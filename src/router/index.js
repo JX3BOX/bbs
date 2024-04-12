@@ -20,23 +20,29 @@ const Emotion = () => import("../views/Emotion.vue");
 const Forum = () => import("../views/Forum.vue");
 const Single = () => import("../views/Single.vue");
 const Collection = () => import("../views/Collection.vue");
+const Community = () => import("../views/Community.vue");
 
 Vue.use(VueRouter);
 
 const routes = [
-    { name: "index", path: "/", redirect: { name: 'bbs' }, component: Forum },
+    { name: "index", path: "/", redirect: { name: "bbs" }, component: Forum },
     { name: "bbs", path: "/bbs", component: Forum },
+    { name: "community", path: "/community", component: Community },
     { name: "single", path: "/bbs/:id", component: Single },
     { name: "namespace", path: "/namespace", component: Namespace },
     { name: "joke", path: "/joke/:id?", component: Joke },
     { name: "emotion", path: "/emotion/:id?", component: Emotion },
     { name: "collection", path: "/collection", component: Collection },
-    { name: "collection-single", path: "/collection/:id", component: () => import('@/components/collection/collection_single.vue') },
+    {
+        name: "collection-single",
+        path: "/collection/:id",
+        component: () => import("@/components/collection/collection_single.vue"),
+    },
 ];
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
+    mode: "history",
 });
 
 export default router;

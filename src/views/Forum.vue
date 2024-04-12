@@ -62,7 +62,6 @@
                 <!-- 主题过滤 -->
                 <topicBy :modelValue="tag" @update:modelValue="setTag" :topics="theme" />
 
-
                 <!-- 排序过滤 -->
                 <orderBy @filter="filterMeta" class="m-order-by"></orderBy>
             </div>
@@ -137,7 +136,7 @@ import list_guide_top from "@/components/bbs/list_guide_top.vue";
 export default {
     name: "Index",
     props: [],
-    data: function() {
+    data: function () {
         return {
             loading: false, //加载状态
             data: [], //数据列表
@@ -166,21 +165,21 @@ export default {
                 all: "全端",
                 std: "重制",
                 origin: "缘起",
-                wujie: "无界"
+                wujie: "无界",
             },
         };
     },
     computed: {
         // 发布按钮链接
-        publish_link: function() {
+        publish_link: function () {
             return publishLink(appKey);
         },
         // 是否显示加载更多
-        hasNextPage: function() {
+        hasNextPage: function () {
             return this.pages > 1 && this.page < this.total;
         },
         // 请求关联参数
-        query: function() {
+        query: function () {
             return {
                 subtype: this.subtype,
                 order: this.order,
@@ -191,14 +190,14 @@ export default {
             };
         },
         // 分页相关参数
-        pg_queries: function() {
+        pg_queries: function () {
             return {
                 page: this.page,
                 per: this.per,
             };
         },
         // 重置页码参数
-        reset_queries: function() {
+        reset_queries: function () {
             return [this.subtype, this.tag];
         },
     },
@@ -213,11 +212,11 @@ export default {
                 this.users = [];
             }
         },
-        reporterLink: function(val) {
+        reporterLink: function (val) {
             const prefix = this.client === "std" ? "www" : "origin";
             return `${prefix}:/${appKey}/` + val;
         },
-        onSearch: function() {
+        onSearch: function () {
             if (this.page !== 1) {
                 this.page = 1;
                 return;
@@ -225,7 +224,7 @@ export default {
             this.loadData();
         },
         // 构建最终请求参数
-        buildQuery: function(appendMode) {
+        buildQuery: function (appendMode) {
             if (appendMode) {
                 this.page += 1;
             }
@@ -258,7 +257,7 @@ export default {
             return _query;
         },
         // 加载数据
-        loadData: function(appendMode = false) {
+        loadData: function (appendMode = false) {
             let query = this.buildQuery(appendMode);
             console.log("[cms-list]", "<loading data>", query);
 
@@ -285,7 +284,7 @@ export default {
                 });
         },
         // 路由绑定
-        replaceRoute: function(extend) {
+        replaceRoute: function (extend) {
             return this.$router
                 .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
                 .then(() => {
@@ -294,20 +293,20 @@ export default {
                 .catch((err) => {});
         },
         // 条件过滤
-        filterMeta: function(o) {
+        filterMeta: function (o) {
             this.replaceRoute({ [o["type"]]: o["val"], page: 1 });
         },
         // 条件过滤（不附加路由）
-        filterImperceptibly: function(o) {
+        filterImperceptibly: function (o) {
             this[o["type"]] = o["val"];
         },
         // 翻页加载
-        changePage: function(i) {
+        changePage: function (i) {
             this.loadData();
             this.replaceRoute({ page: i });
         },
         // 追加加载
-        appendPage: function() {
+        appendPage: function () {
             this.loadData(true);
         },
 
@@ -335,7 +334,7 @@ export default {
         "$route.query": {
             deep: true,
             immediate: true,
-            handler: function(query) {
+            handler: function (query) {
                 if (Object.keys(query).length) {
                     console.log("[cms-list]", "<route query change>", query);
                     for (let key in query) {
@@ -352,7 +351,7 @@ export default {
         // 重置分页参数
         reset_queries: {
             deep: true,
-            handler: function() {
+            handler: function () {
                 console.log("[cms-list]", "<reset page>");
                 this.page = 1;
             },
@@ -361,7 +360,7 @@ export default {
         query: {
             deep: true,
             immediate: true,
-            handler: function(query) {
+            handler: function (query) {
                 console.log("[cms-list]", "<request query change>", query);
                 this.loadData();
             },
