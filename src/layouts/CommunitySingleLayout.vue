@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="p-bbs p-bbs-single">
+    <div id="app" class="p-community-single">
         <Header></Header>
         <Breadcrumb
             name="竹林茶馆"
@@ -25,9 +25,6 @@
                 </span>
             </template>
         </Breadcrumb>
-        <LeftSidebar :uid="user_id">
-            <Nav :id="id" />
-        </LeftSidebar>
         <Main :withoutRight="false">
             <slot></slot>
             <RightSidebar :show-toggle="true">
@@ -39,7 +36,6 @@
 </template>
 
 <script>
-import Nav from "@/components/nav/single_nav.vue";
 import Side from "@/components/bbs/single_side.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
@@ -72,7 +68,6 @@ export default {
     },
     methods: { getAppIcon },
     components: {
-        Nav,
         Side,
         "publish-gate": publishGate,
         AdminDirectMessage,
@@ -81,5 +76,10 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/assets/css/app.less";
+.p-community-single {
+    padding: 20px;
+    .c-main {
+        margin-left: 0;
+    }
+}
 </style>

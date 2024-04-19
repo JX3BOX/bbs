@@ -1,13 +1,15 @@
-<!--
- * @Author: iRuxu
- * @Date: 2022-07-17 01:25:16
- * @LastEditTime: 2022-07-17 19:59:30
- * @Description:
--->
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="竹林茶馆" slug="bbs" :publishEnable="false" :topicEnable="false" :adminEnable="false" :feedbackEnable="true" :crumbEnable="true">
+        <Breadcrumb
+            name="竹林茶馆"
+            slug="bbs"
+            :publishEnable="false"
+            :topicEnable="false"
+            :adminEnable="false"
+            :feedbackEnable="true"
+            :crumbEnable="true"
+        >
             <Info />
             <publish-gate slot="op-append" />
         </Breadcrumb>
@@ -39,9 +41,9 @@ export default {
         return {};
     },
     computed: {
-        slug : function (){
-            return this.$route.name
-        }
+        slug: function () {
+            return this.$route.name;
+        },
     },
     methods: {
         getAppIcon,
@@ -62,7 +64,7 @@ export default {
 <style lang="less">
 .m-bbs-right-side {
     //&.c-sidebar-right.is-close {
-        //transform: translateX(0) !important;
+    //transform: translateX(0) !important;
     //}
     .c-sidebar-right-inner {
         background: #fff;

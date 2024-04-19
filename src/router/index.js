@@ -21,6 +21,7 @@ const Forum = () => import("../views/Forum.vue");
 const Single = () => import("../views/Single.vue");
 const Collection = () => import("../views/Collection.vue");
 const Community = () => import("../views/Community.vue");
+const CommunitySingle = () => import("../views/CommunitySingle.vue");
 
 Vue.use(VueRouter);
 
@@ -28,9 +29,14 @@ const routes = [
     { name: "index", path: "/", redirect: { name: "bbs" }, component: Forum },
     { name: "bbs", path: "/bbs", component: Forum },
     { name: "community", path: "/community", component: Community },
+    { name: "community-single", path: "/community/:id", component: CommunitySingle },
     { name: "single", path: "/bbs/:id", component: Single },
     { name: "namespace", path: "/namespace", component: Namespace },
-    { name: "namespace-single", path: "/namespace/:id", component: () => import('@/components/namespace/namespace_single.vue')},
+    {
+        name: "namespace-single",
+        path: "/namespace/:id",
+        component: () => import("@/components/namespace/namespace_single.vue"),
+    },
     { name: "joke", path: "/joke/:id?", component: Joke },
     { name: "emotion", path: "/emotion/:id?", component: Emotion },
     { name: "collection", path: "/collection", component: Collection },
