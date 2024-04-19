@@ -61,26 +61,14 @@ import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import { getPosts, getLikes } from "@/service/post";
 import dateFormat from "@/utils/dateFormat";
-import {
-    __ossMirror,
-    __imgPath,
-    __ossRoot,
-    __Root,
-    feedback
-} from "@jx3box/jx3box-common/data/jx3box";
-import {
-    showAvatar,
-    showBanner,
-    publishLink,
-    buildTarget,
-} from "@jx3box/jx3box-common/js/utils";
+import { __ossMirror, __imgPath, __ossRoot, __Root, feedback } from "@jx3box/jx3box-common/data/jx3box";
+import { showAvatar, showBanner, publishLink, buildTarget } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Feedback",
     props: [],
     data: function () {
         return {
             loading: false, //加载状态
-
             data: [], //数据列表
             page: 1, //当前页数
             total: 1, //总条目数
@@ -95,7 +83,7 @@ export default {
             mark: "", //筛选模式
             client: this.$store.state.client, //版本选择
 
-            feedback_url : feedback
+            feedback_url: feedback,
         };
     },
     computed: {
@@ -175,18 +163,18 @@ export default {
         },
         // 批量点赞
         loadLike: function () {
-            let id = this.data.map((d) => ('feedback-' + d.ID));
-            id = id.join(',');
+            let id = this.data.map((d) => "feedback-" + d.ID);
+            id = id.join(",");
             const params = {
-                post_type: 'feedback',
-                post_action: 'likes',
-                id
-            }
+                post_type: "feedback",
+                post_action: "likes",
+                id,
+            };
             getLikes(params).then((res) => {
                 const likes = res.data.data;
-                if(Object.keys(likes).length){
+                if (Object.keys(likes).length) {
                     this.data.forEach((d) => {
-                        this.$set(d, 'count', likes?.['feedback-' + d.ID]?.likes)
+                        this.$set(d, "count", likes?.["feedback-" + d.ID]?.likes);
                     });
                 }
             });
@@ -194,9 +182,9 @@ export default {
         goBack: function () {
             this.$router.push("/feedback");
         },
-        handleUpdate: function (id){
-            this.data = this.data.filter(d => d.ID !== id);
-        }
+        handleUpdate: function (id) {
+            this.data = this.data.filter((d) => d.ID !== id);
+        },
     },
     filters: {
         dateFormat: function (val) {
@@ -231,10 +219,10 @@ export default {
         },
         data: {
             deep: true,
-            handler: function() {
-                this.loadLike()
-            }
-        }
+            handler: function () {
+                this.loadLike();
+            },
+        },
     },
     created: function () {
         this.page = ~~this.$route.query.page || 1;

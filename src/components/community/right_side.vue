@@ -1,21 +1,15 @@
 <template>
     <div class="m-extend-list">
-        <RightSideMsg>
-            <em>综合交流群</em> :
-            <strong @click="onQQClick" class="u-link" title="点击复制">
-                <a>{{ qq }}</a>
-            </strong>
-        </RightSideMsg>
         <minirank />
-        <birthday></birthday>
+        <listside></listside>
     </div>
 </template>
 
 <script>
 import minirank from "./minirank.vue";
-import birthday from "./birthday.vue";
+import listside from "./list_side.vue";
 export default {
-    name: "list_side",
+    name: "right_side",
     props: [],
     data: function () {
         return {
@@ -50,7 +44,7 @@ export default {
     mounted: function () {},
     components: {
         minirank,
-        birthday,
+        listside,
     },
 };
 </script>

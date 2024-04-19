@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getBirthdayList } from "@/service/next";
+import {getBirthdayList} from "@/service/next";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import { getStarSign } from "@/utils/common";
 import starSign from "@/assets/data/star_sign.json";
@@ -33,18 +33,18 @@ export default {
         return {
             list: [],
             loading: false,
-        };
+        }
     },
     computed: {
         today() {
-            return dayjs().format("MM-DD");
+            return dayjs().format("MM-DD")
         },
         currentStarSign() {
             return getStarSign(this.today);
         },
         icon() {
             return starSign[this.currentStarSign];
-        },
+        }
     },
     mounted() {
         this.loadData();
@@ -52,29 +52,27 @@ export default {
     methods: {
         loadData() {
             const params = {
-                limit: 50,
-            };
-            this.loading = true;
-            getBirthdayList(params)
-                .then((res) => {
-                    this.list = res.data.data;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+                limit: 50
+            }
+            this.loading = true
+            getBirthdayList(params).then(res => {
+                this.list = res.data.data
+            }).finally(() => {
+                this.loading = false
+            })
         },
         authorLink,
-    },
-};
+    }
+}
 </script>
 
 <style lang="less">
-.m-birthday {
-    .c-sidebar-right-title {
+.m-birthday{
+    .c-sidebar-right-title{
         .flex;
         justify-content: space-between;
-        .u-date {
-            color: #8d29ae;
+        .u-date{
+            color:#8d29ae;
         }
     }
 }
