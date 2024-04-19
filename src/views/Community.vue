@@ -50,6 +50,10 @@
                 </div>
             </div>
         </div>
+        <div class="m-topic-list m-topic-hot__mini">
+            <TopicItem :data="toptopic" />
+        </div>
+
         <div class="m-topic-list">
             <TopicItem v-for="(item, index) in topicData.data?.list" :key="index" :data="item" />
         </div>
@@ -155,5 +159,5 @@ export default {
 };
 </script>
 <style lang="less">
-@import "~@/assets/css/community/topic-list.less";
+@import "~@/assets/css/community/community.less";
 </style>

@@ -1,30 +1,29 @@
 <template>
     <div class="m-community-header">
-        <div class="m-lside">
-            <a class="m-lside__item" href="">
+        <div class="m-community-header__hot">
+            <a class="u-item" href="">
                 <div class="icon"></div>
                 <p class="title">论坛</p>
             </a>
-            <a class="m-lside__item" href="">
+            <a class="u-item" href="">
                 <div class="icon"></div>
                 <p class="title">茶馆</p>
             </a>
         </div>
-        <div class="m-rside">
-            <ul class="m-rside__navs">
-                <li v-for="(item, index) in navs" :key="index">
-                    <a href="">
-                        {{ item }}
-                    </a>
-                </li>
-            </ul>
-            <ul class="m-rside__right">
-                <li v-for="(item, index) in channel" :key="index">
-                    <i class="el-icon-s-promotion"></i>
-                    <a href="">{{ item }}</a>
-                </li>
-            </ul>
-        </div>
+        <ul class="m-community-header__tags">
+            <li v-for="(item, index) in navs" :key="index">
+                <a href="">
+                    {{ item }}
+                    <i v-if="index === navs.length - 1" class="el-icon-arrow-down"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="m-community-header__special">
+            <li v-for="(item, index) in channel" :key="index">
+                <i class="el-icon-s-promotion"></i>
+                <a href="">{{ item }}</a>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -50,11 +49,11 @@ export default {
                 "游戏",
                 "音乐",
                 "影视",
-                "知识",
-                "咨询",
-                "生活",
+                "骚话",
+                "趣图",
+                "更多",
             ],
-            channel: ["专栏", "活动", "直播", "课堂", "新歌热榜", "社区中心"],
+            channel: ["魔盒tivi", "资料片专题", "小册文集", "活动专题"],
         };
     },
 };

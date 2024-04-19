@@ -12,6 +12,7 @@
 
 .m-topic-imgs {
     display: flex;
+    overflow-x: scroll;
     gap: 9.6px;
     .m-topic-imgs__item {
         width: 48px;
@@ -42,6 +43,7 @@
         }
     }
 }
+
 .m-topic-tag {
     display: flex;
     gap: 5px;
@@ -223,5 +225,46 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+    }
+}
+
+.m-topic-hot__mini {
+    display: none;
+}
+@media screen and (max-width: @game) {
+    .m-topic-list {
+        column-count: 1;
+        margin-bottom: 0;
+        .m-topic-box {
+            .m-topic-box__content {
+                flex-direction: column;
+            }
+            .u-content-aside {
+                padding-right: 0;
+                margin-right: 0;
+                border: 0;
+                .u-cover {
+                    display: none;
+                }
+            }
+        }
+        .m-topic-userinfo {
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(229, 229, 229, 1);
+        }
+        .m-topic-content {
+            display: -webkit-box;
+            -webkit-line-clamp: 4; /* 控制显示的行数 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .m-topic-hot {
+        display: none;
+    }
+    .m-topic-hot__mini {
+        display: block;
     }
 }
