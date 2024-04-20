@@ -25,6 +25,10 @@
             </div>
 
             <el-divider content-position="left">评论</el-divider>
+
+            <div>
+                <CommentEditor />
+            </div>
         </div>
     </CommunitySingleLayout>
 </template>
@@ -33,11 +37,13 @@
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@jx3box/jx3box-common-ui/src/single/PostHeader.vue";
 import CommentItem from "@/components/community/comment_item.vue";
+import CommentEditor from "@/components/community/comment_editor.vue";
 import { getStat } from "@jx3box/jx3box-common/js/stat";
 import { appKey } from "@/../setting.json";
 
 export default {
     components: {
+        CommentEditor,
         CommunitySingleLayout,
         PostHeader,
         CommentItem,
