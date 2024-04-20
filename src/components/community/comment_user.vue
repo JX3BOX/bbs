@@ -41,8 +41,8 @@
             alt=""
         />
         <p class="u-desc">寒蝉凄切，对长亭晚，骤雨初歇。</p>
-        <div>
-            <el-button size="small" type="primary" icon="el-icon-plus">关注</el-button>
+        <div class="u-btns">
+            <el-button size="small" type="primary" icon="el-icon-plus" class="u-follow">关注</el-button>
             <el-button size="small" icon="el-icon-message">私信</el-button>
         </div>
     </div>

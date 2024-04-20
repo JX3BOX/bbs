@@ -28,7 +28,11 @@
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
-                    <h2 class="u-title">{{ toptopic.title }}</h2>
+                    <h2 class="u-title">
+                        <a href="/community/12">
+                            {{ toptopic.title }}
+                        </a>
+                    </h2>
                     <div class="m-topic-tag">
                         <span v-for="(item, index) in toptopic.tag" :key="index">
                             {{ item }}

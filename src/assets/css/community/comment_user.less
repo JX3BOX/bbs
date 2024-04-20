@@ -55,9 +55,52 @@
     .u-honour {
         width: 220px;
     }
+    .u-follow {
+        background: #4080ff;
+        border-color: #4080ff;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
     .u-desc {
         font-size: 12px;
         line-height: 18px;
         color: rgba(145, 153, 170, 1);
+    }
+}
+
+@media screen and (max-width: @phone) {
+    .m-comment-wrapper {
+        .m-comment-wrapper__left {
+            margin-right: 0;
+            padding-right: 0;
+        }
+    }
+
+    .m-comment-item__user {
+        flex-direction: row;
+        // justify-content: space-between;
+        align-items: end;
+        margin-bottom: 8px;
+        .u-userinfo {
+            .u-avatar {
+                .size(48px);
+            }
+            .u-info {
+                .u-medals {
+                    display: none;
+                }
+            }
+        }
+        .u-desc {
+            display: none;
+        }
+        .u-btns {
+            display: none;
+        }
+        .u-honour {
+            min-width: 220px;
+            height: 45px;
+        }
     }
 }

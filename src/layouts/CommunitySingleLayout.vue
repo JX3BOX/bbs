@@ -25,21 +25,26 @@
                 </span>
             </template>
         </Breadcrumb>
-        <div class="m-community-single__main">
+        <div>
             <Main :withoutRight="false">
-                <slot></slot>
-                <RightSidebar :show-toggle="true">
-                    <Side :id="id" class="m-extend" />
-                </RightSidebar>
+                <div class="m-community-single__main">
+                    <slot></slot>
+                    <div class="m-community-single__right">
+                        <a href="">
+                            <img
+                                src="https://img.js.design/assets/img/6619361efdbe3d13f2374668.png#1fce3e04d726b880da75046bfabaf6dc"
+                                alt=""
+                            />
+                        </a>
+                    </div>
+                </div>
                 <Footer></Footer>
             </Main>
-            <div class="m-community-single__right"></div>
         </div>
     </div>
 </template>
 
 <script>
-import Side from "@/components/bbs/single_side.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDirectMessage from "@jx3box/jx3box-common-ui/src/bread/AdminDirectMessage.vue";
@@ -71,7 +76,6 @@ export default {
     },
     methods: { getAppIcon },
     components: {
-        Side,
         "publish-gate": publishGate,
         AdminDirectMessage,
     },
@@ -87,10 +91,25 @@ export default {
     .c-main {
         flex: 1;
         margin-left: 0;
+        margin-right: 0;
+        .m-community-single {
+            flex: 1;
+        }
+        .m-community-single__right {
+            width: 280px;
+            background: rgba(250, 250, 250, 1);
+            img {
+                width: 100%;
+                cursor: pointer;
+            }
+        }
     }
-    .m-community-single__right {
-        width: 280px;
-        background: rgba(250, 250, 250, 1);
+    @media screen and (max-width: @ipad) {
+        .c-main {
+            .m-community-single__right {
+                display: none;
+            }
+        }
     }
 }
 </style>

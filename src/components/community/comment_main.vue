@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import CommentUser from "@/components/community/comment_user.vue";
-import CommentReplyItem from "@/components/community/comment_reply_item.vue";
 import CommentReplyList from "@/components/community/comment_reply_list.vue";
 
 export default {
