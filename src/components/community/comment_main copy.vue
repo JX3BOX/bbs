@@ -70,6 +70,7 @@
                                         <span>回复</span>
                                     </div>
                                 </el-button>
+
                                 <el-button type="primary" size="small" class="u-praise-btn">
                                     <div class="u-btn">
                                         <img src="@/assets/img/community/praise.svg" alt="" />
@@ -80,62 +81,8 @@
                         </div>
                     </div>
                     <div class="m-reply-list">
-                        <div class="m-comment-wrapper">
-                            <div class="m-comment-wrapper__right">
-                                <div class="m-comment-wrapper__right-box">
-                                    <div class="m-reply-user">
-                                        <img
-                                            class="u-avatar"
-                                            src="https://thirdwx.qlogo.cn/mmopen/vi_32/XVv97dQRkCiaC1R6nMP6zSbxuAgrFVegAj7LmEY7wtm5UjrdyLAW1UDZtXWGcTnPaYUoMl0CLITPrBYko4yEbDO0N1xSrQtjcfBkoDnianRqI/132?x-oss-process=image/auto-orient,1/resize,m_fill,w_360,h_360/quality,Q_100"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                        <div>
-                                            <p class="u-name">芝士饭团</p>
-                                            <p class="u-content">所以监听用户的截图操作，提示用户进行分享.</p>
-                                            <div class="u-toolbar">
-                                                <div>
-                                                    <el-button type="text" size="small">黑洞</el-button>
-                                                    <el-button type="text" size="small">删除</el-button>
-                                                    <el-button type="text" size="small">举报</el-button>
-                                                    <el-button type="text" size="small">拉黑</el-button>
-                                                </div>
-                                                <div class="u-time">2024-01-02 20:00:00</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-comment-wrapper">
-                            <div class="m-comment-wrapper__right">
-                                <div class="m-comment-wrapper__right-box">
-                                    <div class="m-reply-user">
-                                        <img
-                                            class="u-avatar"
-                                            src="https://thirdwx.qlogo.cn/mmopen/vi_32/XVv97dQRkCiaC1R6nMP6zSbxuAgrFVegAj7LmEY7wtm5UjrdyLAW1UDZtXWGcTnPaYUoMl0CLITPrBYko4yEbDO0N1xSrQtjcfBkoDnianRqI/132?x-oss-process=image/auto-orient,1/resize,m_fill,w_360,h_360/quality,Q_100"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                        <div>
-                                            <p class="u-name">芝士饭团</p>
-                                            <p class="u-content">
-                                                所以监听用户的截图操作，提示用户进行分享，既缩短了以前分享截图的操作路径，避免了在之前长路径中的行为流失（比如截图完成后忘记分享或觉得麻烦放弃分享等等）
-                                            </p>
-                                            <div class="u-toolbar">
-                                                <div>
-                                                    <el-button type="text" size="small">黑洞</el-button>
-                                                    <el-button type="text" size="small">删除</el-button>
-                                                    <el-button type="text" size="small">举报</el-button>
-                                                    <el-button type="text" size="small">拉黑</el-button>
-                                                </div>
-                                                <div class="u-time">2024-01-02 20:00:00</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <CommentReplyItem />
+                        <CommentReplyItem />
                     </div>
                 </div>
             </div>
@@ -221,33 +168,7 @@
                         </div>
                     </div>
                     <div class="m-reply-list">
-                        <div class="m-comment-wrapper">
-                            <div class="m-comment-wrapper__right">
-                                <div class="m-comment-wrapper__right-box">
-                                    <div class="m-reply-user">
-                                        <img
-                                            class="u-avatar"
-                                            src="https://thirdwx.qlogo.cn/mmopen/vi_32/XVv97dQRkCiaC1R6nMP6zSbxuAgrFVegAj7LmEY7wtm5UjrdyLAW1UDZtXWGcTnPaYUoMl0CLITPrBYko4yEbDO0N1xSrQtjcfBkoDnianRqI/132?x-oss-process=image/auto-orient,1/resize,m_fill,w_360,h_360/quality,Q_100"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                        <div>
-                                            <p class="u-name">芝士饭团</p>
-                                            <p class="u-content">所以监听用户的截图操作，提示用户进行分享.</p>
-                                            <div class="u-toolbar">
-                                                <div>
-                                                    <el-button type="text" size="small">黑洞</el-button>
-                                                    <el-button type="text" size="small">删除</el-button>
-                                                    <el-button type="text" size="small">举报</el-button>
-                                                    <el-button type="text" size="small">拉黑</el-button>
-                                                </div>
-                                                <div class="u-time">2024-01-02 20:00:00</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <CommentReplyItem />
                     </div>
                 </div>
             </div>
@@ -258,9 +179,17 @@
 
 <script>
 import CommentUser from "@/components/community/comment_user.vue";
+import CommentReplyItem from "@/components/community/comment_reply_item.vue";
+
 export default {
     components: {
+        CommentReplyItem,
         CommentUser,
+    },
+    data() {
+        return {
+            showReplyForReplyFrom: true,
+        };
     },
 };
 </script>

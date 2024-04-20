@@ -36,7 +36,7 @@
             />
             <div class="u-toolbar">
                 <el-button type="primary" @click="onSubmit" class="u-publish" :disabled="disableSubmitBtn"
-                    >发表评论</el-button
+                    >跟帖</el-button
                 >
             </div>
         </el-form-item>

@@ -26,7 +26,7 @@
                 class="u-reference"
                 width="24"
                 height="24"
-                src="../assets/img/comment.svg"
+                src="@/assets/img/comment.svg"
                 alt="comment"
             />
         </el-popover>
