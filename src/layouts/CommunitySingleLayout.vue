@@ -25,13 +25,16 @@
                 </span>
             </template>
         </Breadcrumb>
-        <Main :withoutRight="false">
-            <slot></slot>
-            <RightSidebar :show-toggle="true">
-                <Side :id="id" class="m-extend" />
-            </RightSidebar>
-            <Footer></Footer>
-        </Main>
+        <div class="m-community-single__main">
+            <Main :withoutRight="false">
+                <slot></slot>
+                <RightSidebar :show-toggle="true">
+                    <Side :id="id" class="m-extend" />
+                </RightSidebar>
+                <Footer></Footer>
+            </Main>
+            <div class="m-community-single__right"></div>
+        </div>
     </div>
 </template>
 
@@ -77,9 +80,17 @@ export default {
 
 <style lang="less">
 .p-community-single {
-    padding: 20px;
+    .m-community-single__main {
+        display: flex;
+        gap: 24px;
+    }
     .c-main {
+        flex: 1;
         margin-left: 0;
+    }
+    .m-community-single__right {
+        width: 280px;
+        background: rgba(250, 250, 250, 1);
     }
 }
 </style>

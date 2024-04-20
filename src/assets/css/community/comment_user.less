@@ -1,0 +1,63 @@
+.m-comment-item__user {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    p {
+        margin: 0;
+    }
+    .u-userinfo {
+        display: flex;
+        gap: 16px;
+        .u-avatar {
+            .size(72px);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .u-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            .u-name {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                color: rgba(64, 128, 255, 1);
+            }
+            .u-other {
+                display: flex;
+                gap: 4px;
+                > span {
+                    color: white;
+                    border-radius: 2px;
+                    font-size: 12px;
+                    padding: 0 6px;
+                    line-height: 16px;
+                }
+                .u-lv {
+                    background: rgba(255, 219, 42, 1);
+                }
+                .u-vip {
+                    background: rgba(111, 66, 193, 1);
+                }
+            }
+
+            .u-medals {
+                display: flex;
+                gap: 4px;
+                > img {
+                    cursor: pointer;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+    .u-honour {
+        width: 220px;
+    }
+    .u-desc {
+        font-size: 12px;
+        line-height: 18px;
+        color: rgba(145, 153, 170, 1);
+    }
+}
