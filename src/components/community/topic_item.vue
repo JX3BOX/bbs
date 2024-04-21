@@ -13,7 +13,7 @@
         </div>
         <div class="u-box m-topic-box__content">
             <div class="u-content-aside">
-                <div class="u-cover" :style="`background-image: url(${data.cover});`"></div>
+                <a class="u-cover" href="/community/test" :style="`background-image: url(${data.cover});`"></a>
                 <h2 class="u-title">{{ data.title }}</h2>
                 <div class="m-topic-tag">
                     <span v-for="(item, index) in data.tag" :key="index">
@@ -34,10 +34,19 @@
 
             <div class="u-box-content">
                 <div class="m-topic-content">
-                    {{ data.content }}
+                    <a href="/community/test">
+                        {{ data.content }}
+                    </a>
                 </div>
                 <div class="m-topic-imgs">
-                    <img class="m-topic-imgs__item" v-for="(item, index) in data.imgs" :key="index" :src="item" />
+                    <a
+                        href="/community/test"
+                        class="m-topic-imgs__item"
+                        v-for="(item, index) in data.imgs"
+                        :key="index"
+                    >
+                        <img :src="item" />
+                    </a>
                 </div>
             </div>
         </div>

@@ -71,8 +71,7 @@ export default {
     methods: {
         onShowReply() {
             if (this.isMaster) {
-                var rootElement = document.documentElement;
-                rootElement.scrollTop = rootElement.scrollHeight - rootElement.clientHeight;
+                window.scrollTo(0, document.body.scrollHeight);
             } else {
                 this.showReplyForReplyFrom = true;
             }

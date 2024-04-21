@@ -15,21 +15,23 @@
             </div>
             <div class="m-topic-box__content">
                 <div class="m-topic-hot__left">
-                    <img class="u-cover" :src="toptopic.cover" alt="" />
+                    <a class="u-cover" href="/community/test">
+                        <img :src="toptopic.cover" alt="" />
+                    </a>
                     <div class="m-topic-imgs">
-                        <img
+                        <a
+                            href="/community/test"
                             class="m-topic-imgs__item"
                             v-for="(item, index) in toptopic.imgs"
                             :key="index"
-                            :src="item"
-                            alt=""
-                            srcset=""
-                        />
+                        >
+                            <img :src="item" alt="" srcset="" />
+                        </a>
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
                     <h2 class="u-title">
-                        <a href="/community/12">
+                        <a href="/community/test">
                             {{ toptopic.title }}
                         </a>
                     </h2>
@@ -49,7 +51,7 @@
                         <span class="m-topic-userinfo__name">{{ toptopic.user_info.display_name }}</span>
                     </div>
                     <div class="m-topic-content">
-                        {{ toptopic.content }}
+                        <a href="/community/test">{{ toptopic.content }}</a>
                     </div>
                 </div>
             </div>
