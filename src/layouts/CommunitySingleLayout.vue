@@ -111,5 +111,10 @@ export default {
             }
         }
     }
+    @media screen and (max-width: @phone) {
+        .m-community-single__main {
+            display: block;
+        }
+    }
 }
 </style>
