@@ -60,8 +60,8 @@
             <TopicItem :data="toptopic" />
         </div>
 
-        <div class="m-topic-list">
-            <TopicItem v-for="(item, index) in topicData.data?.list" :key="index" :data="item" />
+        <div class="m-topic-list" v-if="topicData.data">
+            <TopicItem v-for="(item, index) in topicData.data.list" :key="index" :data="item" />
         </div>
         <!-- 下一页 -->
         <el-button

@@ -30,8 +30,8 @@
 
 <script>
 import Info from "@/components/Info.vue";
-import Nav from "@/components/community/Nav.vue";
-import Side from "@/components/community/right_side.vue";
+import Nav from "@/components/nav/Nav.vue";
+import Side from "@/components/bbs/list_side.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 export default {
