@@ -29,9 +29,9 @@
                 <em>BBS</em>
             </a>
             <a href="/bbs" :class="{ 'is-active': routeActive('bbs') }">
-                <i class="el-icon-cold-drink"></i>
+                <i class="el-icon-coffee-cup"></i>
                 <span>茶馆</span>
-                <em>BBS</em>
+                <em>Story</em>
             </a>
             <a href="/joke" :class="{ 'is-active': routeActive('joke') }">
                 <i class="el-icon-cherry"></i>
