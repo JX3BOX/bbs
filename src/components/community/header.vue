@@ -1,60 +1,92 @@
 <template>
     <div class="m-community-header">
         <div class="m-community-header__hot">
-            <a class="u-item" href="">
+            <el-button type="primary">发布</el-button>
+            <!-- <a class="u-item" href="">
                 <div class="icon"></div>
                 <p class="title">论坛</p>
             </a>
             <a class="u-item" href="">
                 <div class="icon"></div>
                 <p class="title">茶馆</p>
-            </a>
+            </a> -->
         </div>
         <ul class="m-community-header__tags">
             <li v-for="(item, index) in navs" :key="index">
-                <a href="">
-                    {{ item }}
+                <a :href="item.href || 'javascript:;'">
+                    {{ item.lable }}
                     <i v-if="index === navs.length - 1" class="el-icon-arrow-down"></i>
                 </a>
             </li>
         </ul>
-        <ul class="m-community-header__special">
-            <li v-for="(item, index) in channel" :key="index">
-                <i class="el-icon-s-promotion"></i>
-                <a href="">{{ item }}</a>
-            </li>
-        </ul>
+        <div class="m-community-header__special-box">
+            <div class="m-community-header__special-list">
+                <a v-for="(item, index) in channel" :key="index" :href="item.href">
+                    <i class="el-icon-s-promotion"></i>
+                    <span>{{ item.name }}</span>
+                </a>
+            </div>
+            <img class="ewm" src="@/assets/img/community/ewm.jpeg" alt="" srcset="" />
+        </div>
     </div>
 </template>
 
 <script>
+import { getTopicBucket } from "@/service/community";
 export default {
     data() {
         return {
-            navs: [
-                "番剧",
-                "国创",
-                "综艺",
-                "动画",
-                "鬼畜",
-                "舞蹈",
-                "娱乐",
-                "科技",
-                "美食",
-                "汽车",
-                "运动",
-                "电影",
-                "电视剧",
-                "纪录片",
-                "游戏",
-                "音乐",
-                "影视",
-                "骚话",
-                "趣图",
-                "更多",
+            navs: [],
+            channel: [
+                {
+                    name: "活动专题",
+                    href: "/event",
+                },
+                {
+                    name: "资料片专题",
+                    href: "/topic",
+                },
             ],
-            channel: ["魔盒tivi", "资料片专题", "小册文集", "活动专题"],
         };
+    },
+    mounted() {
+        this.getTopicBucket();
+    },
+    methods: {
+        getTopicBucket() {
+            getTopicBucket({ type: "community" }).then((res) => {
+                const data = res.data.data?.map((item) => item.name) || [];
+
+                let navs = data.map((item) => {
+                    return {
+                        value: item,
+                        lable: item,
+                    };
+                });
+                this.navs = [
+                    ...navs,
+                    {
+                        value: "骚话",
+                        lable: "骚话",
+                        href: "/joke",
+                    },
+                    {
+                        value: "趣图",
+                        lable: "趣图",
+                        href: "/emotion",
+                    },
+                    {
+                        value: "故事",
+                        lable: "故事",
+                        href: "/bbs",
+                    },
+                    {
+                        value: "更多",
+                        lable: "更多",
+                    },
+                ];
+            });
+        },
     },
 };
 </script>

@@ -8,6 +8,13 @@
         grid-area: hot;
         display: flex;
         align-items: center;
+        .el-button {
+            border-color: #4080ff;
+            background: #4080ff;
+            &:hover {
+                opacity: 0.9;
+            }
+        }
         .u-item {
             margin-right: 10px;
             .icon {
@@ -34,6 +41,7 @@
         flex: 1;
         list-style: none;
         padding: 0 30px;
+        padding-left: 20px;
         display: grid;
         grid-template-columns: repeat(10, 1fr);
         border-right: 1px solid @border;
@@ -57,8 +65,18 @@
             }
         }
     }
-    .m-community-header__special {
+    .m-community-header__special-box {
         grid-area: special;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        .ewm {
+            min-width: 70px;
+            width: 70px;
+            min-height: 70px;
+        }
+    }
+    .m-community-header__special-list {
         list-style: none;
         padding: 0;
         grid-row-gap: 10px;
@@ -67,32 +85,51 @@
         display: grid;
         grid-template-rows: repeat(2, 1fr);
         flex-shrink: 0;
-        li {
+        & > a {
             display: flex;
             align-items: center;
             height: 28px;
-            a {
+            font-size: 13px;
+            color: @color;
+            & > span {
                 margin-left: 4px;
-                font-size: 13px;
-                color: @color;
             }
         }
     }
 }
 
+@media screen and (max-width: @mininote) {
+    .m-community-header {
+        .m-community-header__tags {
+            grid-template-columns: repeat(6, 1fr);
+        }
+        .m-community-header__special-list {
+            margin: 0;
+        }
+        .m-community-header__special-box {
+            flex-direction: column;
+        }
+    }
+}
 @media screen and (max-width: @ipad) {
     .m-community-header {
         grid-template-areas:
             "hot "
             "special"
             "tags";
-        .m-community-header__special {
-            width: 100%;
+        .m-community-header__special-box {
+            flex-direction: unset;
+        }
+        .m-community-header__special-list {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             margin: 12px 0;
         }
+        .ewm {
+            display: none;
+        }
+
         .m-community-header__tags {
             display: flex;
             flex-wrap: wrap;
