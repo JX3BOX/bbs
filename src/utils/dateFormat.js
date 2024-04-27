@@ -18,7 +18,9 @@ function dateFormat(dt, separator = "-", polished = true) {
     let year = dt.getFullYear();
     let month = dt.getMonth() + 1;
     let date = dt.getDate();
-    let str = polished ? `${year}${separator}${polish(month)}${separator}${polish(date)}` : `${year}${separator}${month}${separator}${date}`;
+    let str = polished
+        ? `${year}${separator}${polish(month)}${separator}${polish(date)}`
+        : `${year}${separator}${month}${separator}${date}`;
     return str;
 }
 
@@ -26,4 +28,29 @@ function polish(val) {
     return val < 10 ? "0" + val : val;
 }
 
-export { dateFormat, getRelativeTime };
+function getTimeAgo(dateString) {
+    // 使用dayjs解析传入的日期字符串
+    const date = dayjs(dateString);
+    const now = dayjs();
+
+    // 计算当前时间与给定日期之间的差异
+    const diff = now.diff(date, "day");
+    if (diff === 0) {
+        if (now.diff(date, "minute") <= 60) {
+            return "刚刚";
+        } else if (now.diff(date, "minute") <= 120) {
+            return `2小时内`;
+        } else {
+            return date.format("HH:mm");
+        }
+    } else if (diff === 1) {
+        return "昨天";
+    } else if (diff >= 2 && diff <= 365) {
+        return date.format("MM-DD");
+    } else {
+        // 如果时间差超过1年
+        return date.format("YYYY-MM-DD HH:mm:ss");
+    }
+}
+
+export { dateFormat, getRelativeTime, getTimeAgo };
