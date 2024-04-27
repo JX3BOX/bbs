@@ -21,7 +21,7 @@
         </ul>
         <div class="m-community-header__special-box">
             <div class="m-community-header__special-list">
-                <a v-for="(item, index) in channel" :key="index" :href="item.href">
+                <a v-for="(item, index) in channel" :key="index" :href="item.href" target="_blank">
                     <i class="el-icon-s-promotion"></i>
                     <span>{{ item.name }}</span>
                 </a>
