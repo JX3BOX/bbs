@@ -8,7 +8,7 @@
             <div :class="`m-topic-top__category`" :style="`background-color: ${getRandomMacaronColor()};`">
                 <img v-if="data.category === '文章'" src="@/assets/img/community/文章.svg" alt="" srcset="" />
                 <img v-else src="@/assets/img/community/讨论.svg" alt="" srcset="" />
-                <div>{{ data.sub_category }}</div>
+                <div>{{ data.category }}</div>
             </div>
         </div>
         <div class="u-box m-topic-box__content">
@@ -17,18 +17,19 @@
                     <img :src="getBanner(data.banner_img)" alt="" srcset="" />
                 </a>
                 <a :href="getPostUrl(data.id)" class="u-title">{{ data.title }}</a>
-                <div class="m-topic-tag">
-                    <span v-for="(item, index) in tag" :key="index">
+                <div v-if="data.tags?.length" class="m-topic-tag">
+                    <span v-for="(item, index) in data.tags" :key="index">
                         {{ item }}
                     </span>
                 </div>
                 <a
+                    v-if="data.collection_id && data.collection_title"
                     class="m-topic-collection"
-                    :href="data.collection_id ? `/collection/${data.collection_id}` : 'javascript:;'"
+                    :href="`/collection/${data.collection_id}`"
                 >
                     <div>
                         <span class="u-label">小册</span>
-                        <span class="u-value">{{ data.collection_title || "-" }}</span>
+                        <span class="u-value">{{ data.collection_title }}</span>
                     </div>
                 </a>
                 <a class="m-topic-userinfo" :href="authorLink(data.ext_user_info.id)">
@@ -83,7 +84,6 @@ export default {
         return {
             content:
                 "一、分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。下面我们会从不同维度来分析一下APP的社交分享功能设计，看看这里面有哪些值得探讨之处。二、产品特性尤其是刚上线的产品，很难通过产品的内部体系来实现快速的用户增...分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。下面我们会从不同维度来分析一下APP的社交分享功能设计，看看这里面有哪些值得探讨之处。尤其是刚上线的产品，很难通过产品的内部体系来实现快速的用户增...分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。下面我们会从不同维度来分析一下APP的社交分享功能设计，看看这里面有哪些值得探讨之处。三、产品联系尤其是刚上线的产品，很难通过产品的内部体系来实现快速的用户增...分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。下面我们会从不同维度来分析一下APP的社交分享功能设计，看看这里面有哪些值得探讨之处。尤其是刚上线的产品，很难通过产品的内部体系来实现快速的用户增...",
-            tag: ["萌新指南", "进阶玩法", "编辑推荐"],
         };
     },
     methods: {

@@ -12,7 +12,12 @@
             </a> -->
         </div>
         <ul class="m-community-header__tags">
-            <li v-for="(item, index) in navs" :key="index">
+            <li
+                :class="selectedCategory === item.value && 'active'"
+                v-for="(item, index) in navs"
+                :key="index"
+                @click="handleChange(item)"
+            >
                 <a :href="item.href || 'javascript:;'">
                     {{ item.lable }}
                     <i v-if="index === navs.length - 1" class="el-icon-arrow-down"></i>
@@ -34,8 +39,10 @@
 <script>
 import { getTopicBucket } from "@/service/community";
 export default {
+    props: ["onCategoryChange"],
     data() {
         return {
+            selectedCategory: "",
             navs: [],
             channel: [
                 {
@@ -86,6 +93,12 @@ export default {
                     },
                 ];
             });
+        },
+        handleChange: function (item) {
+            if (!item.href) {
+                this.selectedCategory = item.value;
+                this.onCategoryChange(item);
+            }
         },
     },
 };

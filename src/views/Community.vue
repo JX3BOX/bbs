@@ -1,7 +1,7 @@
 <template>
     <CommunityLayout>
         <div v-loading="loading">
-            <Header />
+            <Header :on-category-change="onCategoryChange" />
             <!-- <div class="m-topic-hot m-topic-box">
                 <div class="m-topic-top">
                     <div class="m-topic-top__time">
@@ -116,6 +116,7 @@ export default {
             total: 0, //总条目数
             pages: 10, //总页数
             number_queries: ["per", "page"],
+            category: undefined,
             toptopic: {
                 banner_img:
                     "https://img.js.design/assets/img/66169bbdbb057ffd43b0f3d5.jpg#25bbb55f613aabc74e724d760a201df7",
@@ -152,6 +153,10 @@ export default {
         this.loadData();
     },
     methods: {
+        onCategoryChange: function (event) {
+            this.category = event.value;
+            this.loadData();
+        },
         // 翻页加载
         changePage: function (i) {
             this.loadData();
@@ -176,6 +181,7 @@ export default {
                 this.page += 1;
             }
             let _query = {
+                category: this.category,
                 pageSize: this.per,
                 index: this.page,
             };
