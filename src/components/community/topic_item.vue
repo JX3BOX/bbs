@@ -17,7 +17,7 @@
                     <img :src="getBanner(data.banner_img)" alt="" srcset="" />
                 </a>
                 <a :href="getPostUrl(data.id)" class="u-title">{{ data.title }}</a>
-                <div v-if="data.tags?.length" class="m-topic-tag">
+                <div v-if="data.tags && data.tags.length" class="m-topic-tag">
                     <span v-for="(item, index) in data.tags" :key="index">
                         {{ item }}
                     </span>
