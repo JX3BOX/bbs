@@ -6,8 +6,8 @@
                 <span>{{ getTimeAgo(data.updated_at) }} </span>
             </div>
             <div :class="`m-topic-top__category`" :style="`background-color: ${getRandomMacaronColor()};`">
-                <img v-if="data.category === '文章'" src="@/assets/img/community/文章.svg" alt="" srcset="" />
-                <img v-else src="@/assets/img/community/讨论.svg" alt="" srcset="" />
+                <!-- <img v-if="data.category === '文章'" src="@/assets/img/community/文章.svg" alt="" srcset="" /> -->
+                <!-- <img v-else src="@/assets/img/community/讨论.svg" alt="" srcset="" /> -->
                 <div>{{ data.category }}</div>
             </div>
         </div>
