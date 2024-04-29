@@ -1,13 +1,9 @@
 <template>
     <div class="m-comment-item__user">
         <div class="u-userinfo">
-            <img
-                class="u-avatar"
-                src="https://thirdwx.qlogo.cn/mmopen/vi_32/XVv97dQRkCiaC1R6nMP6zSbxuAgrFVegAj7LmEY7wtm5UjrdyLAW1UDZtXWGcTnPaYUoMl0CLITPrBYko4yEbDO0N1xSrQtjcfBkoDnianRqI/132?x-oss-process=image/auto-orient,1/resize,m_fill,w_360,h_360/quality,Q_100"
-                alt="avatar"
-            />
+            <img class="u-avatar" :src="userInfo?.avatar" alt="avatar" />
             <div class="u-info">
-                <p class="u-name">芝士饭团</p>
+                <p class="u-name">{{ userInfo?.display_name }}</p>
                 <p class="u-other">
                     <span class="u-lv">Lv.4</span>
                     <span class="u-vip">PRO</span>
@@ -49,7 +45,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+    props: ["userInfo"],
+};
 </script>
 
 <style lang="less">

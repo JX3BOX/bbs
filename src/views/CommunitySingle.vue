@@ -2,14 +2,19 @@
     <CommunitySingleLayout>
         <div class="m-community-single">
             <!-- 头部 -->
-            <PostHeader :post="post" :stat="stat">
+            <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
                 <slot name="single-header"></slot>
             </PostHeader>
             <el-divider content-position="left">JX3BOX</el-divider>
+            <!--  楼主 -->
 
-            <div>
-                <CommentMain />
+            <CommentReplyList :isMaster="true" :post="post" />
+
+            <!-- 帖子回复s -->
+            <div class="m-reply-box">
+                <CommentReplyList v-for="(item, i) in replyList" :key="i" :post="item" />
             </div>
+            <!-- 帖子回复e -->
 
             <!-- 分页 -->
             <div class="m-pagination-box">
@@ -27,26 +32,27 @@
             <el-divider content-position="left">评论</el-divider>
 
             <div>
-                <CommentEditor />
+                <CommentEditor @submit="onReplyTopic" />
             </div>
         </div>
     </CommunitySingleLayout>
 </template>
 
 <script>
+import CommentReplyList from "@/components/community/comment_reply_list.vue";
+
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@jx3box/jx3box-common-ui/src/single/PostHeader.vue";
-import CommentMain from "@/components/community/comment_main.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
-import { getStat } from "@jx3box/jx3box-common/js/stat";
-import { appKey } from "@/../setting.json";
+import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
+import { post } from "jquery";
 
 export default {
     components: {
         CommentEditor,
         CommunitySingleLayout,
         PostHeader,
-        CommentMain,
+        CommentReplyList,
     },
     data() {
         return {
@@ -54,64 +60,62 @@ export default {
             page: 1, //当前页数
             per: 10, //每页条目
             total: 100, //总条目数
-            post: {
-                ID: 74835,
-                post_author: 14476,
-                author: "少侠089024",
-                post_title: "萌新视角：杂七杂八笔记 & 一个人做点什么",
-                post_type: "bbs",
-                post_subtype: "2",
-                post_mode: "tinymce",
-                post_content: "",
-                post_meta: {},
-                post_excerpt: "",
-                post_banner: "",
-                post_status: "publish",
-                original: 1,
-                client: "std",
-                lang: "cn",
-                zlp: "",
-                tags: null,
-                comment: 0,
-                comment_visible: 0,
-                visible: "0",
-                post_collection: "0",
-                collection_collapse: 0,
-                pz: null,
-                allow_gift: 1,
-                include_video: 0,
-                prev_post: 0,
-                next_post: 0,
-                mix_subtype: null,
-                post_date: "2024-02-06T12:49:49.000Z",
-                post_modified: "2024-04-19T11:44:08.000Z",
-                sticky: null,
-                color: null,
-                mark: null,
-                star: 0,
-                author_info: {
-                    display_name: "少侠089024",
-                    user_avatar: "https://cdn.jx3box.com/upload/avatar/2024/2/7/14476_8021093.jpg",
-                    user_avatar_frame: "flower_2",
-                    deleted: 0,
-                },
-                topics: [
-                    {
-                        topic: "纯新指南",
-                    },
-                    {
-                        topic: "回归指南",
-                    },
-                ],
-            },
+            post: null,
+            replyList: [],
         };
     },
-    mounted() {
-        getStat(appKey, this.id).then((res) => {
-            this.stat = this.$store.state.stat = res.data;
-        });
+    computed: {
+        id: function () {
+            return this.$route.params.id;
+        },
+        postHeader: function () {
+            if (!this.post) return;
+            return {
+                ID: this.post.id,
+                post_type: "community",
+                post_title: this.post.title,
+                author_info: {
+                    display_name: this.post?.ext_user_info.display_name || "",
+                    user_avatar: this.post?.ext_user_info.avatar,
+                    user_avatar_frame: this.post?.ext_user_info.user_avatar_frame,
+                    deleted: 0,
+                },
+                post_date: this.post.created_at,
+                post_modified: this.post.updated_at,
+                star: 10,
+            };
+        },
     },
+    mounted() {
+        if (!this.id) return this.$message.error("文章id不存在");
+
+        this.getDetails();
+        this.getReplyList();
+    },
+
     methods: {
+        getDetails: function () {
+            getTopicDetails(this.id).then((res) => {
+                this.post = res.data.data;
+            });
+        },
+        getReplyList: function () {
+            getTopicReplyList(this.id).then((res) => {
+                const list = res.data.data.list;
+                if (list) {
+                    this.replyList = list;
+                    console.log(list);
+                }
+            });
+        },
+        onReplyTopic({ attachmentList, content }) {
+            if (!this.id) return this.$message.error("文章id不存在");
+            replyTopic(this.id, {
+                client: location.href.includes("origin") ? "origin" : "std",
+                content: content,
+                // extra_images: [...attachmentList],
+            });
+        },
         changePage() {},
     },
 };

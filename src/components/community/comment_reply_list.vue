@@ -2,15 +2,15 @@
     <div>
         <div class="m-comment-wrapper">
             <div class="m-comment-wrapper__left">
-                <CommentUser />
+                <CommentUser :userInfo="post?.user_info || post?.ext_user_info" />
             </div>
             <div class="m-comment-wrapper__right">
                 <div class="m-comment-wrapper__right-box">
-                    <div class="u-layer">X楼</div>
+                    <div class="u-layer">{{ isMaster ? "楼主" : "X楼" }}</div>
                     <div class="u-content">
-                        所以监听用户的截图操作，提示用户进行分享，既缩短了以前分享截图的操作路径，避免了在之前长路径中的行为流失（比如截图完成后忘记分享或觉得麻烦放弃分享等等），也让用户觉得更加贴心。现在很多APP在用户截图时会自动提示用户是否要进行分享。这个时机确实抓的很棒，一般来说，用户截图大多数时候都是为了分享给他人，少部分是为了留底备份。作为用户和产品之间的桥梁，社交分享在产品的发展过程中扮演
+                        <Article :content="post?.content || ''" />
                     </div>
-                    <div class="u-time">2024-01-02 20:00:00</div>
+                    <div class="u-time">{{ post?.updated_at || post?.created_at }}</div>
                     <div class="u-toolbar">
                         <div></div>
                         <div>
@@ -55,13 +55,15 @@
 import CommentUser from "@/components/community/comment_user.vue";
 import ReplyForReply from "./ReplyForReply.vue";
 import CommentReplyItem from "@/components/community/comment_reply_item.vue";
+import Article from "@jx3box/jx3box-editor/src/Article.vue";
 
 export default {
-    props: ["isMaster"],
+    props: ["isMaster", "post"],
     components: {
         CommentUser,
         ReplyForReply,
         CommentReplyItem,
+        Article,
     },
     data() {
         return {

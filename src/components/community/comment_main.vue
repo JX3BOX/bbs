@@ -1,7 +1,5 @@
 <template>
     <div>
-        <CommentReplyList :isMaster="true" />
-
         <!-- 帖子回复s -->
         <div class="m-reply-box">
             <CommentReplyList />
