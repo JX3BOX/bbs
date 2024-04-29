@@ -153,8 +153,8 @@ export default {
         this.loadData();
     },
     methods: {
-        onCategoryChange: function (event) {
-            this.category = event.value;
+        onCategoryChange: function (v) {
+            this.category = v;
             this.loadData();
         },
         // 翻页加载

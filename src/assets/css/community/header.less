@@ -49,20 +49,22 @@
         gap: 10px;
         margin-right: 25px;
         li {
-            &.active {
+            &.active,
+            &:hover {
                 border-color: #4080ff;
                 background: #4080ff;
                 a {
                     color: white;
                 }
             }
+            &:hover {
+                opacity: 0.9;
+            }
             border: 1px solid #f1f2f3;
             background: #f6f7f8;
             border-radius: 6px;
             text-align: center;
-            &:hover {
-                background: #e3e5e7;
-            }
+
             a {
                 display: block;
                 width: 100%;

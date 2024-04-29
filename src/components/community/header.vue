@@ -96,8 +96,12 @@ export default {
         },
         handleChange: function (item) {
             if (!item.href) {
-                this.selectedCategory = item.value;
-                this.onCategoryChange(item);
+                let selectedCategory = "";
+                if (this.selectedCategory != item.value) {
+                    selectedCategory = item.value;
+                }
+                this.selectedCategory = selectedCategory;
+                this.onCategoryChange(selectedCategory);
             }
         },
     },
