@@ -23,13 +23,13 @@
                     </span>
                 </div>
                 <a
-                    v-if="data.collection_id && data.collection_title"
+                    v-if="data.collection_id && data.collection.id && data.collection.title"
                     class="m-topic-collection"
                     :href="`/collection/${data.collection_id}`"
                 >
                     <div>
                         <span class="u-label">小册</span>
-                        <span class="u-value">{{ data.collection_title }}</span>
+                        <span class="u-value">{{ data.collection.title }}</span>
                     </div>
                 </a>
                 <a class="m-topic-userinfo" :href="authorLink(data.ext_user_info.id)">
@@ -48,10 +48,10 @@
                     <a
                         :href="getPostUrl(data.id)"
                         class="m-topic-imgs__item"
-                        v-for="(item, index) in data.imgs"
+                        v-for="(item, index) in data.extra_images"
                         :key="index"
                     >
-                        <img :src="item" />
+                        <img :src="getBanner(item)" />
                     </a>
                 </div>
             </div>
