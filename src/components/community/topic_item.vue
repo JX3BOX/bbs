@@ -41,7 +41,7 @@
             <div class="u-box-content">
                 <div class="m-topic-content">
                     <a :href="getPostUrl(data.id)" target="_blank">
-                        {{ data.introduction }}
+                        {{ data.introduction }}{{ data.introduction.length >= 100 ? "..." : "" }}
                     </a>
                 </div>
                 <div class="m-topic-imgs">
