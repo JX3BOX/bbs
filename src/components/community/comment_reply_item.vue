@@ -10,8 +10,8 @@
                         srcset=""
                     />
                     <div>
-                        <p class="u-name">芝士饭团</p>
-                        <p class="u-content">所以监听用户的截图操作，提示用户进行分享.</p>
+                        <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
+                        <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
                                 <el-button type="text" size="small">赞（14）</el-button>
@@ -27,9 +27,8 @@
                         </div>
                         <ReplyForReply
                             v-if="showReplyForReplyFrom"
-                            username="芝士饭团"
-                            :user-href="'1'"
-                            :current-id="'1'"
+                            :username="userInfo.display_name"
+                            :user-href="authorLink(userInfo.id)"
                             @hideForm="showReplyForReplyFrom = false"
                             @doReply="doReply"
                         />
@@ -42,24 +41,89 @@
 
 <script>
 import ReplyForReply from "./ReplyForReply.vue";
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import JX3_EMOTION from "@jx3box/jx3box-emotion";
+import { replyReply, getCommentsList } from "@/service/community";
+import { escapeHtml } from "@/utils/common";
 export default {
+    props: {
+        id: {
+            type: Number,
+            default: 0,
+        },
+        content: {
+            type: String,
+            default: "",
+        },
+        userInfo: {
+            type: Object,
+            default() {
+                return {
+                    display_name: "",
+                    avatar: "",
+                    id: "",
+                };
+            },
+        },
+    },
     components: {
         ReplyForReply,
     },
     data() {
         return {
+            renderContent: "",
             showReplyForReplyFrom: false,
         };
     },
+    watch: {
+        content: {
+            handler: function (val) {
+                this.formatContent(val);
+            },
+            immediate: true,
+        },
+    },
+    mounted() {
+        this.getList();
+    },
     methods: {
+        async formatContent(val) {
+            const ins = new JX3_EMOTION(escapeHtml(val));
+            this.renderContent = await ins._renderHTML();
+        },
+        authorLink,
         onShowReply() {
             this.showReplyForReplyFrom = true;
         },
-        doReply() {
-            // (replyData.replyForUID = this.reply.userId),
-            //     (replyData.replyForCommentId = this.reply.id),
-            //     this.$emit("addReply", replyData);
+        doReply({ content }) {
+            const id = this.$route.params.id;
+            const replyId = this.id;
+            const userId = this.userInfo.id;
+            if (id && replyId && userId) {
+                replyReply(id, replyId, {
+                    content: content,
+                    reply_for_user_id: userId,
+                }).finally(() => {
+                    this.showReplyForReplyFrom = false;
+                });
+            } else {
+                this.$message.error("回复失败：数据不正确");
+            }
             this.showReplyForReplyFrom = false;
+        },
+        getList() {
+            if (this.isMaster) return;
+            const id = this.$route.params.id;
+            const replyId = this.id;
+            if (id && replyId) {
+                getCommentsList(id, replyId).then((res) => {
+                    const list = res.data.data.list;
+                    if (list) {
+                        console.log(list);
+                        this.commentsList = list;
+                    }
+                });
+            }
         },
     },
 };

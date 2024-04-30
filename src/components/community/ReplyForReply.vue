@@ -10,15 +10,15 @@
         </el-form-item>
         <el-form-item>
             <div class="c-comment-tools">
-                <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i>
+                <!-- <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i> -->
                 <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
             </div>
-            <Uploader
+            <!-- <Uploader
                 v-if="showUploader"
                 ref="uploader"
                 @onFinish="attachmentUploadFinish"
                 @onError="attachmentUplodError"
-            />
+            /> -->
         </el-form-item>
         <el-form-item>
             <el-button size="mini" type="primary" @click="submintReply()" :disabled="disableSubmitBtn">提交</el-button>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import Uploader from "./upload.vue";
+// import Uploader from "./upload.vue";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 export default {
     props: ["username", "userHref", "currentId"],
@@ -41,7 +41,7 @@ export default {
         };
     },
     components: {
-        Uploader,
+        // Uploader,
         Emotion,
     },
     mounted() {

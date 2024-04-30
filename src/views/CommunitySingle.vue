@@ -1,14 +1,14 @@
 <template>
     <CommunitySingleLayout>
-        <div class="m-community-single">
+        <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
             <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
                 <slot name="single-header"></slot>
             </PostHeader>
             <el-divider content-position="left">JX3BOX</el-divider>
-            <!--  楼主 -->
 
-            <CommentReplyList :isMaster="true" :post="post" />
+            <!--  楼主 -->
+            <CommentReplyList v-if="this.page === 1" :isMaster="true" :post="post" />
 
             <!-- 帖子回复s -->
             <div class="m-reply-box">
@@ -59,9 +59,10 @@ export default {
             stat: "",
             page: 1, //当前页数
             per: 10, //每页条目
-            total: 100, //总条目数
-            post: null,
+            total: 0, //总条目数
+            post: {},
             replyList: [],
+            loading: false,
         };
     },
     computed: {
@@ -69,15 +70,15 @@ export default {
             return this.$route.params.id;
         },
         postHeader: function () {
-            if (!this.post) return;
+            if (!this.post.id) return;
             return {
                 ID: this.post.id,
                 post_type: "community",
                 post_title: this.post.title,
                 author_info: {
-                    display_name: this.post?.ext_user_info.display_name || "",
-                    user_avatar: this.post?.ext_user_info.avatar,
-                    user_avatar_frame: this.post?.ext_user_info.user_avatar_frame,
+                    display_name: this.post.ext_user_info.display_name || "",
+                    user_avatar: this.post.ext_user_info.avatar,
+                    user_avatar_frame: this.post.ext_user_info.user_avatar_frame,
                     deleted: 0,
                 },
                 post_date: this.post.created_at,
@@ -100,23 +101,42 @@ export default {
             });
         },
         getReplyList: function () {
-            getTopicReplyList(this.id).then((res) => {
-                const list = res.data.data.list;
-                if (list) {
-                    this.replyList = list;
-                    console.log(list);
-                }
-            });
+            this.loading = true;
+            getTopicReplyList(this.id, {
+                index: this.page,
+                pageSize: this.per,
+                order_created_at: 0,
+            })
+                .then((res) => {
+                    const list = res.data.data.list;
+                    const page = res.data.data.page;
+                    if (list) {
+                        this.replyList = list.map((item, i) => {
+                            return {
+                                ...item,
+                                layer: (page.index - 1) * page.pageSize + i + 1,
+                            };
+                        });
+                        this.total = page.total;
+                    }
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         onReplyTopic({ attachmentList, content }) {
             if (!this.id) return this.$message.error("文章id不存在");
             replyTopic(this.id, {
                 client: location.href.includes("origin") ? "origin" : "std",
                 content: content,
-                // extra_images: [...attachmentList],
+                extra_images: attachmentList,
+            }).then((res) => {
+                this.getReplyList();
             });
         },
-        changePage() {},
+        changePage() {
+            this.getReplyList();
+        },
     },
 };
 </script>

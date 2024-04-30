@@ -54,4 +54,18 @@ function isPhone() {
     return mobile !== null;
 }
 
-export { getAppID, getAppType, getStarSign, isPhone };
+function escapeHtml(str) {
+    return str.replace(/[<>"']/g, function (match) {
+        switch (match) {
+            case "<":
+                return "&lt;";
+            case ">":
+                return "&gt;";
+            case '"':
+                return "&quot;";
+            case "'":
+                return "&#39;";
+        }
+    });
+}
+export { getAppID, getAppType, getStarSign, isPhone, escapeHtml };

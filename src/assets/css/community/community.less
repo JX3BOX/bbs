@@ -12,7 +12,7 @@
 
 .m-topic-imgs {
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     gap: 9.6px;
     .m-topic-imgs__item {
@@ -148,7 +148,8 @@
             gap: 8px;
 
             .u-cover {
-                width: 168px;
+                // width: 168px;
+                width: 100%;
                 height: 88px;
                 border-radius: 4px;
                 background-size: 300% 100%;
@@ -174,6 +175,7 @@
         .u-box-content {
             display: flex;
             flex-direction: column;
+            flex: 1;
             gap: 24px;
             justify-content: space-between;
         }

@@ -16,13 +16,23 @@ function getTopicDetails(id) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}`);
 }
 // 获取帖子回复列表
-function getTopicReplyList(id) {
-    return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/list/dropdown`);
+function getTopicReplyList(id, params) {
+    return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/list`, {
+        params,
+    });
 }
 
-// 回帖
+// 主贴回帖
 function replyTopic(id, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply`, data);
 }
-
-export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic };
+// 主贴回帖的评论
+function replyReply(id, replyId, data) {
+    return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments`, data);
+}
+function getCommentsList(id, replyId, params) {
+    return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments/list`, {
+        params,
+    });
+}
+export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList };

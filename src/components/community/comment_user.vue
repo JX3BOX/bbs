@@ -1,9 +1,9 @@
 <template>
     <div class="m-comment-item__user">
         <div class="u-userinfo">
-            <img class="u-avatar" :src="userInfo?.avatar" alt="avatar" />
+            <img class="u-avatar" :src="userInfo.avatar" alt="avatar" />
             <div class="u-info">
-                <p class="u-name">{{ userInfo?.display_name }}</p>
+                <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
                 <p class="u-other">
                     <span class="u-lv">Lv.4</span>
                     <span class="u-vip">PRO</span>
@@ -45,8 +45,19 @@
 </template>
 
 <script>
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
-    props: ["userInfo"],
+    props: {
+        userInfo: {
+            type: Object,
+            default: function () {
+                return { display_name: "", avatar: "" };
+            },
+        },
+    },
+    methods: {
+        authorLink,
+    },
 };
 </script>
 

@@ -14,7 +14,7 @@
                 <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i>
                 <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
                 <quickReply @reply="onQuickReply"></quickReply>
-                <div class="c-comment-secret">
+                <!-- <div class="c-comment-secret">
                     <el-checkbox class="u-secret" v-model="is_secret" border size="mini"
                         >悄悄话
                         <el-tooltip
@@ -25,7 +25,7 @@
                         >
                             <i class="el-icon-info"></i> </el-tooltip
                     ></el-checkbox>
-                </div>
+                </div> -->
             </div>
             <Uploader
                 class="u-uploader"
