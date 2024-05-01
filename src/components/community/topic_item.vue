@@ -5,9 +5,11 @@
                 <img class="u-timeload-icon" src="@/assets/img/community/timeload.svg" alt="" srcset="" />
                 <span>{{ getTimeAgo(data.updated_at) }} </span>
             </div>
-            <div :class="`m-topic-top__category`" :style="`background-color: ${getRandomMacaronColor()};`">
-                <!-- <img v-if="data.category === '文章'" src="@/assets/img/community/文章.svg" alt="" srcset="" /> -->
-                <!-- <img v-else src="@/assets/img/community/讨论.svg" alt="" srcset="" /> -->
+            <div
+                :class="`m-topic-top__category`"
+                :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+            >
+                <div v-html="styles.icon"></div>
                 <div>{{ data.category }}</div>
             </div>
         </div>
@@ -40,9 +42,7 @@
 
             <div class="u-box-content">
                 <div class="m-topic-content">
-                    <a :href="getPostUrl(data.id)" target="_blank">
-                        {{ data.introduction }}{{ data.introduction.length >= 100 ? "..." : "" }}
-                    </a>
+                    <a :href="getPostUrl(data.id)" target="_blank" v-html="introduction"> </a>
                 </div>
                 <div class="m-topic-imgs">
                     <a
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, showBanner, getThumbnail } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
@@ -79,9 +79,26 @@ const macarons = [
     "#E1D1A7", // 浅棕色
 ];
 export default {
-    props: ["data"],
+    props: ["data", "getCategoryStyle"],
     data() {
         return {};
+    },
+    computed: {
+        styles: function () {
+            return this.getCategoryStyle(this.data.category || "");
+        },
+        introduction: function () {
+            const data = this.data;
+            if (data.introduction) {
+                if (data.introduction.length >= 100) {
+                    return data.introduction + "...";
+                } else {
+                    return data.introduction;
+                }
+            } else {
+                return "";
+            }
+        },
     },
     methods: {
         getTimeAgo,
@@ -100,8 +117,8 @@ export default {
                 return __cdn + `design/random_cover/${randomNum}.jpg`;
             }
         },
-        getSquareBanner:function (val){
-            return getThumbnail(val, 48*2);
+        getSquareBanner: function (val) {
+            return getThumbnail(val, 48 * 2);
         },
         showAvatar: function () {
             return showAvatar(this.data?.ext_user_info?.avatar);

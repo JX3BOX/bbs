@@ -44,14 +44,7 @@
 
                 <div v-if="!isMaster" class="m-reply-list">
                     <!-- 回帖的回复-->
-                    <CommentReplyItem
-                        v-for="item in commentsList"
-                        :key="item.id"
-                        :content="item.content"
-                        :userInfo="item.user_info"
-                        :id="item.id"
-                        :comments="item.comments"
-                    />
+                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :data="item"> </CommentReplyItem>
                 </div>
             </div>
         </div>

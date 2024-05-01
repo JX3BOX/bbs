@@ -3,12 +3,7 @@
         <div class="m-comment-wrapper__right">
             <div class="m-comment-wrapper__right-box">
                 <div class="m-reply-user">
-                    <img
-                        class="u-avatar"
-                        src="https://thirdwx.qlogo.cn/mmopen/vi_32/XVv97dQRkCiaC1R6nMP6zSbxuAgrFVegAj7LmEY7wtm5UjrdyLAW1UDZtXWGcTnPaYUoMl0CLITPrBYko4yEbDO0N1xSrQtjcfBkoDnianRqI/132?x-oss-process=image/auto-orient,1/resize,m_fill,w_360,h_360/quality,Q_100"
-                        alt=""
-                        srcset=""
-                    />
+                    <img class="u-avatar" :src="userInfo.avatar" />
                     <div>
                         <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
                         <p class="u-content" v-html="renderContent"></p>
@@ -22,7 +17,7 @@
                             <div>
                                 <el-button type="text" size="small">删除</el-button>
                                 <el-button type="text" size="small">黑洞</el-button>
-                                <span class="u-time">2024-01-02 20:00:00</span>
+                                <span class="u-time">{{ data.updated_at }}</span>
                             </div>
                         </div>
                         <ReplyForReply
@@ -35,6 +30,7 @@
                     </div>
                 </div>
             </div>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -46,26 +42,7 @@ import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { replyReply, getCommentsList } from "@/service/community";
 import { escapeHtml } from "@/utils/common";
 export default {
-    props: {
-        id: {
-            type: Number,
-            default: 0,
-        },
-        content: {
-            type: String,
-            default: "",
-        },
-        userInfo: {
-            type: Object,
-            default() {
-                return {
-                    display_name: "",
-                    avatar: "",
-                    id: "",
-                };
-            },
-        },
-    },
+    props: ["data"],
     components: {
         ReplyForReply,
     },
@@ -81,6 +58,17 @@ export default {
                 this.formatContent(val);
             },
             immediate: true,
+        },
+    },
+    computed: {
+        userInfo: function () {
+            return this.data.user_info;
+        },
+        comments: function () {
+            return this.data.comments;
+        },
+        content: function () {
+            return this.data.content;
         },
     },
     mounted() {
