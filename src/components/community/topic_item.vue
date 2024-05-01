@@ -32,7 +32,7 @@
                         <span class="u-value">{{ data.collection.title }}</span>
                     </div>
                 </a>
-                <a class="m-topic-userinfo" :href="authorLink(data.ext_user_info.id)">
+                <a class="m-topic-userinfo" :href="authorLink(data.ext_user_info.id)" target="_blank">
                     <img class="m-topic-userinfo__avatar" :src="showAvatar()" alt="" srcset="" />
                     <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
                 </a>
@@ -51,7 +51,7 @@
                         v-for="(item, index) in data.extra_images"
                         :key="index"
                     >
-                        <img :src="getBanner(item)" />
+                        <img :src="getSquareBanner(item)" />
                     </a>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, showBanner } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink, showBanner, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
@@ -92,13 +92,16 @@ export default {
         },
         getBanner: function (val) {
             if (val) {
-                return showBanner(val);
+                return getThumbnail(val, [168 * 2, 88 * 2]);
             } else {
                 // 从1-39中随机选一个
                 const randomNum = random(1, 39);
                 // return __imgPath + `image/banner/${appKey}${subtype}` + ".png";
                 return __cdn + `design/random_cover/${randomNum}.jpg`;
             }
+        },
+        getSquareBanner:function (val){
+            return getThumbnail(val, 48*2);
         },
         showAvatar: function () {
             return showAvatar(this.data?.ext_user_info?.avatar);

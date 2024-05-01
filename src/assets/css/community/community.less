@@ -96,16 +96,17 @@
         align-items: center;
         user-select: none;
         cursor: pointer;
-        color: rgba(135, 42, 42, 1);
+        color:@color;
+        // color: rgba(135, 42, 42, 1);
 
-        &.u-article {
-            color: rgba(135, 42, 42, 1);
-            background: rgba(255, 236, 191, 1);
-        }
-        &.u-taolun {
-            color: rgba(81, 42, 135, 1);
-            background: rgba(241, 224, 255, 1);
-        }
+        // &.u-article {
+            // color: rgba(135, 42, 42, 1);
+            // background: rgba(255, 236, 191, 1);
+        // }
+        // &.u-taolun {
+            // color: rgba(81, 42, 135, 1);
+            // background: rgba(241, 224, 255, 1);
+        // }
     }
 }
 
@@ -168,8 +169,8 @@
                 line-height: 26px;
                 color: rgba(64, 128, 255, 1);
                 margin: 0;
-                &:hover {
-                    color: rgba(255, 64, 128, 1);
+                &:hover{
+                    text-decoration: underline;
                 }
             }
         }
