@@ -2,35 +2,39 @@
     <div>
         <div class="m-comment-wrapper">
             <div class="m-comment-wrapper__left">
-                <CommentUser :userInfo="post.user_info || post.ext_user_info" />
+                <CommentUser :userInfo="userInfo" />
             </div>
             <div class="m-comment-wrapper__right">
                 <div class="m-comment-wrapper__right-box">
-                    <div class="u-layer">{{ isMaster ? "楼主" : post.layer + "楼" }}</div>
-                    <div class="u-content">
-                        <Article v-if="isMaster" :content="post.content || ''" />
-                        <div v-else v-html="renderContent" />
+                    <div>
+                        <div class="u-layer">{{ isMaster ? "楼主" : post.layer + "楼" }}</div>
+                        <div class="u-content">
+                            <Article v-if="isMaster" :content="post.content || ''" />
+                            <div v-else v-html="renderContent" />
+                        </div>
                     </div>
-                    <div class="u-time">{{ post.updated_at || post.created_at }}</div>
-                    <div class="u-toolbar">
-                        <div></div>
-                        <div>
-                            <el-button type="text" size="small">黑洞</el-button>
-                            <el-button type="text" size="small">删除</el-button>
-                            <el-button type="text" size="small">举报</el-button>
-                            <el-button type="text" size="small">拉黑</el-button>
-                            <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
-                                <div class="u-btn">
-                                    <img src="@/assets/img/community/reply.svg" alt="" />
-                                    <span>{{ isMaster ? "跟帖" : "回复" }}</span>
-                                </div>
-                            </el-button>
-                            <el-button type="primary" size="small" class="u-praise-btn">
-                                <div class="u-btn">
-                                    <img src="@/assets/img/community/praise.svg" alt="" />
-                                    <span>赞</span>
-                                </div>
-                            </el-button>
+                    <div>
+                        <div class="u-time">{{ post.updated_at || post.created_at }}</div>
+                        <div class="u-toolbar">
+                            <div></div>
+                            <div>
+                                <el-button type="text" size="small">黑洞</el-button>
+                                <el-button type="text" size="small">删除</el-button>
+                                <el-button type="text" size="small">举报</el-button>
+                                <el-button type="text" size="small">拉黑</el-button>
+                                <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
+                                    <div class="u-btn">
+                                        <img src="@/assets/img/community/reply.svg" alt="" />
+                                        <span>{{ isMaster ? "跟帖" : "回复" }}</span>
+                                    </div>
+                                </el-button>
+                                <el-button type="primary" size="small" class="u-praise-btn">
+                                    <div class="u-btn">
+                                        <img src="@/assets/img/community/praise.svg" alt="" />
+                                        <span>赞</span>
+                                    </div>
+                                </el-button>
+                            </div>
                         </div>
                     </div>
                     <ReplyForReply
@@ -42,9 +46,9 @@
                     />
                 </div>
 
-                <div v-if="!isMaster" class="m-reply-list">
+                <div v-if="!isMaster && commentsList.length" class="m-reply-list">
                     <!-- 回帖的回复-->
-                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :data="item"> </CommentReplyItem>
+                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :data="item" />
                 </div>
             </div>
         </div>
@@ -76,6 +80,15 @@ export default {
         };
     },
     computed: {
+        userInfo: function () {
+            if (this.post && this.post.user_info) {
+                return this.post.user_info;
+            }
+            if (this.post && this.post.ext_user_info) {
+                return this.post.ext_user_info;
+            }
+            return {};
+        },
         userId: function () {
             if (this.post && this.post.user_info) {
                 return this.post.user_info.id;
@@ -96,7 +109,7 @@ export default {
             immediate: true,
         },
         "post.comments": {
-            handler: function (val) {
+            handler: function () {
                 if (this.post.comments) {
                     this.commentsList = this.post.comments;
                 }

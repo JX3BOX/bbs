@@ -7,12 +7,16 @@
             </PostHeader>
             <el-divider content-position="left">JX3BOX</el-divider>
 
-            <!--  楼主 -->
-            <CommentReplyList v-if="this.page === 1" :isMaster="true" :post="post" />
+            <div class="m-list-box">
+                <!--  楼主 -->
+                <div class="m-master-box">
+                    <CommentReplyList v-if="this.page === 1" :isMaster="true" :post="post" />
+                </div>
 
-            <!-- 帖子回复s -->
-            <div class="m-reply-box">
-                <CommentReplyList v-for="(item, i) in replyList" :key="i" :post="item" />
+                <!-- 帖子回复s -->
+                <div class="m-reply-box">
+                    <CommentReplyList v-for="(item, i) in replyList" :key="i" :post="item"> /> </CommentReplyList>
+                </div>
             </div>
             <!-- 帖子回复e -->
 
@@ -30,8 +34,7 @@
             </div>
 
             <el-divider content-position="left">评论</el-divider>
-
-            <div>
+            <div class="u-editor">
                 <CommentEditor @submit="onReplyTopic" />
             </div>
         </div>

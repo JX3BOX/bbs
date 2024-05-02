@@ -86,7 +86,6 @@ export default {
 .p-community-single {
     .m-community-single__main {
         display: flex;
-        gap: 24px;
     }
     .c-main {
         flex: 1;
