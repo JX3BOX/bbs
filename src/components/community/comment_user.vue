@@ -1,6 +1,8 @@
 <template>
     <div class="m-comment-item__user">
-        <div class="u-userinfo">
+        <Author :uid="userInfo.id" />
+
+        <!-- <div class="u-userinfo">
             <img class="u-avatar" :src="userInfo.avatar" alt="avatar" />
             <div class="u-info">
                 <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
@@ -40,7 +42,7 @@
         <div class="u-btns">
             <el-button size="small" type="primary" icon="el-icon-plus" class="u-follow">关注</el-button>
             <el-button size="small" icon="el-icon-message">私信</el-button>
-        </div>
+        </div> -->
     </div>
 </template>
 
