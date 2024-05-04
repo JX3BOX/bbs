@@ -1,68 +1,60 @@
 <template>
-    <div class="m-comment-item__user">
-        <Author :uid="userInfo.id" />
-
-        <!-- <div class="u-userinfo">
-            <img class="u-avatar" :src="userInfo.avatar" alt="avatar" />
-            <div class="u-info">
-                <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
-                <p class="u-other">
-                    <span class="u-lv">Lv.4</span>
-                    <span class="u-vip">PRO</span>
-                </p>
-                <p class="u-medals">
-                    <el-tooltip class="item" effect="dark" content="达摩洞百强团队成员" placement="top">
-                        <img
-                            src="https://img.js.design/assets/img/6618ebca760483d015860819.gif#dda55e95966e0b843f6012575f3a9890"
-                            alt=""
-                        />
-                    </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="达摩洞百强团队成员" placement="top">
-                        <img
-                            src="https://img.js.design/assets/img/6618ebca760483d015860819.gif#dda55e95966e0b843f6012575f3a9890"
-                            alt=""
-                        />
-                    </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="达摩洞百强团队成员" placement="top">
-                        <img
-                            src="https://img.js.design/assets/img/6618ebca760483d015860819.gif#dda55e95966e0b843f6012575f3a9890"
-                            alt=""
-                        />
-                    </el-tooltip>
-                </p>
+    <div class="c-author">
+        <AuthorInfo :uid="uid" @ready="installModules" />
+        <template v-if="data">
+            <div class="u-interact">
+                <AuthorFollow style="margin-right: 8px" :uid="uid" />
+                <!-- <AuthorGift :uid="uid" /> -->
+                <el-button icon="el-icon-message" class="u-btn" size="mini" @click="onMessage">私信</el-button>
             </div>
-        </div>
-
-        <img
-            class="u-honour"
-            src="https://img.js.design/assets/img/6618ec744eb2224151864807.png#f4663c4b17ba6d2588ba059d26156ad9"
-            alt=""
-        />
-        <p class="u-desc">寒蝉凄切，对长亭晚，骤雨初歇。</p>
-        <div class="u-btns">
-            <el-button size="small" type="primary" icon="el-icon-plus" class="u-follow">关注</el-button>
-            <el-button size="small" icon="el-icon-message">私信</el-button>
-        </div> -->
+            <!-- <AuthorMsg :uid="uid" /> -->
+            <!-- <AuthorLink class="u-block u-links" :uid="uid" :data="data" /> -->
+            <AuthorMedals class="u-block u-trophy" :uid="uid" />
+            <!-- <AuthorTeams class="u-block u-teams" :uid="uid" /> -->
+            <!-- <AuthorFans class="u-block u-fans" :uid="uid" /> -->
+            <slot></slot>
+            <!-- <AuthorPosts class="u-block u-posts" :uid="uid" /> -->
+        </template>
     </div>
 </template>
 
 <script>
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import AuthorInfo from "@jx3box/jx3box-common-ui/src/author/AuthorInfo.vue";
+// import AuthorLink from "@jx3box/jx3box-common-ui/src/author/AuthorLink.vue";
+import AuthorFollow from "@jx3box/jx3box-common-ui/src/author/AuthorFollow.vue";
+// import AuthorMsg from "@jx3box/jx3box-common-ui/src/author/AuthorMsg.vue";
+// import AuthorGift from "@jx3box/jx3box-common-ui/src/author/AuthorGift.vue";
+// import AuthorFans from "@jx3box/jx3box-common-ui/src/author/AuthorFans.vue";
+import AuthorMedals from "@jx3box/jx3box-common-ui/src/author/AuthorMedals.vue";
+// import AuthorTeams from "@jx3box/jx3box-common-ui/src/author/AuthorTeams.vue";
+// import AuthorPosts from "@jx3box/jx3box-common-ui/src/author/AuthorPosts.vue";
 export default {
-    props: {
-        userInfo: {
-            type: Object,
-            default: function () {
-                return { display_name: "", avatar: "" };
-            },
-        },
+    props: ["uid"],
+    data: function () {
+        return {
+            data: "",
+        };
     },
     methods: {
-        authorLink,
+        installModules: function (data) {
+            this.data = data;
+        },
+        onMessage: function () {
+            window.open("/dashboard/letter?receiver=" + this.uid, "_blank");
+        },
+    },
+    components: {
+        AuthorInfo,
+        // AuthorLink,
+        AuthorFollow,
+        // AuthorMsg,
+        // AuthorGift,
+        AuthorMedals,
+        // AuthorTeams,
+        // AuthorPosts,
+        // AuthorFans,
     },
 };
 </script>
 
-<style lang="less">
-@import "~@/assets/css/community/comment_user.less";
-</style>
+<style lang="less"></style>

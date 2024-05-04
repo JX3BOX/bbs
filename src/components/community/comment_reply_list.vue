@@ -2,7 +2,7 @@
     <div>
         <div class="m-comment-wrapper">
             <div class="m-comment-wrapper__left">
-                <CommentUser :userInfo="userInfo" />
+                <CommentUser :uid="userInfo.id" />
             </div>
             <div class="m-comment-wrapper__right">
                 <div class="m-comment-wrapper__right-box">
