@@ -57,9 +57,9 @@
                             <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
                         </a>
                     </div>
-                    <div class="m-topic-content">
-                        <a :href="getPostUrl(data.id)" target="_blank" v-html="introduction"> </a>
-                    </div>
+                    <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
+                        <div v-html="introduction"></div>
+                    </a>
                 </div>
             </div>
         </div>
