@@ -7,7 +7,7 @@
                     <div>
                         <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
                         <p class="u-reply-user">
-                            回复 {{ data.id }}
+                            回复
                             <a :href="authorLink(replyUserInfo.id)">{{ replyUserInfo.display_name }}</a> ：
                         </p>
                         <p class="u-content" v-html="renderContent"></p>
