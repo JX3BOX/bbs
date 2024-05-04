@@ -117,7 +117,9 @@ export default {
             immediate: true,
         },
     },
-    mounted() {},
+    mounted() {
+        this.getList();
+    },
     methods: {
         authorLink,
         async formatContent(val) {

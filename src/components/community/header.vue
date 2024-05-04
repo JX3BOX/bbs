@@ -7,7 +7,7 @@
             <a
                 :href="item.href || 'javascript:;'"
                 :class="`${selectedCategory === item.value && 'active'} u-item`"
-                v-for="(item, index) in navs"
+                v-for="(item, index) in showNavs"
                 :key="index"
                 @click="handleChange(item)"
                 :style="{
@@ -21,6 +21,33 @@
                 <div v-if="item.mark" class="u-mark" v-html="item.mark" :style="{ color: item.activeColor }"></div>
                 <img v-if="item.markGif" class="u-mark u-markgif" :src="item.markGif" />
             </a>
+            <el-dropdown trigger="click" :disabled="morenNavs.length === 0">
+                <a href="javascript:;" :class="`u-item u-more ${morenNavs.length === 0 && 'is-disabled'}`">
+                    <span>更多</span>
+                    <i class="el-icon-arrow-down"></i>
+                </a>
+                <el-dropdown-menu slot="dropdown" class="m-community-dropdown">
+                    <el-dropdown-item
+                        v-for="(item, index) in morenNavs"
+                        :key="index"
+                        :style="{
+                            '--hover-bg-color': item.hoverColor,
+                            '--hover-color': item.color,
+                            '--active-color': item.activeColor || '#fff',
+                        }"
+                        class="m-community-dropdown__item"
+                    >
+                        <a
+                            :href="item.href || 'javascript:;'"
+                            :class="`${selectedCategory === item.value && 'active'} u-item`"
+                            @click="handleChange(item)"
+                        >
+                            <span> {{ item.lable }}</span>
+                            <div class="u-icon" v-html="item.icon"></div>
+                        </a>
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
         </div>
         <div class="m-community-header__special-box">
             <div class="m-community-header__special-list">
@@ -46,10 +73,21 @@ export default {
         return {
             selectedCategory: "",
             navs: [],
+            showNavs: [],
+            morenNavs: [],
         };
     },
     mounted() {
         this.getTopicBucket();
+    },
+    watch: {
+        navs: function () {
+            const len = 17;
+            const navs = [...this.navs];
+            this.showNavs = navs.slice(0, len);
+            console.log(this.showNavs, navs);
+            this.morenNavs = navs.slice(len);
+        },
     },
     methods: {
         getTopicBucket() {

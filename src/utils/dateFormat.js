@@ -37,19 +37,19 @@ function getTimeAgo(dateString) {
     const diff = now.diff(date, "day");
     if (diff === 0) {
         if (now.diff(date, "minute") <= 60) {
-            return "刚刚";
+            return { text: "刚刚", icon: "el-icon-loading" };
         } else if (now.diff(date, "minute") <= 120) {
-            return `2小时内`;
+            return { text: "2小时内", icon: "el-icon-time" };
         } else {
-            return date.format("HH:mm");
+            return { text: date.format("HH:mm"), icon: "el-icon-time" };
         }
     } else if (diff === 1) {
-        return "昨天";
+        return { text: "昨天", icon: "el-icon-time" };
     } else if (diff >= 2 && diff <= 365) {
-        return date.format("MM-DD");
+        return { text: date.format("MM-DD"), icon: "el-icon-date" };
     } else {
         // 如果时间差超过1年
-        return date.format("YYYY-MM-DD HH:mm:ss");
+        return { text: date.format("YYYY-MM-DD HH:mm:ss"), icon: "el-icon-date" };
     }
 }
 

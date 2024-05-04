@@ -2,8 +2,8 @@
     <div id="app">
         <Header></Header>
         <Breadcrumb
-            name="竹林茶馆"
-            slug="bbs"
+            name="论坛交流"
+            slug="community"
             :publishEnable="false"
             :topicEnable="false"
             :adminEnable="false"

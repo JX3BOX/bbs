@@ -2,8 +2,8 @@
     <div class="m-topic-box">
         <div class="m-topic-top">
             <div class="m-topic-top__time">
-                <img class="u-timeload-icon" src="@/assets/img/community/timeload.svg" alt="" srcset="" />
-                <span>{{ getTimeAgo(data.updated_at) }} </span>
+                <i :class="getTimeAgo(data.updated_at).icon"></i>
+                <span>{{ getTimeAgo(data.updated_at).text }} </span>
             </div>
             <div
                 :class="`m-topic-top__category`"
@@ -24,37 +24,34 @@
                         {{ item }}
                     </span>
                 </div>
-                <a
+                <div
                     v-if="data.collection_id && data.collection.id && data.collection.title"
                     class="m-topic-collection"
-                    :href="`/collection/${data.collection_id}`"
                 >
-                    <div>
+                    <a :href="`/collection/${data.collection_id}`">
                         <span class="u-label">小册</span>
                         <span class="u-value">{{ data.collection.title }}</span>
-                    </div>
-                </a>
-                <a class="m-topic-userinfo" :href="authorLink(data.ext_user_info.id)" target="_blank">
-                    <img class="m-topic-userinfo__avatar" :src="showAvatar()" alt="" srcset="" />
-                    <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
-                </a>
-            </div>
-
-            <div class="u-box-content">
-                <div class="m-topic-content">
-                    <a :href="getPostUrl(data.id)" target="_blank" v-html="introduction"> </a>
+                    </a>
                 </div>
-                <div class="m-topic-imgs">
-                    <a
-                        :href="getPostUrl(data.id)"
-                        class="m-topic-imgs__item"
-                        v-for="(item, index) in data.extra_images"
-                        :key="index"
-                    >
-                        <img :src="getSquareBanner(item)" />
+
+                <div class="m-topic-userinfo">
+                    <a :href="authorLink(data.ext_user_info.id)" target="_blank">
+                        <img class="m-topic-userinfo__avatar" :src="showAvatar()" alt="" srcset="" />
+                        <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
                     </a>
                 </div>
             </div>
+
+            <a class="u-box-content" :href="getPostUrl(data.id)">
+                <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
+                    <div v-html="introduction"></div>
+                </a>
+                <div class="m-topic-imgs">
+                    <a class="m-topic-imgs__item" v-for="(item, index) in data.extra_images" :key="index">
+                        <img :src="getSquareBanner(item)" />
+                    </a>
+                </div>
+            </a>
         </div>
     </div>
 </template>

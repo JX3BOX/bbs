@@ -7,7 +7,7 @@
                     <div>
                         <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
                         <p class="u-reply-user">
-                            回复
+                            回复 {{ data.id }}
                             <a :href="authorLink(replyUserInfo.id)">{{ replyUserInfo.display_name }}</a> ：
                         </p>
                         <p class="u-content" v-html="renderContent"></p>
@@ -84,7 +84,7 @@ export default {
         },
     },
     mounted() {
-        this.getList();
+        // this.getList();
     },
     methods: {
         async formatContent(val) {

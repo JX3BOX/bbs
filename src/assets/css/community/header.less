@@ -32,6 +32,7 @@
         margin-right: 20px;
         .u-item {
             min-width: 104px;
+            cursor: pointer;
             height: 28px;
             background: #f6f7f8;
             border-radius: 6px;
@@ -45,10 +46,8 @@
             position: relative;
             gap: 2px;
             .u-icon {
-                display: flex;
+                display: none;
                 align-items: center;
-                position: relative;
-                top: 1px;
             }
             &:hover {
                 background-color: var(--hover-bg-color);
@@ -70,9 +69,6 @@
                     display: none;
                 }
             }
-            .u-icon {
-                display: none;
-            }
             .u-mark {
                 position: absolute;
                 top: 0;
@@ -82,6 +78,18 @@
             .u-markgif {
                 width: 20px;
                 height: 20px;
+            }
+        }
+        .u-more {
+            &:hover {
+                background: rgba(235, 244, 255, 1);
+                color: rgba(64, 128, 255, 1);
+            }
+            &.is-disabled:hover {
+                cursor: not-allowed;
+                background: #f6f7f8;
+                color: @color;
+                opacity: 0.8;
             }
         }
     }
@@ -118,6 +126,26 @@
     }
 }
 
+.m-community-dropdown__item {
+    &:not(.is-disabled):hover {
+        background-color: var(--hover-bg-color);
+        & .u-item {
+            color: var(--hover-color);
+        }
+    }
+    .u-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .u-icon {
+        display: flex;
+        align-items: center;
+    }
+}
+.m-community-dropdown {
+    width: 120px;
+}
 @media screen and (max-width: 1850px) {
     .m-community-header {
         .m-community-publish {
