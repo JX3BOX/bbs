@@ -1,6 +1,6 @@
 .m-community-single {
     .m-single-header {
-        padding-left: 32px;
+        margin: 0 28px;
     }
     .el-divider__text {
         color: #888;
@@ -20,13 +20,23 @@
     background: #fafafa;
 }
 
-@media screen and (max-width: @phone) {
+@media screen and (max-width: @ipad) {
+    .m-community-single__main {
+        margin: 0 12px;
+    }
     .m-community-single {
+        .m-single-header {
+            margin: 0 ;
+        }
         .m-pagination-box {
             display: block;
             padding: 0 12px;
             overflow: scroll;
             padding-bottom: 15px;
         }
+        .u-editor {
+            padding: 0;
+        }
     }
+
 }

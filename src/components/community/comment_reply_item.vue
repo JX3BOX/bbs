@@ -7,8 +7,8 @@
                     <div>
                         <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
                         <p class="u-reply-user">
-                            回复
-                            <a :href="authorLink(replyUserInfo.id)">{{ replyUserInfo.display_name }}</a> ：
+                            回复 {{ replyUserInfo.display_name }}：
+                            <!-- <a :href="authorLink(replyUserInfo.id)">{{ replyUserInfo.display_name }}</a> ： -->
                         </p>
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
@@ -24,6 +24,7 @@
                                 <span class="u-time">{{ data.updated_at }}</span>
                             </div>
                         </div>
+                        <span class="u-time u-mobile-time">{{ data.updated_at }}</span>
                         <ReplyForReply
                             v-if="showReplyForReplyFrom"
                             :username="userInfo.display_name"
