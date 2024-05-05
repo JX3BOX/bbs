@@ -98,7 +98,7 @@ export default {
     mounted() {},
     watch: {
         categoryList: function () {
-            const len = 17;
+            const len = 19;
             const navs = [...this.categoryList];
             this.showNavs = navs.slice(0, len);
             this.morenNavs = navs.slice(len);
