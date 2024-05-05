@@ -10,7 +10,7 @@
                     :class="`m-topic-top__category`"
                     :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                 >
-                    <div v-html="styles.icon"></div>
+                    <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}`)" />
                     <div>{{ data.category }}</div>
                 </div>
             </div>

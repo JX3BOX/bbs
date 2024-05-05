@@ -1,9 +1,10 @@
 <template>
     <CommunityLayout>
         <div v-loading="loading">
-            <Header :on-category-change="onCategoryChange" :getCategoryStyle="getCategoryStyle" />
+            <Header :on-category-change="onCategoryChange" :categoryList="categoryList" />
             <!-- 置顶文章 -->
             <TopicTop v-if="toptopicData" :data="toptopicData" :getCategoryStyle="getCategoryStyle" />
+
             <div v-if="toptopicData" class="m-topic-list m-topic-hot__mini">
                 <TopicItem :data="toptopicData" :getCategoryStyle="getCategoryStyle" />
             </div>
@@ -51,8 +52,9 @@ import Header from "@/components/community/header.vue";
 import TopicItem from "@/components/community/topic_item.vue";
 import topicData from "@/assets/data/topic_list.json";
 import { getTopicList } from "@/service/community";
-import palugif from "@/assets/img/community/category/帕鲁.gif";
 import TopicTop from "@/components/community/topic_top.vue";
+import { getTopicBucket } from "@/service/community";
+import { modifyAlpha } from "@/utils/common";
 export default {
     components: {
         CommunityLayout,
@@ -72,6 +74,7 @@ export default {
             category: undefined,
             list: [],
             toptopicData: null,
+            categoryList: [],
         };
     },
     computed: {
@@ -93,69 +96,42 @@ export default {
 
     mounted() {
         this.loadData();
+        this.getCategoryList();
     },
     methods: {
-        getCategoryStyle(name) {
-            switch (name) {
-                case "找情缘":
-                case "拜师":
-                case "求助":
-                case "收徒":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/求助.svg">`,
-                        hoverColor: "rgba(255, 240, 244, 1)",
-                        color: "rgba(252, 96, 145, 1)",
-                    };
-                case "招人":
-                case "找队友":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/招募.svg">`,
-                        hoverColor: "rgba(255, 247, 230, 1)",
-                        color: "rgba(247, 171, 72, 1)",
-                    };
-                case "同人":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/创作.svg">`,
-                        hoverColor: "rgba(249, 240, 255, 1)",
-                        color: "rgba(166, 105, 245, 1)",
-                    };
-                case "家园":
-                case "侠客":
-                case "江湖":
-                case "剧情":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/内容.svg">`,
-                        hoverColor: "rgba(237, 247, 247, 1)",
-                        color: "rgba(72, 184, 176, 1)",
-                    };
-                case "帕鲁":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/帕鲁.svg">`,
-                        hoverColor: "rgba(255, 247, 230, 1)",
-                        color: "rgba(247, 171, 72, 1)",
-                        markGif: palugif,
-                    };
-                case "警示":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/警示.svg">`,
-                        hoverColor: "rgba(242, 229, 218, 1)",
-                        color: "rgba(56, 56, 56, 1)",
-                        activeColor: "rgba(255, 191, 0, 1)",
-                        mark: `<img svg-inline src="@/assets/img/community/category/警示.svg">`,
-                    };
-                case "讨论":
-                case "剧情":
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/社交.svg">`,
-                        hoverColor: "rgba(235, 244, 255, 1)",
-                        color: "rgba(76, 151, 237, 1)",
-                    };
-                default:
-                    return {
-                        icon: `<img svg-inline src="@/assets/img/community/category/全部.svg">`,
-                        hoverColor: "rgba(235, 244, 255, 1)",
-                        color: "rgba(64, 128, 255, 1)",
-                    };
+        getCategoryList() {
+            getTopicBucket({ type: "community" }).then((res) => {
+                this.categoryList =
+                    res.data.data.map((item) => {
+                        let color = item.color ? item.color : "rgba(64, 128, 255, 1)";
+                        const data = {
+                            value: item.name,
+                            name: item.name,
+                            lable: item.name,
+                            icon: item.icon || "内容.svg",
+                            hoverColor: modifyAlpha(color, 0.1),
+                            color: modifyAlpha(color, 1),
+                            mark: item.mark,
+                            remark: item.remark,
+                        };
+                        if (item.name === "警示") {
+                            data.hoverColor = "rgba(242, 229, 218, 1)";
+                            data.activeColor = "rgba(255, 191, 0, 1)";
+                        }
+                        return data;
+                    }) || [];
+            });
+        },
+        getCategoryStyle: function (category) {
+            let item = this.categoryList.find((item) => item.value === category);
+            if (item) {
+                return item;
+            } else {
+                return {
+                    icon: `内容.svg`,
+                    hoverColor: "rgba(235, 244, 255, 1)",
+                    color: "rgba(64, 128, 255, 1)",
+                };
             }
         },
         onCategoryChange: function (v) {

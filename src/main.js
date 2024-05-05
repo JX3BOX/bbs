@@ -1,15 +1,31 @@
 try {
-    let [subtype,id] = location.hash.slice(2)?.split("/");
+    let [subtype, id] = location.hash.slice(2)?.split("/");
     const oldSubtypes = ["collection", "emotion", "joke"];
     if (oldSubtypes.includes(subtype)) {
-        location.href = location.origin + "/" + subtype + '/' + id;
+        location.href = location.origin + "/" + subtype + "/" + id;
     }
 } catch (e) {
-    console.log('旧地址匹配异常',e);
+    console.log("旧地址匹配异常", e);
 }
 
 Vue.config.productionTip = false;
 
+// import Vue plugin
+import VueSvgInlinePlugin from "vue-svg-inline-plugin";
+
+// import polyfills for IE if you want to support it
+import "vue-svg-inline-plugin/src/polyfills";
+
+// use Vue plugin without options
+Vue.use(VueSvgInlinePlugin);
+
+// use Vue plugin with options
+VueSvgInlinePlugin.install(Vue, {
+    attributes: {
+        data: ["src"],
+        remove: ["alt"],
+    },
+});
 // 第三方UI组件
 import Vue from "vue";
 import ElementUI from "element-ui";

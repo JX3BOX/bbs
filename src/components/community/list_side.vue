@@ -5,7 +5,7 @@
             <h3 class="m-side-title" style="border-bottom: none">
                 <div class="u-title">
                     <!-- svg 图标 -->
-                    <!-- <img class="u-icon" svg-inline src="" /> -->
+                    <!-- <img class="u-icon" v-svg-inline src="" /> -->
                     魔盒文档
                 </div>
             </h3>

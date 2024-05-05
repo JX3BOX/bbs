@@ -68,4 +68,28 @@ function escapeHtml(str) {
         }
     });
 }
-export { getAppID, getAppType, getStarSign, isPhone, escapeHtml };
+
+function modifyAlpha(rgbaString, newAlpha) {
+    // 正则表达式匹配 rgba 中的数字
+    const rgbaRegex = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/;
+
+    // 使用正则表达式提取 rgba 值
+    const matches = rgbaString.match(rgbaRegex);
+
+    // 如果匹配失败，返回原始的 rgba 字符串
+    if (!matches) {
+        console.error("Invalid rgba string");
+        return rgbaString;
+    }
+
+    // 提取 r, g, b 和 a 的值
+    const [, r, g, b, a] = matches;
+
+    // 确保新的 alpha 值在 0 到 1 之间
+    const alpha = Math.min(1, Math.max(0, parseFloat(newAlpha)));
+
+    // 重新组合 rgba 字符串，并返回
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+export { getAppID, getAppType, getStarSign, isPhone, escapeHtml, modifyAlpha };

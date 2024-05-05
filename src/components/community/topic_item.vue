@@ -9,7 +9,8 @@
                 :class="`m-topic-top__category`"
                 :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
             >
-                <div v-html="styles.icon"></div>
+                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}`)" />
+
                 <div>{{ data.category }}</div>
             </div>
         </div>
@@ -62,19 +63,7 @@ import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
 
-const macarons = [
-    "#FB6571",
-    "#FFDAE1", // 柔和的粉色
-    "#D1FFDA", // 浅绿色
-    "#A7FED1", // 柔和的绿色
-    "#D1FFDA", // 浅蓝色
-    "#A7E1FD", // 柔和的蓝色
-    "#E1D1FD", // 浅紫色
-    "#FDD1E1", // 柔和的紫色
-    "#FED1A7", // 浅黄色
-    "#FED1A7", // 柔和的黄色
-    "#E1D1A7", // 浅棕色
-];
+
 export default {
     props: ["data", "getCategoryStyle"],
     data() {
@@ -100,10 +89,6 @@ export default {
     methods: {
         getTimeAgo,
         authorLink,
-        getRandomMacaronColor: function () {
-            const randomIndex = Math.floor(Math.random() * macarons.length);
-            return macarons[randomIndex];
-        },
         getBanner: function (val) {
             if (val) {
                 return getThumbnail(val, [168 * 2, 88 * 2]);

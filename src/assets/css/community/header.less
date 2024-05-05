@@ -70,14 +70,12 @@
                 }
             }
             .u-mark {
+                width: 14px;
                 position: absolute;
                 top: 0;
                 right: 8px;
                 transform: translateY(-50%);
-            }
-            .u-markgif {
-                width: 20px;
-                height: 20px;
+                color: var(--active-color);
             }
         }
         .u-more {
@@ -137,10 +135,13 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        color: @color;
     }
     .u-icon {
         display: flex;
         align-items: center;
+        position: relative;
+        top: -1px;
     }
 }
 .m-community-dropdown {

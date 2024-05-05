@@ -15,13 +15,27 @@
                     '--hover-color': item.color,
                     '--active-color': item.activeColor || '#fff',
                 }"
+                @mouseenter="hover(item)"
+                @mouseleave="unhover(item)"
             >
-                <span> {{ item.lable }}</span>
-                <div class="u-icon" v-html="item.icon"></div>
-                <div v-if="item.mark" class="u-mark" v-html="item.mark" :style="{ color: item.activeColor }"></div>
-                <img v-if="item.markGif" class="u-mark u-markgif" :src="item.markGif" />
+                <span>{{ item.lable }}</span>
+                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${item.icon}`)" />
+
+                <img
+                    v-if="item.mark && item.mark.indexOf('.svg') >= 0"
+                    v-svg-inline
+                    class="u-mark"
+                    :src="require(`@/assets/img/community/category/${item.mark}`)"
+                />
+
+                <img
+                    v-else-if="item.mark"
+                    :v-svg-inline="item.mark.indexOf('.svg') >= 0"
+                    class="u-mark"
+                    :src="require(`@/assets/img/community/category/${item.mark}`)"
+                />
             </a>
-            <el-dropdown trigger="click" :disabled="morenNavs.length === 0">
+            <el-dropdown trigger="click" size="small" :disabled="morenNavs.length === 0">
                 <a href="javascript:;" :class="`u-item u-more ${morenNavs.length === 0 && 'is-disabled'}`">
                     <span>更多</span>
                     <i class="el-icon-arrow-down"></i>
@@ -43,7 +57,11 @@
                             @click="handleChange(item)"
                         >
                             <span> {{ item.lable }}</span>
-                            <div class="u-icon" v-html="item.icon"></div>
+                            <img
+                                v-svg-inline
+                                class="u-icon"
+                                :src="require(`@/assets/img/community/category/${item.icon}`)"
+                            />
                         </a>
                     </el-dropdown-item>
                 </el-dropdown-menu>
@@ -66,42 +84,32 @@
 </template>
 
 <script>
-import { getTopicBucket } from "@/service/community";
 export default {
-    props: ["onCategoryChange", "getCategoryStyle"],
+    props: ["onCategoryChange", "categoryList"],
     data() {
         return {
             selectedCategory: "",
             navs: [],
             showNavs: [],
             morenNavs: [],
+            hoveredItem: null,
         };
     },
-    mounted() {
-        this.getTopicBucket();
-    },
+    mounted() {},
     watch: {
-        navs: function () {
+        categoryList: function () {
             const len = 17;
-            const navs = [...this.navs];
+            const navs = [...this.categoryList];
             this.showNavs = navs.slice(0, len);
-            console.log(this.showNavs, navs);
             this.morenNavs = navs.slice(len);
         },
     },
     methods: {
-        getTopicBucket() {
-            getTopicBucket({ type: "community" }).then((res) => {
-                const data = res.data.data?.map((item) => item.name) || [];
-                this.navs =
-                    data.map((item) => {
-                        return {
-                            value: item,
-                            lable: item,
-                            ...this.getCategoryStyle(item),
-                        };
-                    }) || [];
-            });
+        hover(item) {
+            item.lable = item.remark || item.name;
+        },
+        unhover(item) {
+            item.lable = item.name;
         },
 
         handleChange: function (item) {
