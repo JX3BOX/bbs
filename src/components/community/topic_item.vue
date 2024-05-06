@@ -63,7 +63,6 @@ import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
 
-
 export default {
     props: ["data", "getCategoryStyle"],
     data() {

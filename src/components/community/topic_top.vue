@@ -152,7 +152,8 @@ export default {
             margin: 0;
             margin-bottom: 12px;
             &:hover {
-                color: rgba(255, 64, 128, 1);
+                // color: rgba(255, 64, 128, 1);
+                text-decoration: underline;
             }
         }
         .m-topic-tag {
