@@ -4,26 +4,29 @@
             <a class="u-publish" href="/publish/#/community" target="_blank"> </a>
         </div>
         <div class="m-community-header__tags">
-            <el-tooltip
-                effect="light"
-                :content="item.remark"
-                placement="top"
-                v-for="(item, index) in showNavs"
+            <el-popover
+                popper-class="m-community-header__popover"
+                v-for="(item, index) in showNavList"
                 :key="index"
+                placement="top"
+                trigger="hover"
+                :content="item.remark"
             >
                 <a
+                    slot="reference"
                     :href="item.href || 'javascript:;'"
-                    :class="`${selectedCategory === item.value && 'active'} u-item`"
+                    :class="`
+                    ${selectedCategory === item.value && 'u-active'}
+                    ${item.icon === 'thunder' && 'is-thunder'}
+                    ${item.mark && 'has-mark'}
+                    u-item`"
                     @click="handleChange(item)"
                     :style="{
                         '--hover-bg-color': item.hoverColor,
                         '--hover-color': item.color,
-                        '--active-color': item.activeColor || '#fff',
-                        backgroundColor: item.mark ? item.hoverColor : '',
-                        color: item.mark ? item.color : '',
                     }"
                 >
-                    <span class="u-name">{{ item.name }}</span>
+                    <span>{{ item.name }}</span>
                     <img
                         v-svg-inline
                         class="u-icon"
@@ -34,26 +37,26 @@
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
                         v-svg-inline
                         class="u-mark"
+                        :style="{ color: item.color }"
                         :src="require(`@/assets/img/community/category/${item.mark}`)"
                     />
 
                     <img
                         v-else-if="item.mark"
-                        :v-svg-inline="item.mark.indexOf('.svg') >= 0"
                         class="u-mark"
                         :src="require(`@/assets/img/community/category/${item.mark}`)"
                     />
                 </a>
-            </el-tooltip>
+            </el-popover>
 
-            <el-dropdown trigger="click" size="small" :disabled="morenNavs.length === 0">
-                <a href="javascript:;" :class="`u-item u-more ${morenNavs.length === 0 && 'is-disabled'}`">
+            <el-dropdown trigger="click" size="small" :disabled="moreNavList.length === 0">
+                <a href="javascript:;" :class="`u-item u-more ${moreNavList.length === 0 && 'is-disabled'}`">
                     <span>更多</span>
                     <i class="el-icon-arrow-down"></i>
                 </a>
                 <el-dropdown-menu slot="dropdown" class="m-community-dropdown">
                     <el-dropdown-item
-                        v-for="(item, index) in morenNavs"
+                        v-for="(item, index) in moreNavList"
                         :key="index"
                         :style="{
                             '--hover-bg-color': item.hoverColor,
@@ -71,7 +74,7 @@
                             <img
                                 v-svg-inline
                                 class="u-icon"
-                                :src="require(`@/assets/img/community/category/${item.icon}`)"
+                                :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                             />
                         </a>
                     </el-dropdown-item>
@@ -96,23 +99,36 @@
 
 <script>
 export default {
-    props: ["onCategoryChange", "categoryList"],
+    props: ["categoryList"],
+    inject: ["onCategoryChange"],
     data() {
         return {
             selectedCategory: "",
-            navs: [],
-            showNavs: [],
-            morenNavs: [],
+            navList: [],
+            showNavList: [],
+            moreNavList: [],
             hoveredItem: null,
         };
     },
     mounted() {},
     watch: {
         categoryList: function () {
-            const len = 19;
-            const navs = [...this.categoryList];
-            this.showNavs = navs.slice(0, len);
-            this.morenNavs = navs.slice(len);
+            const len = 15;
+            const navList = [...this.categoryList];
+            this.showNavList = navList.slice(0, len);
+            this.moreNavList = navList.slice(len);
+        },
+        "$route.query": {
+            deep: true,
+            immediate: true,
+            handler: function (query) {
+                if (Object.keys(query).length) {
+                    if(query.category) {
+                        this.selectedCategory = query.category;
+                    }
+
+                }
+            },
         },
     },
     methods: {

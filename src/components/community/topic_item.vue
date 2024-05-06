@@ -6,11 +6,11 @@
                 <span>{{ getTimeAgo(data.updated_at).text }} </span>
             </div>
             <div
+                @click="onCategoryChange(data.category)"
                 :class="`m-topic-top__category`"
                 :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
             >
-                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}`)" />
-
+                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
                 <div>{{ data.category }}</div>
             </div>
         </div>
@@ -35,10 +35,10 @@
                     </a>
                 </div>
 
-                <div class="m-topic-userinfo">
+                <div class="m-topic-userInfo">
                     <a :href="authorLink(data.ext_user_info.id)" target="_blank">
-                        <img class="m-topic-userinfo__avatar" :src="showAvatar()" alt="" srcset="" />
-                        <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
+                        <img class="m-topic-userInfo__avatar" :src="showAvatar()" alt="" srcset="" />
+                        <span class="m-topic-userInfo__name">{{ data.ext_user_info.display_name }}</span>
                     </a>
                 </div>
             </div>
@@ -64,7 +64,8 @@ import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
 
 export default {
-    props: ["data", "getCategoryStyle"],
+    props: ["data"],
+    inject: ["getCategoryStyle", "onCategoryChange"],
     data() {
         return {};
     },
@@ -75,7 +76,7 @@ export default {
         introduction: function () {
             const data = this.data;
             if (data.introduction) {
-                if (data.introduction.length >= 100) {
+                if (data.introduction.length >= 200) {
                     return data.introduction + "...";
                 } else {
                     return data.introduction;

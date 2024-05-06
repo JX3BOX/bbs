@@ -55,13 +55,17 @@
                 .u-icon {
                     display: flex;
                 }
-                .u-mark {
+
+            }
+            &.has-mark:hover:not(.u-active) {
+                .u-icon {
                     display: none;
                 }
             }
-            &.active {
+
+            &.u-active {
                 background-color: var(--hover-color);
-                color: var(--active-color);
+                color: #fff;
                 .u-icon {
                     display: flex;
                 }
@@ -69,13 +73,20 @@
                     display: none;
                 }
             }
+            &.is-thunder.u-active {
+                background: rgba(56, 56, 56, 1);
+                svg path{
+                        color: rgba(56, 56, 56, 1);
+                        stroke: var(--hover-color);
+                }
+            }
             .u-mark {
-                width: 14px;
+                height: 15px;
                 position: absolute;
                 top: 0;
                 right: 8px;
                 transform: translateY(-50%);
-                color: var(--active-color);
+                color: #fff;
             }
         }
         .u-more {
@@ -87,7 +98,7 @@
                 cursor: not-allowed;
                 background: #f6f7f8;
                 color: @color;
-                opacity: 0.8;
+                opacity: 0.5;
             }
         }
     }
@@ -140,7 +151,6 @@
     .u-icon {
         display: flex;
         align-items: center;
-
     }
 }
 .m-community-dropdown {

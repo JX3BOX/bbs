@@ -10,7 +10,7 @@
                     :class="`m-topic-top__category`"
                     :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                 >
-                    <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}`)" />
+                    <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
                     <div>{{ data.category }}</div>
                 </div>
             </div>
@@ -51,10 +51,10 @@
                             <span class="u-value">{{ data.collection.title }}</span>
                         </div>
                     </a>
-                    <div class="m-topic-userinfo">
+                    <div class="m-topic-userInfo">
                         <a :href="authorLink(data.ext_user_info.id)" target="_blank">
-                            <img class="m-topic-userinfo__avatar" :src="showAvatar()" alt="" srcset="" />
-                            <span class="m-topic-userinfo__name">{{ data.ext_user_info.display_name }}</span>
+                            <img class="m-topic-userInfo__avatar" :src="showAvatar()" alt="" srcset="" />
+                            <span class="m-topic-userInfo__name">{{ data.ext_user_info.display_name }}</span>
                         </a>
                     </div>
                     <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
@@ -72,12 +72,13 @@ import { random } from "lodash";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 export default {
-    props: ["data", "getCategoryStyle"],
+    props: ["data"],
+    inject: ["getCategoryStyle"],
     computed: {
         introduction: function () {
             const data = this.data;
             if (data.introduction) {
-                if (data.introduction.length >= 100) {
+                if (data.introduction.length >= 200) {
                     return data.introduction + "...";
                 } else {
                     return data.introduction;
@@ -98,7 +99,7 @@ export default {
         },
         getBanner: function (val) {
             if (val) {
-                return getThumbnail(val, [168 * 2, 88 * 2]);
+                return getThumbnail(val, [336 * 2, 176 * 2]);
             } else {
                 // 从1-39中随机选一个
                 const randomNum = random(1, 39);
@@ -162,13 +163,13 @@ export default {
         .m-topic-collection {
             margin-bottom: 12px;
         }
-        .m-topic-userinfo {
+        .m-topic-userInfo {
             margin-bottom: 28px;
-            .m-topic-userinfo__avatar {
+            .m-topic-userInfo__avatar {
                 width: 20px;
                 height: 20px;
             }
-            .m-topic-userinfo__name {
+            .m-topic-userInfo__name {
                 font-size: 15px;
             }
         }

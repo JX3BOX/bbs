@@ -1,20 +1,20 @@
 <template>
     <CommunityLayout>
         <div v-loading="loading">
-            <Header :on-category-change="onCategoryChange" :categoryList="categoryList" />
+            <Header  :categoryList="categoryList" />
             <!-- 置顶文章 -->
-            <TopicTop v-if="toptopicData" :data="toptopicData" :getCategoryStyle="getCategoryStyle" />
-
-            <div v-if="toptopicData" class="m-topic-list m-topic-hot__mini">
-                <TopicItem :data="toptopicData" :getCategoryStyle="getCategoryStyle" />
+            <TopicTop v-if="topTopicData" :data="topTopicData" />
+            <!-- 移动端兼容置顶文章 -->
+            <div v-if="topTopicData" class="m-topic-list m-topic-hot__mini">
+                <TopicItem :data="topTopicData" />
             </div>
 
-            <div class="m-topic-list" v-if="topicData.data">
+            <div class="m-topic-list" v-if="list.length">
                 <TopicItem
                     v-for="(item, index) in list"
                     :key="index"
                     :data="item"
-                    :getCategoryStyle="getCategoryStyle"
+
                 />
             </div>
 
@@ -50,7 +50,6 @@
 import CommunityLayout from "@/layouts/CommunityLayout.vue";
 import Header from "@/components/community/header.vue";
 import TopicItem from "@/components/community/topic_item.vue";
-import topicData from "@/assets/data/topic_list.json";
 import { getTopicList } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
 import { getTopicBucket } from "@/service/community";
@@ -64,7 +63,6 @@ export default {
     },
     data() {
         return {
-            topicData: topicData,
             loading: false,
             page: 1, //当前页数
             per: 10, //每页条目
@@ -73,30 +71,44 @@ export default {
             number_queries: ["per", "page"],
             category: undefined,
             list: [],
-            toptopicData: null,
+            topTopicData: null,
             categoryList: [],
         };
     },
     computed: {
-        toptopic: function () {
-            if (this.list.length && this.page === 1) {
-                return;
-            } else if (this.toptopic) {
-                return this.toptopic;
-            } else {
-                return null;
-            }
-        },
-
         // 是否显示加载更多
         hasNextPage: function () {
             return this.pages >= 1 && this.per * this.page <= this.total;
         },
     },
-
+    provide() {
+        return {
+            onCategoryChange: this.onCategoryChange,
+            getCategoryStyle: this.getCategoryStyle,
+        };
+    },
     mounted() {
         this.loadData();
         this.getCategoryList();
+    },
+    watch: {
+        // 加载路由参数
+        "$route.query": {
+            deep: true,
+            immediate: true,
+            handler: function (query) {
+                if (Object.keys(query).length) {
+                    for (let key in query) {
+                        // for:element分页组件兼容性问题
+                        if (this.number_queries.includes(key)) {
+                            this[key] = ~~query[key];
+                        } else {
+                            this[key] = query[key];
+                        }
+                    }
+                }
+            },
+        },
     },
     methods: {
         getCategoryList() {
@@ -107,16 +119,16 @@ export default {
                         const data = {
                             value: item.name,
                             name: item.name,
-                            lable: item.name,
-                            icon: item.icon || "内容.svg",
+                            icon: item.icon || "game",
                             hoverColor: modifyAlpha(color, 0.1),
                             color: modifyAlpha(color, 1),
                             mark: item.mark,
                             remark: item.remark,
                         };
                         if (item.name === "警示") {
+                            data.color = color;
                             data.hoverColor = "rgba(242, 229, 218, 1)";
-                            data.activeColor = "rgba(255, 191, 0, 1)";
+                            data.activeColor = "#000";
                         }
                         return data;
                     }) || [];
@@ -128,20 +140,19 @@ export default {
                 return item;
             } else {
                 return {
-                    icon: `game.svg`,
+                    icon: `game`,
                     hoverColor: "rgba(235, 244, 255, 1)",
                     color: "rgba(64, 128, 255, 1)",
                 };
             }
         },
-        onCategoryChange: function (v) {
-            this.category = v;
+        onCategoryChange: function (category) {
+            this.category = category;
             this.loadData();
         },
         // 翻页加载
         changePage: function (i) {
             this.loadData();
-            this.replaceRoute({ page: i });
         },
         // 路由绑定
         replaceRoute: function (extend) {
@@ -166,6 +177,7 @@ export default {
                 pageSize: this.per,
                 index: this.page,
             };
+            this.replaceRoute({ category: this.category, page: this.page });
 
             return _query;
         },
@@ -179,9 +191,9 @@ export default {
                         this.list = this.list.concat(list || []);
                     } else {
                         if (query.index === 1 && list && list.length) {
-                            this.toptopicData = list.shift();
+                            this.topTopicData = list.shift();
                         } else {
-                            this.toptopicData = null;
+                            this.topTopicData = null;
                         }
                         this.list = list || [];
                     }

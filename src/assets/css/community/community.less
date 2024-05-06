@@ -107,23 +107,23 @@
     }
 }
 
-.m-topic-userinfo {
+.m-topic-userInfo {
     & > a {
-        display: flex;
-        align-items: center;
-        gap: 6px;
         color: @color;
-    }
-    .m-topic-userinfo__avatar {
-        width: 18px;
-        height: 18px;
-        border-radius: 100%;
-    }
-    .m-topic-userinfo__name {
-        font-size: 14px;
         &:hover {
             color: @pink;
         }
+    }
+    .m-topic-userInfo__avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 100%;
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+    .m-topic-userInfo__name {
+        vertical-align: middle;
+        font-size: 14px;
     }
 }
 
@@ -201,6 +201,12 @@
     display: none;
 }
 
+.m-community-header__popover[x-placement^="top"] {
+    .popper__arrow {
+        border-top-color: #eee
+    }
+}
+
 @media screen and (max-width: @pc) {
     .m-topic-list {
         column-count: 2;
@@ -224,7 +230,7 @@
                 }
             }
         }
-        .m-topic-userinfo {
+        .m-topic-userInfo {
             padding-bottom: 8px;
             margin-bottom: 8px;
             border-bottom: 1px solid rgba(229, 229, 229, 1);

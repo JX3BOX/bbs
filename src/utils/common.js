@@ -78,7 +78,7 @@ function modifyAlpha(rgbaString, newAlpha) {
 
     // 如果匹配失败，返回原始的 rgba 字符串
     if (!matches) {
-        console.error("Invalid rgba string");
+        console.log("如果匹配失败，返回原始的 rgba 字符串：" + rgbaString);
         return rgbaString;
     }
 
