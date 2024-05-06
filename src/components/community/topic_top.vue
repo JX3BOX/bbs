@@ -7,10 +7,15 @@
                     <span>{{ getTimeAgo(data.updated_at).text }} </span>
                 </div>
                 <div
+                    @click="onCategoryChange(data.category)"
                     :class="`m-topic-top__category`"
                     :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                 >
-                    <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
+                    <img
+                        v-svg-inline
+                        class="u-icon"
+                        :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                    />
                     <div>{{ data.category }}</div>
                 </div>
             </div>
@@ -41,16 +46,16 @@
                             {{ item }}
                         </span>
                     </div>
-                    <a
-                        v-if="data.collection_id && data.collection.id && data.collection.title"
+                    <div
                         class="m-topic-collection"
-                        :href="`/collection/${data.collection_id}`"
+                        v-if="data.collection_id && data.collection.id && data.collection.title"
                     >
-                        <div>
+                        <a :href="`/collection/${data.collection_id}`">
                             <span class="u-label">小册</span>
                             <span class="u-value">{{ data.collection.title }}</span>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+
                     <div class="m-topic-userInfo">
                         <a :href="authorLink(data.ext_user_info.id)" target="_blank">
                             <img class="m-topic-userInfo__avatar" :src="showAvatar()" alt="" srcset="" />
@@ -73,7 +78,7 @@ import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 export default {
     props: ["data"],
-    inject: ["getCategoryStyle"],
+    inject: ["getCategoryStyle", "onCategoryChange"],
     computed: {
         introduction: function () {
             const data = this.data;
@@ -121,7 +126,7 @@ export default {
 .m-topic-hot {
     margin-bottom: 24px;
     .m-topic-hot__left {
-        min-width: 336px;
+        width: 336px;
         padding-right: 24px;
         margin-right: 24px;
         border-right: 1px solid rgba(229, 229, 229, 1);
@@ -134,6 +139,11 @@ export default {
             height: 176px;
             overflow: hidden;
             border-radius: 8px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
     }
     .m-topic-hot__right {

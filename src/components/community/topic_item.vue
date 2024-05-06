@@ -26,8 +26,8 @@
                     </span>
                 </div>
                 <div
-                    v-if="data.collection_id && data.collection.id && data.collection.title"
                     class="m-topic-collection"
+                    v-if="data.collection_id && data.collection.id && data.collection.title"
                 >
                     <a :href="`/collection/${data.collection_id}`">
                         <span class="u-label">小册</span>
