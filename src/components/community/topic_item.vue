@@ -78,6 +78,8 @@ export default {
             if (data.introduction) {
                 if (data.introduction.length >= 200) {
                     return data.introduction + "...";
+                } else if (data.introduction.length <= 0) {
+                    return "......";
                 } else {
                     return data.introduction;
                 }
