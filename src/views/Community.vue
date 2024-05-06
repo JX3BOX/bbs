@@ -128,7 +128,7 @@ export default {
                 return item;
             } else {
                 return {
-                    icon: `内容.svg`,
+                    icon: `game.svg`,
                     hoverColor: "rgba(235, 244, 255, 1)",
                     color: "rgba(64, 128, 255, 1)",
                 };

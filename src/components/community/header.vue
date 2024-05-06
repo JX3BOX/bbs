@@ -4,37 +4,48 @@
             <a class="u-publish" href="/publish/#/community" target="_blank"> </a>
         </div>
         <div class="m-community-header__tags">
-            <a
-                :href="item.href || 'javascript:;'"
-                :class="`${selectedCategory === item.value && 'active'} u-item`"
+            <el-tooltip
+                effect="light"
+                :content="item.remark"
+                placement="top"
                 v-for="(item, index) in showNavs"
                 :key="index"
-                @click="handleChange(item)"
-                :style="{
-                    '--hover-bg-color': item.hoverColor,
-                    '--hover-color': item.color,
-                    '--active-color': item.activeColor || '#fff',
-                }"
-                @mouseenter="hover(item)"
-                @mouseleave="unhover(item)"
             >
-                <span>{{ item.lable }}</span>
-                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${item.icon}`)" />
+                <a
+                    :href="item.href || 'javascript:;'"
+                    :class="`${selectedCategory === item.value && 'active'} u-item`"
+                    @click="handleChange(item)"
+                    :style="{
+                        '--hover-bg-color': item.hoverColor,
+                        '--hover-color': item.color,
+                        '--active-color': item.activeColor || '#fff',
+                        backgroundColor: item.mark ? item.hoverColor : '',
+                        color: item.mark ? item.color : '',
+                    }"
+                >
+                    <span class="u-name">{{ item.name }}</span>
+                    <img
+                        v-svg-inline
+                        class="u-icon"
+                        :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
+                    />
 
-                <img
-                    v-if="item.mark && item.mark.indexOf('.svg') >= 0"
-                    v-svg-inline
-                    class="u-mark"
-                    :src="require(`@/assets/img/community/category/${item.mark}`)"
-                />
+                    <img
+                        v-if="item.mark && item.mark.indexOf('.svg') >= 0"
+                        v-svg-inline
+                        class="u-mark"
+                        :src="require(`@/assets/img/community/category/${item.mark}`)"
+                    />
 
-                <img
-                    v-else-if="item.mark"
-                    :v-svg-inline="item.mark.indexOf('.svg') >= 0"
-                    class="u-mark"
-                    :src="require(`@/assets/img/community/category/${item.mark}`)"
-                />
-            </a>
+                    <img
+                        v-else-if="item.mark"
+                        :v-svg-inline="item.mark.indexOf('.svg') >= 0"
+                        class="u-mark"
+                        :src="require(`@/assets/img/community/category/${item.mark}`)"
+                    />
+                </a>
+            </el-tooltip>
+
             <el-dropdown trigger="click" size="small" :disabled="morenNavs.length === 0">
                 <a href="javascript:;" :class="`u-item u-more ${morenNavs.length === 0 && 'is-disabled'}`">
                     <span>更多</span>
@@ -56,7 +67,7 @@
                             :class="`${selectedCategory === item.value && 'active'} u-item`"
                             @click="handleChange(item)"
                         >
-                            <span> {{ item.lable }}</span>
+                            <span> {{ item.name }}</span>
                             <img
                                 v-svg-inline
                                 class="u-icon"
@@ -105,13 +116,6 @@ export default {
         },
     },
     methods: {
-        hover(item) {
-            item.lable = item.remark || item.name;
-        },
-        unhover(item) {
-            item.lable = item.name;
-        },
-
         handleChange: function (item) {
             if (!item.href) {
                 let selectedCategory = "";
