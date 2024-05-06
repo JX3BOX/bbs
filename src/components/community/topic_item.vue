@@ -45,7 +45,7 @@
 
             <a class="u-box-content" :href="getPostUrl(data.id)">
                 <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
-                    <div v-html="introduction"></div>
+                    <!-- <div v-html="introduction"></div> -->{{introduction}}
                 </a>
                 <div class="m-topic-imgs">
                     <a class="m-topic-imgs__item" v-for="(item, index) in data.extra_images" :key="index">
