@@ -19,7 +19,9 @@
                             <div></div>
                             <div>
                                 <el-button type="text" size="small">黑洞</el-button>
-                                <el-button type="text" size="small">删除</el-button>
+                                <el-button v-if="allowDelete" type="text" size="small" @click="deleteReply()"
+                                    >删除</el-button
+                                >
                                 <el-button type="text" size="small">举报</el-button>
                                 <el-button type="text" size="small">拉黑</el-button>
                                 <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
@@ -62,8 +64,10 @@ import CommentReplyItem from "@/components/community/comment_reply_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList } from "@/service/community";
+import { replyReply, getCommentsList, delReply } from "@/service/community";
 import { escapeHtml } from "@/utils/common";
+import User from "@jx3box/jx3box-common/js/user.js";
+
 export default {
     props: ["isMaster", "post"],
     components: {
@@ -80,6 +84,9 @@ export default {
         };
     },
     computed: {
+        allowDelete: function () {
+            return this.isMaster || this.post.user_id == User.getInfo().uid;
+        },
         userInfo: function () {
             if (this.post && this.post.user_info) {
                 return this.post.user_info;
@@ -121,6 +128,18 @@ export default {
         this.getList();
     },
     methods: {
+        deleteReply: function () {
+            console.log(this.post);
+            this.$confirm("确认是否删除该评论？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                // delReply(this.post.id).then(() => {
+                //     this.$message.success("删除成功");
+                // });
+            });
+        },
         authorLink,
         async formatContent(val) {
             const ins = new JX3_EMOTION(escapeHtml(val));

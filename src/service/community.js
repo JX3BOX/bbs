@@ -22,17 +22,27 @@ function getTopicReplyList(id, params) {
     });
 }
 
-// 主贴回帖
+// 回复主贴
 function replyTopic(id, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply`, data);
 }
+// 删除主贴回复
+function delReply(id) {
+    return $next().delete(`${API_PREFIX}/community/discussion/my/reply/item/${id}`);
+}
+
+
 // 主贴回帖的评论
 function replyReply(id, replyId, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments`, data);
 }
+
 function getCommentsList(id, replyId, params) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments/list`, {
         params,
     });
 }
-export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList };
+
+
+
+export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList,delReply };

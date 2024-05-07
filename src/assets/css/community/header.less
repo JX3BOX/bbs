@@ -26,7 +26,7 @@
         list-style: none;
         padding: 0 20px;
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
+
         border-right: 1px solid @border;
         gap: 10px;
         margin-right: 10px;
@@ -55,7 +55,6 @@
                 .u-icon {
                     display: flex;
                 }
-
             }
             &.has-mark:hover:not(.u-active) {
                 .u-icon {
@@ -75,9 +74,9 @@
             }
             &.is-thunder.u-active {
                 background: rgba(56, 56, 56, 1);
-                svg path{
-                        color: rgba(56, 56, 56, 1);
-                        stroke: var(--hover-color);
+                svg path {
+                    color: rgba(56, 56, 56, 1);
+                    stroke: var(--hover-color);
                 }
             }
             .u-mark {
@@ -156,36 +155,32 @@
 .m-community-dropdown {
     width: 120px;
 }
-@media screen and (max-width: 1850px) {
+
+.el-tooltip__popper.is-light {
+    border-color: #eee !important;
+}
+
+@media screen and (max-width: @ipad) {
     .m-community-header {
-        .m-community-publish {
-            margin-right: 12px;
+        margin-bottom: 12px;
+        grid-template-areas:
+            "publish special"
+            "tags tags";
+
+        .m-community-header__tags {
+            padding: 0;
+            margin: 0;
+            border-right: 0;
+            margin-top: 12px;
         }
     }
 }
-
-// @media screen and (max-width: @smallpc) {
-//     .m-community-header {
-//         grid-template-areas:
-//             "publish special"
-//             "tags tags";
-//         .m-community-publish {
-//             margin-right: 12px;
-//         }
-//         // .m-community-header__tags {
-//         //     display: flex;
-//         //     flex-wrap: wrap;
-//         //     border-right: 0;
-//         //     padding: 0;
-//         //     margin: 12px 0 0;
-//         // }
-//         .m-community-header__special-list {
-//             order: 1;
-//         }
-//     }
-// }
-
-
-.el-tooltip__popper.is-light{
-    border-color:#eee !important;
+@media screen and (max-width: 400px) {
+    .m-community-header {
+        .m-community-publish .u-publish {
+            width: 150px;
+            background-size: cover;
+            background-position: right;
+        }
+    }
 }

@@ -3,7 +3,12 @@
         <div class="m-community-publish">
             <a class="u-publish" href="/publish/#/community" target="_blank"> </a>
         </div>
-        <div class="m-community-header__tags">
+        <div
+            class="m-community-header__tags"
+            :style="{
+                gridTemplateColumns: `repeat(${lineCount}, 1fr)`,
+            }"
+        >
             <el-popover
                 popper-class="m-community-header__popover"
                 v-for="(item, index) in showNavList"
@@ -104,34 +109,56 @@ export default {
     data() {
         return {
             selectedCategory: "",
-            navList: [],
             showNavList: [],
             moreNavList: [],
             hoveredItem: null,
+            lineCount: 8,
         };
     },
-    mounted() {},
+    mounted() {
+        window.addEventListener("resize", this.handleResize);
+        this.handleResize();
+    },
+    beforeDestroy() {
+        window.removeEventListener("resize", this.handleResize);
+    },
     watch: {
-        categoryList: function () {
-            const len = 15;
-            const navList = [...this.categoryList];
-            this.showNavList = navList.slice(0, len);
-            this.moreNavList = navList.slice(len);
+        lineCount: function () {
+            this.initNavList();
+        },
+        categoryList: {
+            deep: true,
+            immediate: true,
+            handler: function () {
+                this.initNavList();
+            },
         },
         "$route.query": {
             deep: true,
             immediate: true,
             handler: function (query) {
                 if (Object.keys(query).length) {
-                    if(query.category) {
+                    if (query.category) {
                         this.selectedCategory = query.category;
                     }
-
                 }
             },
         },
     },
     methods: {
+        handleResize() {
+            if (window.innerWidth >= 520) {
+                this.lineCount = 8;
+            } else {
+                this.lineCount = 5;
+            }
+        },
+        initNavList() {
+            const len = this.lineCount * 2 - 1;
+            const categoryList = [...this.categoryList];
+            this.showNavList = categoryList.slice(0, len);
+            this.moreNavList = categoryList.slice(len);
+        },
         handleChange: function (item) {
             if (!item.href) {
                 let selectedCategory = "";

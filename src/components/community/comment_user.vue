@@ -57,24 +57,35 @@ export default {
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 @media screen and (max-width: @ipad) {
     .m-comment-user {
-        .c-author-honor,.u-bio,.c-author-medals,.u-interact {
+        .c-author-honor,
+        .u-bio,
+        .c-author-medals,
+        .u-interact {
             display: none;
         }
         .u-info {
             height: 48px;
         }
-        .c-avatar.s .c-avatar-pic {
-            width: 48px;
-            height: 48px;
+        .c-avatar.s {
+            .c-avatar-pic {
+                width: 48px;
+                height: 48px;
+            }
+            .c-avatar-frame {
+                width: 58px;
+                height: 58px;
+                left: 40px;
+                top: 40px;
+            }
         }
+
         .u-avatar {
             width: 48px;
             height: 48px;
         }
     }
- }
-
+}
 </style>
