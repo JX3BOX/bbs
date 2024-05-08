@@ -37,12 +37,34 @@ function replyReply(id, replyId, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments`, data);
 }
 
+/**
+ * 获取评论列表
+ * @param {*} id
+ * @param {*} replyId
+ * @param {*} params
+ * @returns
+ */
 function getCommentsList(id, replyId, params) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments/list`, {
         params,
     });
 }
+/**
+ * 屏蔽用户
+ * @param {*} userId
+ * @returns
+ */
+function addBlock(userId) {
+    return $next().post(`/api/my-userlist/deny/${userId}`)
+}
+
+/**
+ * 提交反馈
+ * @param {*} data
+ */
+function feedback(data) {
+    return $next().post(`/api/miscfeedback`, data)
+}
 
 
-
-export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList,delReply };
+export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList,delReply ,addBlock,feedback};

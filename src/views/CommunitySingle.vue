@@ -1,9 +1,23 @@
 <template>
-    <CommunitySingleLayout>
+    <CommunitySingleLayout :post="post">
         <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
             <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
-                <slot name="single-header"></slot>
+                <template v-slot:title_before>
+                    <div class="m-topic-category-box">
+                        <div
+                        :class="`m-topic-category`"
+                        :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+                    >
+                        <img
+                            v-svg-inline
+                            class="u-icon"
+                            :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                        />
+                        <div>{{ post.category }}</div>
+                    </div>
+                    </div>
+                </template>
             </PostHeader>
             <el-divider content-position="left">JX3BOX</el-divider>
 
@@ -45,10 +59,12 @@
 import CommentReplyList from "@/components/community/comment_reply_list.vue";
 
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
-import PostHeader from "@jx3box/jx3box-common-ui/src/single/PostHeader.vue";
+import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
 import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
 import { post } from "jquery";
+import { getTopicBucket } from "@/service/community";
+import { formatCategoryList } from "@/utils/community";
 
 export default {
     components: {
@@ -65,10 +81,23 @@ export default {
             total: 0, //总条目数
             post: {},
             replyList: [],
+            categoryList: [],
             loading: false,
         };
     },
     computed: {
+        styles: function () {
+            let item = this.categoryList.find((item) => item.value === this.post.category);
+            if (item) {
+                return item;
+            } else {
+                return {
+                    icon: `game`,
+                    hoverColor: "rgba(235, 244, 255, 1)",
+                    color: "rgba(64, 128, 255, 1)",
+                };
+            }
+        },
         id: function () {
             return this.$route.params.id;
         },
@@ -92,7 +121,7 @@ export default {
     },
     mounted() {
         if (!this.id) return this.$message.error("文章id不存在");
-
+        this.getCategoryList();
         this.getDetails();
         this.getReplyList();
     },
@@ -140,6 +169,12 @@ export default {
         changePage() {
             this.getReplyList();
         },
+        getCategoryList() {
+            getTopicBucket({ type: "community", search: this.post.category }).then((res) => {
+                this.categoryList = formatCategoryList(res.data.data);
+            });
+        },
+
     },
 };
 </script>

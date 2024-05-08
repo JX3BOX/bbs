@@ -13,7 +13,7 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small">赞（14）</el-button>
+                                <el-button type="text" size="small" @click="addLike">赞{{linkCountRender}}</el-button>
                                 <el-button type="text" size="small" @click="onShowReply">回复</el-button>
                                 <el-button type="text" size="small">拉黑</el-button>
                                 <el-button type="text" size="small">举报</el-button>
@@ -21,10 +21,10 @@
                             <div>
                                 <el-button type="text" size="small">删除</el-button>
                                 <el-button type="text" size="small">黑洞</el-button>
-                                <span class="u-time">{{ data.updated_at }}</span>
+                                <span class="u-time">{{ post.updated_at }}</span>
                             </div>
                         </div>
-                        <span class="u-time u-mobile-time">{{ data.updated_at }}</span>
+                        <span class="u-time u-mobile-time">{{ post.updated_at }}</span>
                         <ReplyForReply
                             v-if="showReplyForReplyFrom"
                             :username="userInfo.display_name"
@@ -45,15 +45,17 @@ import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { replyReply, getCommentsList } from "@/service/community";
-import { escapeHtml } from "@/utils/common";
+import { escapeHtml } from "@/utils/community";
+import { postStat } from "@jx3box/jx3box-common/js/stat";
 export default {
     name: "CommentReplyItem",
-    props: ["data"],
+    props: ["post"],
     components: {
         ReplyForReply,
     },
     data() {
         return {
+            linkCount: 0,
             renderContent: "",
             showReplyForReplyFrom: false,
             commentsList: [],
@@ -68,20 +70,29 @@ export default {
         },
     },
     computed: {
+        linkCountRender: function () {
+            if (this.linkCount >= 100) {
+                return "(99+)";
+            } else if (this.linkCount != 0) {
+                return `${this.linkCount}`;
+            } else {
+                return "";
+            }
+        },
         userInfo: function () {
-            return this.data.user_info;
+            return this.post.user_info;
         },
         replyUserInfo: function () {
-            return this.data.reply_for_user_info;
+            return this.post.reply_for_user_info;
         },
         comments: function () {
-            return this.data.comments;
+            return this.post.comments;
         },
         content: function () {
-            return this.data.content;
+            return this.post.content;
         },
         id: function () {
-            return this.data.id;
+            return this.post.id;
         },
     },
     mounted() {
@@ -134,6 +145,33 @@ export default {
                         console.error(replyId);
                     });
             }
+        },
+        // 拉黑
+        addBlock: function () {
+            this.$confirm("确定要拉黑此人？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    addBlock(this.post.user_id)
+                        .then(() => {
+                            this.$message.success("拉黑成功");
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((_) => {});
+        },
+        // 点赞
+        addLike: function () {
+            if (this.isLike) return;
+            this.linkCount++;
+            if (!this.isLike) {
+                postStat("community", this.post.id, "likes");
+            }
+            this.isLike = true;
         },
     },
 };

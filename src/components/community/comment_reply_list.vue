@@ -18,22 +18,27 @@
                         <div class="u-toolbar">
                             <div></div>
                             <div>
-                                <el-button type="text" size="small">黑洞</el-button>
-                                <el-button v-if="allowDelete" type="text" size="small" @click="deleteReply()"
-                                    >删除</el-button
-                                >
-                                <el-button type="text" size="small">举报</el-button>
-                                <el-button type="text" size="small">拉黑</el-button>
+                                <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
+                                <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
+                                <el-button v-if="allowReport" type="text">举报</el-button>
+                                <el-button v-if="allowBlock" type="text" @click="addBlock()">拉黑</el-button>
                                 <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
                                     <div class="u-btn">
                                         <img src="@/assets/img/community/reply.svg" alt="" />
                                         <span>{{ isMaster ? "跟帖" : "回复" }}</span>
                                     </div>
                                 </el-button>
-                                <el-button type="primary" size="small" class="u-praise-btn">
+                                <el-button
+                                    :disabled="isLike"
+                                    type="primary"
+                                    size="small"
+                                    class="u-praise-btn"
+                                    @click="addLike"
+                                >
                                     <div class="u-btn">
                                         <img src="@/assets/img/community/praise.svg" alt="" />
                                         <span>赞</span>
+                                        <span>{{ linkCountRender }}</span>
                                     </div>
                                 </el-button>
                             </div>
@@ -50,7 +55,7 @@
 
                 <div v-if="!isMaster && commentsList.length" class="m-reply-list">
                     <!-- 回帖的回复-->
-                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :data="item" />
+                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :post="item" />
                 </div>
             </div>
         </div>
@@ -64,9 +69,10 @@ import CommentReplyItem from "@/components/community/comment_reply_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList, delReply } from "@/service/community";
-import { escapeHtml } from "@/utils/common";
+import { replyReply, getCommentsList, delReply, addBlock, feedback } from "@/service/community";
+import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
+import { postStat } from "@jx3box/jx3box-common/js/stat";
 
 export default {
     props: ["isMaster", "post"],
@@ -78,14 +84,46 @@ export default {
     },
     data() {
         return {
+            isLike: false,
+            linkCount: 0,
             showReplyForReplyFrom: false,
             renderContent: "",
             commentsList: [],
         };
     },
     computed: {
+        linkCountRender: function () {
+            if (this.linkCount >= 100) {
+                return "99+";
+            } else if (this.linkCount != 0) {
+                return this.linkCount;
+            } else {
+                return "";
+            }
+        },
+        // 是否允许黑洞
+        allowBlackHole: function () {
+            // 登录 && 不是楼主
+            return this.isLogin && !this.isMaster;
+        },
+        // 是否允许举报
+        allowReport: function () {
+            // 登陆 && 不是自己
+            return this.isLogin && this.post.user_id != User.getInfo().uid;
+        },
+        // 是否允许删除
         allowDelete: function () {
-            return this.isMaster || this.post.user_id == User.getInfo().uid;
+            // 登录 && 不是楼主 && 是自己
+            return this.isLogin && !this.isMaster && this.post.user_id == User.getInfo().uid;
+        },
+        // 是否允许拉黑
+        allowBlock: function () {
+            // 登录 && 不是楼主 && 不是自己
+            return this.isLogin && !this.isMaster && this.post.user_id != User.getInfo().uid;
+        },
+        // 是否登录
+        isLogin: function () {
+            return User.isLogin();
         },
         userInfo: function () {
             if (this.post && this.post.user_info) {
@@ -129,7 +167,6 @@ export default {
     },
     methods: {
         deleteReply: function () {
-            console.log(this.post);
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -182,6 +219,33 @@ export default {
                     }
                 });
             }
+        },
+        // 拉黑
+        addBlock: function () {
+            this.$confirm("确定要拉黑此人？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    addBlock(this.post.user_id)
+                        .then(() => {
+                            this.$message.success("拉黑成功");
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((_) => {});
+        },
+        // 点赞
+        addLike: function () {
+            if (this.isLike) return;
+            this.linkCount++;
+            if (!this.isLike) {
+                postStat("community", this.post.id, "likes");
+            }
+            this.isLike = true;
         },
     },
 };

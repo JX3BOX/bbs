@@ -35,6 +35,15 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        .el-button {
+            height: 32px;
+        }
+        .el-button--text {
+            padding: 0 11px;
+        }
+        .el-button + .el-button {
+            margin-left: 12px;
+        }
         .u-toolbar__left {
             display: flex;
         }
@@ -64,16 +73,26 @@
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(232, 232, 232, 1);
-
     .u-box {
         padding-bottom: 8px;
         margin-left: 25px;
         border-bottom: 1px solid rgba(232, 232, 232, 1);
     }
+
     .u-toolbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .el-button {
+            font-size: 14px;
+            height: auto;
+        }
+        .el-button--text {
+            padding: 0;
+        }
+        .el-button + .el-button {
+            margin-left: 12px;
+        }
         .u-btn {
             display: flex;
             align-items: center;
@@ -89,7 +108,10 @@
         .u-praise-btn {
             background: rgba(255, 112, 146, 1);
             border-color: rgba(255, 112, 146, 1);
-            &:hover {
+            &.is-disabled {
+                opacity: 0.5;
+            }
+            &:not(.is-disabled):hover {
                 opacity: 0.8;
             }
         }
@@ -140,7 +162,7 @@
         font-size: 16px;
     }
     .u-content {
-        margin: 0;
+        margin: 0 0 4px 0;
     }
     > div {
         flex: 1;
@@ -175,9 +197,8 @@
     }
 }
 
-
 @media screen and (max-width: @ipad) {
-    .m-reply-list  {
+    .m-reply-list {
         margin-left: 0;
     }
 
@@ -188,7 +209,8 @@
         }
         .u-mobile-time {
             display: block;
-            margin: 0 0 12px;
+            margin: 8px 0 12px 0;
+
         }
         .m-comment-wrapper__left {
             padding: 0;
@@ -205,7 +227,6 @@
                     margin-bottom: 12px;
                 }
             }
-
         }
         .u-layer {
             margin-bottom: 0;
@@ -236,7 +257,4 @@
             font-size: 14px;
         }
     }
-
-
-
 }

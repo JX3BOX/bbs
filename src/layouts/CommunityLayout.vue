@@ -2,7 +2,7 @@
     <div id="app">
         <Header></Header>
         <Breadcrumb
-            name="论坛交流"
+            name="魔盒论坛"
             slug="community"
             :publishEnable="false"
             :topicEnable="false"

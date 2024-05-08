@@ -56,11 +56,16 @@
                     display: flex;
                 }
             }
+            &.has-mark {
+                background-color: var(--hover-bg-color);
+                color: var(--hover-color);
+            }
             &.has-mark:hover:not(.u-active) {
                 .u-icon {
                     display: none;
                 }
             }
+
 
             &.u-active {
                 background-color: var(--hover-color);

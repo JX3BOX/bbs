@@ -2,8 +2,9 @@
     <div id="app" class="p-community-single">
         <Header></Header>
         <Breadcrumb
-            name="竹林茶馆"
-            slug="bbs"
+            v-if="post"
+            name="魔盒论坛"
+            slug="community"
             :publishEnable="false"
             :adminEnable="true"
             :feedbackEnable="true"
@@ -15,8 +16,8 @@
             <template #op-prepend>
                 <AdminDirectMessage
                     :user-id="user_id"
-                    :sourceId="String(post.ID)"
-                    :sourceType="post.post_type"
+                    :sourceId="String(post.id)"
+                    sourceType="community"
                 ></AdminDirectMessage>
             </template>
             <template #title>
@@ -30,12 +31,7 @@
                 <div class="m-community-single__main">
                     <slot></slot>
                     <div class="m-community-single__right">
-                        <a href="">
-                            <img
-                                src="https://img.js.design/assets/img/6619361efdbe3d13f2374668.png#1fce3e04d726b880da75046bfabaf6dc"
-                                alt=""
-                            />
-                        </a>
+                        <PostTopic v-if="post.id" type="community" :id="~~post.id" />
                     </div>
                 </div>
                 <Footer></Footer>
@@ -48,13 +44,14 @@
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDirectMessage from "@jx3box/jx3box-common-ui/src/bread/AdminDirectMessage.vue";
+import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
+
 export default {
     name: "Single",
-    props: [],
+    props: ["post"],
     data: function () {
         return {
             id: getAppID(),
-
             subtypeMap: {
                 1: "攻略心得",
                 2: "萌新指南",
@@ -65,19 +62,17 @@ export default {
     },
     computed: {
         user_id: function () {
-            return this.$store.state.user_id;
-        },
-        post: function () {
-            return this.$store.state.post;
+            return this.post ? this.post.user_id : ""
         },
         title() {
-            return this.post.post_title || document.title;
+            return this.post ? this.post.post_title : document.title;
         },
     },
     methods: { getAppIcon },
     components: {
         "publish-gate": publishGate,
         AdminDirectMessage,
+        PostTopic
     },
 };
 </script>
@@ -96,6 +91,8 @@ export default {
         }
         .m-community-single__right {
             width: 280px;
+            box-sizing: border-box;
+            padding: 16px;
             background: rgba(250, 250, 250, 1);
             img {
                 width: 100%;

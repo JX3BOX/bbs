@@ -53,7 +53,7 @@ import TopicItem from "@/components/community/topic_item.vue";
 import { getTopicList } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
 import { getTopicBucket } from "@/service/community";
-import { modifyAlpha } from "@/utils/common";
+import { formatCategoryList, modifyAlpha } from "@/utils/community";
 export default {
     components: {
         CommunityLayout,
@@ -113,25 +113,7 @@ export default {
     methods: {
         getCategoryList() {
             getTopicBucket({ type: "community" }).then((res) => {
-                this.categoryList =
-                    res.data.data.map((item) => {
-                        let color = item.color ? item.color : "rgba(64, 128, 255, 1)";
-                        const data = {
-                            value: item.name,
-                            name: item.name,
-                            icon: item.icon || "game",
-                            hoverColor: modifyAlpha(color, 0.1),
-                            color: modifyAlpha(color, 1),
-                            mark: item.mark,
-                            remark: item.remark,
-                        };
-                        if (item.name === "警示") {
-                            data.color = color;
-                            data.hoverColor = "rgba(242, 229, 218, 1)";
-                            data.activeColor = "#000";
-                        }
-                        return data;
-                    }) || [];
+                this.categoryList = formatCategoryList(res.data.data)
             });
         },
         getCategoryStyle: function (category) {

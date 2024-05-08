@@ -7,7 +7,7 @@
             </div>
             <div
                 @click="onCategoryChange(data.category)"
-                :class="`m-topic-top__category`"
+                :class="`m-topic-category`"
                 :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
             >
                 <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />

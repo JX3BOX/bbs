@@ -8,7 +8,7 @@
                 </div>
                 <div
                     @click="onCategoryChange(data.category)"
-                    :class="`m-topic-top__category`"
+                    :class="`m-topic-category`"
                     :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                 >
                     <img
@@ -28,10 +28,10 @@
                         <a
                             :href="getPostUrl(data.id)"
                             class="m-topic-imgs__item"
-                            v-for="(item, index) in data.imgs"
+                            v-for="(item, index) in data.extra_images"
                             :key="index"
                         >
-                            <img :src="item" alt="" srcset="" />
+                            <img :src="getSquareBanner(item)" />
                         </a>
                     </div>
                 </div>
@@ -128,6 +128,7 @@ export default {
 .m-topic-hot {
     margin-bottom: 24px;
     .m-topic-hot__left {
+        min-width: 336px;
         width: 336px;
         padding-right: 24px;
         margin-right: 24px;

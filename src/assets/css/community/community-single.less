@@ -1,18 +1,34 @@
 .m-community-single {
-    .m-single-header {
-        margin: 0 28px;
+    padding: 0 28px;
+    .m-topic-category-box {
+        display: inline-block;
+        padding-right: 8px;
+        .m-topic-category {
+            padding: 3px 12px;
+            font-size: 12px;
+            border-radius: 12px 12px 12px 0px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            align-items: center;
+            user-select: none;
+            cursor: pointer;
+            color: @color;
+            & > div {
+                display: flex;
+                align-items: center;
+            }
+        }
     }
+
     .el-divider__text {
         color: #888;
         font-weight: 300;
     }
-
     .m-pagination-box {
         display: flex;
         justify-content: flex-end;
-    }
-    .u-editor {
-        padding: 0 28px;
     }
 }
 
@@ -21,12 +37,10 @@
 }
 
 @media screen and (max-width: @ipad) {
-    .m-community-single__main {
-        margin: 0 12px;
-    }
     .m-community-single {
+        padding: 0 12px;
         .m-single-header {
-            margin: 0 ;
+            margin: 0;
         }
         .m-pagination-box {
             display: block;
@@ -38,5 +52,4 @@
             padding: 0;
         }
     }
-
 }
