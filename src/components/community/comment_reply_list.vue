@@ -38,7 +38,7 @@
                                     <div class="u-btn">
                                         <img src="@/assets/img/community/praise.svg" alt="" />
                                         <span>赞</span>
-                                        <span>{{ linkCountRender }}</span>
+                                        <span>{{ likeCountRender }}</span>
                                     </div>
                                 </el-button>
                             </div>
@@ -85,18 +85,18 @@ export default {
     data() {
         return {
             isLike: false,
-            linkCount: 0,
+            likeCount: 0,
             showReplyForReplyFrom: false,
             renderContent: "",
             commentsList: [],
         };
     },
     computed: {
-        linkCountRender: function () {
-            if (this.linkCount >= 100) {
+        likeCountRender: function () {
+            if (this.likeCount >= 100) {
                 return "99+";
-            } else if (this.linkCount != 0) {
-                return this.linkCount;
+            } else if (this.likeCount != 0) {
+                return this.likeCount;
             } else {
                 return "";
             }
@@ -241,7 +241,7 @@ export default {
         // 点赞
         addLike: function () {
             if (this.isLike) return;
-            this.linkCount++;
+            this.likeCount++;
             if (!this.isLike) {
                 postStat("community", this.post.id, "likes");
             }

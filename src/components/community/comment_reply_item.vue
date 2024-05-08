@@ -13,7 +13,7 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small" @click="addLike">赞{{linkCountRender}}</el-button>
+                                <el-button type="text" size="small" @click="addLike">赞{{likeCountRender}}</el-button>
                                 <el-button type="text" size="small" @click="onShowReply">回复</el-button>
                                 <el-button type="text" size="small">拉黑</el-button>
                                 <el-button type="text" size="small">举报</el-button>
@@ -55,7 +55,7 @@ export default {
     },
     data() {
         return {
-            linkCount: 0,
+            likeCount: 0,
             renderContent: "",
             showReplyForReplyFrom: false,
             commentsList: [],
@@ -70,11 +70,11 @@ export default {
         },
     },
     computed: {
-        linkCountRender: function () {
-            if (this.linkCount >= 100) {
+        likeCountRender: function () {
+            if (this.likeCount >= 100) {
                 return "(99+)";
-            } else if (this.linkCount != 0) {
-                return `${this.linkCount}`;
+            } else if (this.likeCount != 0) {
+                return `${this.likeCount}`;
             } else {
                 return "";
             }
@@ -167,7 +167,7 @@ export default {
         // 点赞
         addLike: function () {
             if (this.isLike) return;
-            this.linkCount++;
+            this.likeCount++;
             if (!this.isLike) {
                 postStat("community", this.post.id, "likes");
             }
