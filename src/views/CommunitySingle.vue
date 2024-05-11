@@ -6,16 +6,16 @@
                 <template v-slot:title_before>
                     <div class="m-topic-category-box">
                         <div
-                        :class="`m-topic-category`"
-                        :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
-                    >
-                        <img
-                            v-svg-inline
-                            class="u-icon"
-                            :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
-                        />
-                        <div>{{ post.category }}</div>
-                    </div>
+                            :class="`m-topic-category`"
+                            :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+                        >
+                            <img
+                                v-svg-inline
+                                class="u-icon"
+                                :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                            />
+                            <div>{{ post.category }}</div>
+                        </div>
                     </div>
                 </template>
             </PostHeader>
@@ -24,12 +24,12 @@
             <div class="m-list-box">
                 <!--  楼主 -->
                 <div class="m-master-box">
-                    <CommentReplyList v-if="this.page === 1" :isMaster="true" :post="post" />
+                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" />
                 </div>
 
                 <!-- 帖子回复s -->
                 <div class="m-reply-box">
-                    <CommentReplyList v-for="(item, i) in replyList" :key="i" :post="item"> /> </CommentReplyList>
+                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item"> /> </ReplyItem>
                 </div>
             </div>
             <!-- 帖子回复e -->
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import CommentReplyList from "@/components/community/comment_reply_list.vue";
+import ReplyItem from "@/components/community/reply_item.vue";
 
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
@@ -71,7 +71,12 @@ export default {
         CommentEditor,
         CommunitySingleLayout,
         PostHeader,
-        CommentReplyList,
+        ReplyItem,
+    },
+    provide() {
+        return {
+            getTopicData: () => this.post,
+        };
     },
     data() {
         return {
@@ -127,6 +132,9 @@ export default {
     },
 
     methods: {
+        getTopicData: function () {
+            return this.post;
+        },
         getDetails: function () {
             getTopicDetails(this.id).then((res) => {
                 this.post = res.data.data;
@@ -174,7 +182,6 @@ export default {
                 this.categoryList = formatCategoryList(res.data.data);
             });
         },
-
     },
 };
 </script>

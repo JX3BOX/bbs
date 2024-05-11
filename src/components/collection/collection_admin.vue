@@ -11,22 +11,16 @@
         <div class="c-admin-wrapper">
             <el-divider content-position="left">可见性变更</el-divider>
             <el-radio-group v-model="visible" size="small" class="c-admin-status">
-                <el-radio-button
-                    v-for="(option, key) in visible_options"
-                    :label="key"
-                    :key="key"
-                >{{ option }}</el-radio-button>
+                <el-radio-button v-for="(option, key) in visible_options" :label="key" :key="key">{{
+                    option
+                }}</el-radio-button>
             </el-radio-group>
 
             <el-divider content-position="left">元信息</el-divider>
 
             <div class="c-admin-title">
-                <el-input
-                    v-model="title"
-                    placeholder="请输入小册标题"
-                    class="input-author drawer-item-content"
-                >
-                        <template slot="prepend">标题</template>
+                <el-input v-model="title" placeholder="请输入小册标题" class="input-author drawer-item-content">
+                    <template slot="prepend">标题</template>
                 </el-input>
             </div>
 
@@ -61,7 +55,7 @@
                         class="input-author drawer-item-content"
                     >
                         <template slot="prepend">作者</template>
-                </el-input>
+                    </el-input>
                 </div>
             </div>
 
@@ -74,10 +68,7 @@
 </template>
 
 <script>
-import {
-    __postType,
-    __cms
-} from "@jx3box/jx3box-common/data/jx3box.json";
+import { __postType, __cms } from "@jx3box/jx3box-common/data/jx3box.json";
 import { updateCollection, getCollection } from "@/service/helper";
 import Bus from "@/store/bus";
 export default {
@@ -107,7 +98,7 @@ export default {
             image: "",
 
             data: {},
-        }
+        };
     },
     computed: {
         visible_options() {
@@ -117,15 +108,15 @@ export default {
             };
         },
         id() {
-            return this.$route.params.id
-        }
+            return this.$route.params.id;
+        },
     },
     watch: {
         modelValue(val) {
             if (val) {
                 this.loadCollection();
             }
-        }
+        },
     },
     mounted() {
         this.initTypeOptions();
@@ -146,13 +137,13 @@ export default {
             this.type_options = types;
         },
         loadCollection() {
-            getCollection(this.id).then(res => {
+            getCollection(this.id).then((res) => {
                 this.data = res.data.data;
                 this.post_author = this.data.user_id;
                 this.visible = this.data.public;
                 this.title = this.data.title;
-                this.image = this.data.image
-            })
+                this.image = this.data.image;
+            });
         },
         submit() {
             this.pushing = true;
@@ -164,18 +155,20 @@ export default {
                 public: this.visible,
                 user_id: ~~this.post_author,
                 title: this.title,
-            }).then(() => {
-                this.$message({
-                    message: "更新成功",
-                    type: "success",
-                });
-                Bus.$emit("updateCollection");
-            }).finally(() => {
-                this.pushing = false;
             })
+                .then(() => {
+                    this.$message({
+                        message: "更新成功",
+                        type: "success",
+                    });
+                    Bus.$emit("updateCollection");
+                })
+                .finally(() => {
+                    this.pushing = false;
+                });
         },
-         // 上传
-         uploadSuccess: function (res, file, list) {
+        // 上传
+        uploadSuccess: function (res, file, list) {
             this.banner_preview = URL.createObjectURL(file.raw);
             this.image = res.data[0];
         },
@@ -194,19 +187,19 @@ export default {
 .c-admin-title {
     margin-bottom: 20px;
 }
-.c-admin-banner{
-    .u-banner{
+.c-admin-banner {
+    .u-banner {
         .mt(5px);
     }
-    .u-btn{
+    .u-btn {
         .pointer;
     }
 }
-.c-admin-upload{
+.c-admin-upload {
     .w(100%) !important;
     .x;
 
-    .el-upload{
+    .el-upload {
         .size(100%);
         box-sizing: border-box;
     }

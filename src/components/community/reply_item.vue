@@ -20,7 +20,7 @@
                             <div>
                                 <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
                                 <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
-                                <el-button v-if="allowReport" type="text">举报</el-button>
+                                <el-button v-if="allowReport" type="text" @click="onMiscfeedback">举报</el-button>
                                 <el-button v-if="allowBlock" type="text" @click="addBlock()">拉黑</el-button>
                                 <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
                                     <div class="u-btn">
@@ -55,7 +55,7 @@
 
                 <div v-if="!isMaster && commentsList.length" class="m-reply-list">
                     <!-- 回帖的回复-->
-                    <CommentReplyItem v-for="item in commentsList" :key="item.id" :post="item" />
+                    <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
                 </div>
             </div>
         </div>
@@ -65,22 +65,29 @@
 <script>
 import CommentUser from "@/components/community/comment_user.vue";
 import ReplyForReply from "./ReplyForReply.vue";
-import CommentReplyItem from "@/components/community/comment_reply_item.vue";
+import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList, delReply, addBlock, feedback } from "@/service/community";
+import { replyReply, getCommentsList, addBlock, feedback } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 
 export default {
+    name: "CommentItem",
+    inject: ["getTopicData"],
     props: ["isMaster", "post"],
     components: {
         CommentUser,
         ReplyForReply,
-        CommentReplyItem,
+        CommentItem,
         Article,
+    },
+    provide() {
+        return {
+            getReplyData: () => this.post,
+        };
     },
     data() {
         return {
@@ -166,6 +173,39 @@ export default {
         this.getList();
     },
     methods: {
+        onMiscfeedback() {
+            const topicData = this.getTopicData();
+            const replyData = this.post;
+            const layer = this.isMaster ? "楼主" : replyData.layer + "楼";
+            const user_name = this.userInfo.display_name;
+            this.$prompt(`请输入要举报的内容`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                input: "textarea",
+                inputPlaceholder: "请输入要举报的内容",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "内容不能为空!";
+                    }
+                },
+            }).then(({ value }) => {
+                const content = `魔盒论坛《${topicData.title}》${layer}的 ${user_name} ：${value}`;
+                feedback({
+                    // 平台
+                    client: topicData.client,
+                    // 举报内容
+                    content,
+                    // 是否公开
+                    public: 0,
+                    // 类型：举报
+                    subtype: "3",
+                    // 来源：官网
+                    type: "1",
+                }).then(() => {
+                    this.$message.success("举报成功");
+                });
+            });
+        },
         deleteReply: function () {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",

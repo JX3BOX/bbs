@@ -13,10 +13,10 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small" @click="addLike">赞{{likeCountRender}}</el-button>
+                                <el-button type="text" size="small" @click="addLike">赞{{ likeCountRender }}</el-button>
                                 <el-button type="text" size="small" @click="onShowReply">回复</el-button>
                                 <el-button type="text" size="small">拉黑</el-button>
-                                <el-button type="text" size="small">举报</el-button>
+                                <el-button type="text" size="small" @click="onMiscfeedback">举报</el-button>
                             </div>
                             <div>
                                 <el-button type="text" size="small">删除</el-button>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <CommentReplyItem v-for="item in commentsList" :key="item.id" :data="item" />
+            <CommentItem v-for="item in commentsList" :key="item.id" :data="item" />
         </div>
     </div>
 </template>
@@ -44,12 +44,13 @@
 import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { replyReply, getCommentsList } from "@/service/community";
+import { replyReply, getCommentsList, feedback } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 export default {
-    name: "CommentReplyItem",
+    name: "CommentItem",
     props: ["post"],
+    inject: ["getTopicData", "getReplyData"],
     components: {
         ReplyForReply,
     },
@@ -99,6 +100,38 @@ export default {
         // this.getList();
     },
     methods: {
+        onMiscfeedback() {
+            const topicData = this.getTopicData();
+            const replyData = this.getReplyData();
+            const user_name = this.post.user_info.display_name;
+            this.$prompt(`请输入要举报的内容`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                input: "textarea",
+                inputPlaceholder: "请输入要举报的内容",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "内容不能为空!";
+                    }
+                },
+            }).then(({ value }) => {
+                const content = `魔盒论坛《${topicData.title}》${replyData.layer}楼的 ${user_name} ：${value}`;
+                feedback({
+                    // 平台
+                    client: topicData.client,
+                    // 举报内容
+                    content,
+                    // 是否公开
+                    public: 0,
+                    // 类型：举报
+                    subtype: "3",
+                    // 来源：官网
+                    type: "1",
+                }).then(() => {
+                    this.$message.success("举报成功");
+                });
+            });
+        },
         async formatContent(val) {
             const ins = new JX3_EMOTION(escapeHtml(val));
             this.renderContent = await ins._renderHTML();
@@ -109,7 +142,7 @@ export default {
         },
         doReply({ content }) {
             const id = this.$route.params.id;
-            const replyId = this.id;
+            const replyId = this.post.topic_reply_id;
             const userId = this.userInfo.id;
             if (id && replyId && userId) {
                 replyReply(id, replyId, {
