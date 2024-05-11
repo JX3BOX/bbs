@@ -75,7 +75,7 @@ import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 
 export default {
-    name: "CommentItem",
+    name: "ReplyItem",
     inject: ["getTopicData"],
     props: ["isMaster", "post"],
     components: {
@@ -170,7 +170,7 @@ export default {
         },
     },
     mounted() {
-        this.getList();
+        // this.getList();
     },
     methods: {
         onMiscfeedback() {

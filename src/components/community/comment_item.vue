@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <CommentItem v-for="item in commentsList" :key="item.id" :data="item" />
+            <!-- <CommentItem v-for="item in commentsList" :key="item.id" :data="item" /> -->
         </div>
     </div>
 </template>
@@ -150,7 +150,7 @@ export default {
                     reply_for_user_id: userId,
                 })
                     .then(() => {
-                        this.getList();
+                        // this.getList();
                     })
                     .finally(() => {
                         this.showReplyForReplyFrom = false;
