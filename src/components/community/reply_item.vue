@@ -46,7 +46,7 @@
                     </div>
                     <ReplyForReply
                         v-if="showReplyForReplyFrom"
-                        username="芝士饭团"
+                        :username="userInfo.display_name"
                         :user-href="authorLink(userId)"
                         @hideForm="showReplyForReplyFrom = false"
                         @doReply="doReply"

@@ -138,7 +138,7 @@ export default {
         },
         authorLink,
         onShowReply() {
-            this.showReplyForReplyFrom = true;
+            this.showReplyForReplyFrom = !this.showReplyForReplyFrom;
         },
         doReply({ content }) {
             const id = this.$route.params.id;
