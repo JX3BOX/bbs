@@ -87,6 +87,7 @@ export default {
     provide() {
         return {
             getReplyData: () => this.post,
+            getCommentsList: this.getList,
         };
     },
     data() {

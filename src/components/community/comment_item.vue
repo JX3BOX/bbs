@@ -44,13 +44,13 @@
 import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { replyReply, getCommentsList, feedback } from "@/service/community";
+import { replyReply, feedback } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 export default {
     name: "CommentItem",
     props: ["post"],
-    inject: ["getTopicData", "getReplyData"],
+    inject: ["getTopicData", "getReplyData", "getCommentsList"],
     components: {
         ReplyForReply,
     },
@@ -96,9 +96,7 @@ export default {
             return this.post.id;
         },
     },
-    mounted() {
-        // this.getList();
-    },
+    mounted() {},
     methods: {
         onMiscfeedback() {
             const topicData = this.getTopicData();
@@ -150,7 +148,7 @@ export default {
                     reply_for_user_id: userId,
                 })
                     .then(() => {
-                        // this.getList();
+                        this.getCommentsList();
                     })
                     .finally(() => {
                         this.showReplyForReplyFrom = false;
@@ -159,25 +157,6 @@ export default {
                 this.$message.error("回复失败：数据不正确");
             }
             this.showReplyForReplyFrom = false;
-        },
-        getList() {
-            if (this.isMaster) return;
-            const id = this.$route.params.id;
-            const replyId = this.id;
-
-            if (id && replyId) {
-                getCommentsList(id, replyId)
-                    .then((res) => {
-                        const list = res.data.data.list;
-                        if (list) {
-                            console.log(list);
-                            this.commentsList = list;
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(replyId);
-                    });
-            }
         },
         // 拉黑
         addBlock: function () {
