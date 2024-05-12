@@ -52,10 +52,32 @@
                         @doReply="doReply"
                     />
                 </div>
-
+                <div v-if="!isMaster" class="m-comment-collapse">
+                    <div v-if="isCollapse" @click="onCollapseChange">
+                        <img width="14" src="@/assets/img/community/collapse_1.svg" alt="" />
+                        <span>折叠评论</span>
+                    </div>
+                    <div v-else @click="onCollapseChange">
+                        <img width="14" src="@/assets/img/community/collapse_2.svg" alt="" />
+                        <span>展开评论</span>
+                    </div>
+                </div>
+                <!-- 评论列表 -->
                 <div v-if="!isMaster && commentsList.length" class="m-reply-list">
-                    <!-- 回帖的回复-->
                     <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
+                </div>
+
+                <!-- 分页 -->
+                <div v-if="isCollapse" class="m-pagination-box">
+                    <el-pagination
+                        background
+                        layout="total, prev, pager, next"
+                        :hide-on-single-page="true"
+                        :page-size="per"
+                        :total="total"
+                        :current-page.sync="page"
+                        @current-change="changePage"
+                    ></el-pagination>
                 </div>
             </div>
         </div>
@@ -69,14 +91,14 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList, addBlock, feedback } from "@/service/community";
+import { replyReply, getCommentsList, addBlock, feedback, delReply } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 
 export default {
     name: "ReplyItem",
-    inject: ["getTopicData"],
+    inject: ["getTopicData", "getReplyList"],
     props: ["isMaster", "post"],
     components: {
         CommentUser,
@@ -92,6 +114,10 @@ export default {
     },
     data() {
         return {
+            page: 1, //当前页数
+            per: 5, //每页条目
+            total: 0, //总条目数
+            isCollapse: false,
             isLike: false,
             likeCount: 0,
             showReplyForReplyFrom: false,
@@ -170,10 +196,17 @@ export default {
             immediate: true,
         },
     },
-    mounted() {
-        // this.getList();
-    },
+    mounted() {},
     methods: {
+        onCollapseChange() {
+            if (this.isCollapse) {
+                this.commentsList = this.post.comments;
+            } else {
+                this.page = 1;
+                this.getList();
+            }
+            this.isCollapse = !this.isCollapse;
+        },
         onMiscfeedback() {
             const topicData = this.getTopicData();
             const replyData = this.post;
@@ -214,7 +247,7 @@ export default {
                 type: "warning",
             }).then(() => {
                 // delReply(this.post.id).then(() => {
-                //     this.$message.success("删除成功");
+                //     this.getReplyList();
                 // });
             });
         },
@@ -248,16 +281,24 @@ export default {
                 this.$message.error("回复失败：数据不正确");
             }
         },
+        changePage() {
+            this.getList();
+        },
         getList() {
             if (this.isMaster) return;
             const id = this.$route.params.id;
             const replyId = this.post.id;
             if (id && replyId) {
-                getCommentsList(id, replyId).then((res) => {
+                getCommentsList(id, replyId, {
+                    index: this.page,
+                    pageSize: this.per,
+                }).then((res) => {
                     const list = res.data.data.list;
                     if (list) {
                         this.commentsList = list;
+                        this.isCollapse = true;
                     }
+                    this.total = res.data.data.page.total;
                 });
             }
         },

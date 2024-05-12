@@ -6,7 +6,7 @@
     padding: 16px 0;
     border-radius: 0 0 10px 10px;
     .m-comment-wrapper {
-        margin-left: 80px;
+        margin-left: 24px;
     }
     .u-layer {
         color: rgba(64, 128, 255, 1);
@@ -78,7 +78,6 @@
         margin-left: 25px;
         border-bottom: 1px solid rgba(232, 232, 232, 1);
     }
-
     .u-toolbar {
         display: flex;
         justify-content: space-between;
@@ -116,6 +115,20 @@
             }
         }
     }
+    .m-comment-collapse {
+        font-size: 14px;
+        color: rgba(166, 166, 166, 1);
+        padding-bottom: 8px;
+        margin-left: 24px;
+        border-bottom: 1px solid rgba(232, 232, 232, 1);
+        margin-bottom: 4px;
+        & > div {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            cursor: pointer;
+        }
+    }
 }
 .m-comment-toggle {
     display: flex;
@@ -129,7 +142,6 @@
 }
 
 .m-comment-wrapper__right-box {
-    margin-right: 24px;
     padding-left: 24px;
     border-radius: 0 6px 6px 0;
     flex: 1;
@@ -170,7 +182,6 @@
 }
 
 .m-reply-list {
-    margin-left: -50px;
     margin-top: 8px;
     .m-comment-wrapper {
         margin-bottom: 0px;
@@ -210,7 +221,6 @@
         .u-mobile-time {
             display: block;
             margin: 8px 0 12px 0;
-
         }
         .m-comment-wrapper__left {
             padding: 0;

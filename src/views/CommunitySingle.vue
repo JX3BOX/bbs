@@ -76,6 +76,7 @@ export default {
     provide() {
         return {
             getTopicData: () => this.post,
+            getReplyList: this.getReplyList,
         };
     },
     data() {
