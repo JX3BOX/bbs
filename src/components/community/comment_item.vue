@@ -13,7 +13,7 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small" @click="addLike">赞{{ likeCountRender }}</el-button>
+                                <el-button type="text" size="small" @click="addLike">赞 <span class="u-count" v-if="!!likeCountRender">({{ likeCountRender }})</span></el-button>
                                 <el-button type="text" size="small" @click="onShowReply">回复</el-button>
                                 <AddBlockButton :post="post" />
                                 <ComplaintButton :post="post" />

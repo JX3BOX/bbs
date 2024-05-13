@@ -172,8 +172,8 @@ export default {
     position: relative;
     top: 7px;
 }
-.u-toolbar {
-    display: flex;
-    justify-content: flex-end;
-}
+// .u-toolbar {
+//     display: flex;
+//     justify-content: flex-end;
+// }
 </style>

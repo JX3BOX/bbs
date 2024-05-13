@@ -99,6 +99,9 @@ export default {
 .c-comment-subbox {
     .u-subbox-label {
         margin-bottom: 10px;
+        .fz(14px);
+        .flex;
+        gap:3px;
     }
     .el-form-item {
         margin: 0;
