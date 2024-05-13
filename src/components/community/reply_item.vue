@@ -19,8 +19,8 @@
                         <div>
                             <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
                             <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
-                            <el-button v-if="allowReport" type="text" @click="onMiscfeedback">举报</el-button>
-                            <el-button v-if="allowBlock" type="text" @click="addBlock()">拉黑</el-button>
+                            <ComplaintButton :post="post" />
+                            <AddBlockButton :isMaster="isMaster" :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
                                 <div class="u-btn">
                                     <img src="@/assets/img/community/reply.svg" alt="" />
@@ -89,16 +89,20 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList, addBlock, feedback, delReply } from "@/service/community";
+import { replyReply, getCommentsList, delReply } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
+import AddBlockButton from "@/components/community/add_block_button.vue";
+import ComplaintButton from "./complaint_button.vue";
 
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList"],
     props: ["isMaster", "post"],
     components: {
+        ComplaintButton,
+        AddBlockButton,
         CommentUser,
         ReplyForReply,
         CommentItem,
@@ -138,20 +142,10 @@ export default {
             // 登录 && 不是楼主
             return this.isLogin && !this.isMaster;
         },
-        // 是否允许举报
-        allowReport: function () {
-            // 登陆 && 不是自己
-            return this.isLogin && this.post.user_id != User.getInfo().uid;
-        },
         // 是否允许删除
         allowDelete: function () {
             // 登录 && 不是楼主 && 是自己
             return this.isLogin && !this.isMaster && this.post.user_id == User.getInfo().uid;
-        },
-        // 是否允许拉黑
-        allowBlock: function () {
-            // 登录 && 不是楼主 && 不是自己
-            return this.isLogin && !this.isMaster && this.post.user_id != User.getInfo().uid;
         },
         // 是否登录
         isLogin: function () {
@@ -204,39 +198,6 @@ export default {
                 this.getList();
             }
             this.isCollapse = !this.isCollapse;
-        },
-        onMiscfeedback() {
-            const topicData = this.getTopicData();
-            const replyData = this.post;
-            const layer = this.isMaster ? "楼主" : replyData.layer + "楼";
-            const user_name = this.userInfo.display_name;
-            this.$prompt(`请输入要举报的内容`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                input: "textarea",
-                inputPlaceholder: "请输入要举报的内容",
-                inputValidator: (value) => {
-                    if (!value) {
-                        return "内容不能为空!";
-                    }
-                },
-            }).then(({ value }) => {
-                const content = `魔盒论坛《${topicData.title}》${layer}的 ${user_name} ：${value}`;
-                feedback({
-                    // 平台
-                    client: topicData.client,
-                    // 举报内容
-                    content,
-                    // 是否公开
-                    public: 0,
-                    // 类型：举报
-                    subtype: "3",
-                    // 来源：官网
-                    type: "1",
-                }).then(() => {
-                    this.$message.success("举报成功");
-                });
-            });
         },
         deleteReply: function () {
             this.$confirm("确认是否删除该评论？", "提示", {
@@ -296,30 +257,14 @@ export default {
                     if (list) {
                         this.commentsList = list;
                         this.isCollapse = true;
+                    } else {
+                        this.commentsList = [];
                     }
                     this.page = res.data.data.page.index;
                     this.total = res.data.data.page.total;
                     this.current = res.data.data.page.current;
                 });
             }
-        },
-        // 拉黑
-        addBlock: function () {
-            this.$confirm("确定要拉黑此人？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
-                .then(() => {
-                    addBlock(this.post.user_id)
-                        .then(() => {
-                            this.$message.success("拉黑成功");
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                })
-                .catch((_) => {});
         },
         // 点赞
         addLike: function () {

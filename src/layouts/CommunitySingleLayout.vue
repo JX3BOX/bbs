@@ -48,7 +48,6 @@ import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDirectMessage from "@jx3box/jx3box-common-ui/src/bread/AdminDirectMessage.vue";
 import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
-
 export default {
     name: "Single",
     props: ["post"],

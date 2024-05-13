@@ -68,6 +68,7 @@ export default {
                     });
                     fileList.pop();
                 } else {
+                    console.log(fileList);
                     this.fileList = fileList;
                 }
             }
@@ -80,6 +81,7 @@ export default {
             }
         },
         onSuccess(response) {
+            console.log(11);
             this.successList = this.successList.concat(response.data);
             if (this.successList.length == this.fileList.length) {
                 this.$emit("onFinish", this.successList || []);
@@ -88,6 +90,7 @@ export default {
             }
         },
         onError() {
+            console.log(22);
             this.$notify({
                 title: "",
                 message: "图片上传失败!",

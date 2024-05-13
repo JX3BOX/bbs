@@ -171,14 +171,15 @@ export default {
                 });
         },
         onReplyTopic({ attachmentList, content }) {
-            if (!this.id) return this.$message.error("文章id不存在");
-            replyTopic(this.id, {
-                client: location.href.includes("origin") ? "origin" : "std",
-                content: content,
-                extra_images: attachmentList,
-            }).then((res) => {
-                this.getReplyList();
-            });
+            console.log(attachmentList);
+            // if (!this.id) return this.$message.error("文章id不存在");
+            // replyTopic(this.id, {
+            //     client: location.href.includes("origin") ? "origin" : "std",
+            //     content: content,
+            //     extra_images: attachmentList,
+            // }).then((res) => {
+            //     this.getReplyList();
+            // });
         },
         changePage() {
             this.getReplyList();
