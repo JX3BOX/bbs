@@ -29,12 +29,15 @@
         <div>
             <Main :withoutRight="false">
                 <div class="m-community-single__main">
-                    <slot></slot>
+                    <div class="m-community-single__left">
+                        <slot></slot>
+                        <Footer></Footer>
+                    </div>
+
                     <div class="m-community-single__right">
                         <PostTopic v-if="post.id" type="community" :id="~~post.id" />
                     </div>
                 </div>
-                <Footer></Footer>
             </Main>
         </div>
     </div>
@@ -62,7 +65,7 @@ export default {
     },
     computed: {
         user_id: function () {
-            return this.post ? this.post.user_id : ""
+            return this.post ? this.post.user_id : "";
         },
         title() {
             return this.post ? this.post.post_title : document.title;
@@ -72,7 +75,7 @@ export default {
     components: {
         "publish-gate": publishGate,
         AdminDirectMessage,
-        PostTopic
+        PostTopic,
     },
 };
 </script>
@@ -87,6 +90,9 @@ export default {
         margin-left: 0;
         margin-right: 0;
         .m-community-single {
+            flex: 1;
+        }
+        .m-community-single__left {
             flex: 1;
         }
         .m-community-single__right {
