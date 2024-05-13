@@ -27,6 +27,7 @@ export default {
             console.log(this.post);
             const userInfo = this.post.user_info || this.post.ext_user_info;
             const user_name = userInfo.display_name;
+            const layer = replyData.layer ? replyData.layer + "楼" : "楼主";
             this.$prompt(`请输入要举报的内容`, "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -38,7 +39,9 @@ export default {
                     }
                 },
             }).then(({ value }) => {
-                const content = `魔盒论坛《${topicData.title}》(来源： /community/${topicData.id}#${replyData.layer})${replyData.layer}楼的 ${user_name} ：${value}`;
+                const content = `魔盒论坛《${topicData.title}》(来源： /community/${topicData.id || 0}#${
+                    replyData.layer
+                })${layer}的 ${user_name} ：${value}`;
                 feedback({
                     // 平台
                     client: topicData.client,
