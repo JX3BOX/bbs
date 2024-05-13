@@ -5,7 +5,6 @@
 <script>
 import { feedback } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
-console.log(User);
 export default {
     name: "ComplaintButton",
     props: ["post"],
@@ -24,10 +23,11 @@ export default {
         onMiscfeedback() {
             const topicData = this.getTopicData();
             const replyData = this.getReplyData();
-            console.log(this.post);
             const userInfo = this.post.user_info || this.post.ext_user_info;
             const user_name = userInfo.display_name;
-            const layer = replyData.layer ? replyData.layer + "楼" : "楼主";
+            const layerNum = replyData.layer || 0;
+            const layerStr = layerNum ? layerNum + "楼" : "楼主";
+
             this.$prompt(`请输入要举报的内容`, "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -39,9 +39,7 @@ export default {
                     }
                 },
             }).then(({ value }) => {
-                const content = `魔盒论坛《${topicData.title}》(来源： /community/${topicData.id || 0}#${
-                    replyData.layer
-                })${layer}的 ${user_name} ：${value}`;
+                const content = `魔盒论坛《${topicData.title}》（来源：/community/${topicData.id}#${layerNum}）${layerStr}的${user_name}：${value}`;
                 feedback({
                     // 平台
                     client: topicData.client,
