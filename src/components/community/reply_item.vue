@@ -20,7 +20,7 @@
                             <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
                             <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
                             <ComplaintButton :post="post" />
-                            <AddBlockButton :isMaster="isMaster" :post="post" />
+                            <AddBlockButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
                                 <div class="u-btn">
                                     <img src="@/assets/img/community/reply.svg" alt="" />

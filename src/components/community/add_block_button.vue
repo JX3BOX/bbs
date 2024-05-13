@@ -5,17 +5,18 @@
 <script>
 import { addBlock } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
+
 export default {
     name: "add-block-button",
-    props: ["post", "isMaster"],
+    props: ["post"],
     computed: {
         isLogin: function () {
             return User.isLogin();
         },
         // 是否允许拉黑
         allowBlock: function () {
-            // 登录 && 不是楼主 && 不是自己
-            return this.isLogin && !this.isMaster && this.post.user_id != User.getInfo().uid;
+            // 登录  && 不是自己
+            return this.isLogin && this.post.user_id != User.getInfo().uid;
         },
     },
     methods: {

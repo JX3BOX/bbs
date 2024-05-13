@@ -5,7 +5,7 @@
 <script>
 import { feedback } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
-
+console.log(User);
 export default {
     name: "ComplaintButton",
     props: ["post"],

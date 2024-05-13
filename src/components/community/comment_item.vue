@@ -13,7 +13,12 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small" @click="addLike">赞 <span class="u-count" v-if="!!likeCountRender">({{ likeCountRender }})</span></el-button>
+                                <el-button type="text" size="small" @click="addLike"
+                                    >赞
+                                    <span class="u-count" v-if="!!likeCountRender"
+                                        >({{ likeCountRender }})</span
+                                    ></el-button
+                                >
                                 <el-button type="text" size="small" @click="onShowReply">回复</el-button>
                                 <AddBlockButton :post="post" />
                                 <ComplaintButton :post="post" />
@@ -51,6 +56,7 @@ import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
 import ComplaintButton from "./complaint_button.vue";
+import User from "@jx3box/jx3box-common/js/user.js";
 
 export default {
     name: "CommentItem",
