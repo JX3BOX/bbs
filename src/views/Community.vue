@@ -1,7 +1,7 @@
 <template>
     <CommunityLayout>
         <div v-loading="loading">
-            <Header  :categoryList="categoryList" />
+            <Header :categoryList="categoryList" />
             <!-- 置顶文章 -->
             <TopicTop v-if="topTopicData" :data="topTopicData" />
             <!-- 移动端兼容置顶文章 -->
@@ -10,12 +10,7 @@
             </div>
 
             <div class="m-topic-list" v-if="list.length">
-                <TopicItem
-                    v-for="(item, index) in list"
-                    :key="index"
-                    :data="item"
-
-                />
+                <TopicItem v-for="(item, index) in list" :key="index" :data="item" />
             </div>
 
             <!-- 下一页 -->
@@ -113,7 +108,7 @@ export default {
     methods: {
         getCategoryList() {
             getTopicBucket({ type: "community" }).then((res) => {
-                this.categoryList = formatCategoryList(res.data.data)
+                this.categoryList = formatCategoryList(res.data.data);
             });
         },
         getCategoryStyle: function (category) {

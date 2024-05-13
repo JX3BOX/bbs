@@ -1,84 +1,82 @@
 <template>
-    <div>
-        <div class="m-comment-wrapper">
-            <div class="m-comment-wrapper__left">
-                <CommentUser :uid="userInfo.id" />
+    <div class="m-comment-wrapper">
+        <div class="m-comment-wrapper__left">
+            <CommentUser :uid="userInfo.id" />
+        </div>
+        <div class="m-comment-wrapper__right">
+            <div class="m-comment-wrapper__right-box">
+                <div>
+                    <div class="u-layer">{{ isMaster ? "楼主" : post.layer + "楼" }}</div>
+                    <div class="u-content">
+                        <Article v-if="isMaster" :content="post.content || ''" />
+                        <div v-else v-html="renderContent" />
+                    </div>
+                </div>
+                <div>
+                    <div class="u-time">{{ post.updated_at || post.created_at }}</div>
+                    <div class="u-toolbar">
+                        <div></div>
+                        <div>
+                            <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
+                            <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
+                            <el-button v-if="allowReport" type="text" @click="onMiscfeedback">举报</el-button>
+                            <el-button v-if="allowBlock" type="text" @click="addBlock()">拉黑</el-button>
+                            <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
+                                <div class="u-btn">
+                                    <img src="@/assets/img/community/reply.svg" alt="" />
+                                    <span>{{ isMaster ? "跟帖" : "回复" }}</span>
+                                </div>
+                            </el-button>
+                            <el-button
+                                :disabled="isLike"
+                                type="primary"
+                                size="small"
+                                class="u-praise-btn"
+                                @click="addLike"
+                            >
+                                <div class="u-btn">
+                                    <img src="@/assets/img/community/praise.svg" alt="" />
+                                    <span>赞</span>
+                                    <span>{{ likeCountRender }}</span>
+                                </div>
+                            </el-button>
+                        </div>
+                    </div>
+                </div>
+                <ReplyForReply
+                    v-if="showReplyForReplyFrom"
+                    :username="userInfo.display_name"
+                    :user-href="authorLink(userId)"
+                    @hideForm="showReplyForReplyFrom = false"
+                    @doReply="doReply"
+                />
             </div>
-            <div class="m-comment-wrapper__right">
-                <div class="m-comment-wrapper__right-box">
-                    <div>
-                        <div class="u-layer">{{ isMaster ? "楼主" : post.layer + "楼" }}</div>
-                        <div class="u-content">
-                            <Article v-if="isMaster" :content="post.content || ''" />
-                            <div v-else v-html="renderContent" />
-                        </div>
-                    </div>
-                    <div>
-                        <div class="u-time">{{ post.updated_at || post.created_at }}</div>
-                        <div class="u-toolbar">
-                            <div></div>
-                            <div>
-                                <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
-                                <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
-                                <el-button v-if="allowReport" type="text" @click="onMiscfeedback">举报</el-button>
-                                <el-button v-if="allowBlock" type="text" @click="addBlock()">拉黑</el-button>
-                                <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
-                                    <div class="u-btn">
-                                        <img src="@/assets/img/community/reply.svg" alt="" />
-                                        <span>{{ isMaster ? "跟帖" : "回复" }}</span>
-                                    </div>
-                                </el-button>
-                                <el-button
-                                    :disabled="isLike"
-                                    type="primary"
-                                    size="small"
-                                    class="u-praise-btn"
-                                    @click="addLike"
-                                >
-                                    <div class="u-btn">
-                                        <img src="@/assets/img/community/praise.svg" alt="" />
-                                        <span>赞</span>
-                                        <span>{{ likeCountRender }}</span>
-                                    </div>
-                                </el-button>
-                            </div>
-                        </div>
-                    </div>
-                    <ReplyForReply
-                        v-if="showReplyForReplyFrom"
-                        :username="userInfo.display_name"
-                        :user-href="authorLink(userId)"
-                        @hideForm="showReplyForReplyFrom = false"
-                        @doReply="doReply"
-                    />
+            <div v-if="!isMaster && post.comments_count > 3" class="m-comment-collapse">
+                <div v-if="isCollapse" @click="onCollapseChange">
+                    <img width="14" src="@/assets/img/community/collapse_1.svg" alt="" />
+                    <span>折叠评论</span>
                 </div>
-                <div v-if="!isMaster" class="m-comment-collapse">
-                    <div v-if="isCollapse" @click="onCollapseChange">
-                        <img width="14" src="@/assets/img/community/collapse_1.svg" alt="" />
-                        <span>折叠评论</span>
-                    </div>
-                    <div v-else @click="onCollapseChange">
-                        <img width="14" src="@/assets/img/community/collapse_2.svg" alt="" />
-                        <span>展开评论</span>
-                    </div>
+                <div v-else @click="onCollapseChange">
+                    <img width="14" src="@/assets/img/community/collapse_2.svg" alt="" />
+                    <span>展开评论</span>
                 </div>
-                <!-- 评论列表 -->
-                <div v-if="!isMaster && commentsList.length" class="m-reply-list">
-                    <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
-                </div>
+            </div>
+            <!-- 评论列表 -->
+            <div v-if="!isMaster && commentsList.length" class="m-reply-list">
+                <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
+            </div>
 
-                <!-- 分页 -->
-                <div v-if="isCollapse" class="m-pagination-box">
-                    <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :hide-on-single-page="true"
-                        :page-size="per"
-                        :total="total"
-                        :current-page.sync="page"
-                        @current-change="changePage"
-                    ></el-pagination>
-                </div>
+            <!-- 分页 -->
+            <div v-if="isCollapse" class="m-pagination-box">
+                <el-pagination
+                    background
+                    layout="total, prev, pager, next"
+                    :hide-on-single-page="true"
+                    :page-size="per"
+                    :total="total"
+                    :current-page.sync="page"
+                    @current-change="changePage"
+                ></el-pagination>
             </div>
         </div>
     </div>
@@ -246,9 +244,9 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                // delReply(this.post.id).then(() => {
-                //     this.getReplyList();
-                // });
+                delReply(this.post.id).then(() => {
+                    this.getReplyList();
+                });
             });
         },
         authorLink,
@@ -284,7 +282,7 @@ export default {
         changePage() {
             this.getList();
         },
-        getList() {
+        getList(postData = {}) {
             if (this.isMaster) return;
             const id = this.$route.params.id;
             const replyId = this.post.id;
@@ -292,13 +290,16 @@ export default {
                 getCommentsList(id, replyId, {
                     index: this.page,
                     pageSize: this.per,
+                    ...postData,
                 }).then((res) => {
                     const list = res.data.data.list;
                     if (list) {
                         this.commentsList = list;
                         this.isCollapse = true;
                     }
+                    this.page = res.data.data.page.index;
                     this.total = res.data.data.page.total;
+                    this.current = res.data.data.page.current;
                 });
             }
         },

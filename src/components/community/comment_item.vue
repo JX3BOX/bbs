@@ -19,7 +19,7 @@
                                 <el-button type="text" size="small" @click="onMiscfeedback">举报</el-button>
                             </div>
                             <div>
-                                <el-button type="text" size="small">删除</el-button>
+                                <el-button type="text" size="small" @click="deleteReply()">删除</el-button>
                                 <el-button type="text" size="small">黑洞</el-button>
                                 <span class="u-time">{{ post.updated_at }}</span>
                             </div>
@@ -44,7 +44,7 @@
 import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { replyReply, feedback } from "@/service/community";
+import { replyReply, feedback, delReply, delComment } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 export default {
@@ -98,6 +98,18 @@ export default {
     },
     mounted() {},
     methods: {
+        deleteReply: function () {
+            this.$confirm("确认是否删除该评论？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                delComment(this.post.id).then(() => {
+                    this.$message.success("删除成功");
+                    this.getCommentsList({ index: 1 });
+                });
+            });
+        },
         onMiscfeedback() {
             const topicData = this.getTopicData();
             const replyData = this.getReplyData();

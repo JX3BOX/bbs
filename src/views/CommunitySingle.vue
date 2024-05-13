@@ -2,24 +2,26 @@
     <CommunitySingleLayout :post="post">
         <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
-            <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
-                <template v-slot:title_before>
-                    <div class="m-topic-category-box">
-                        <div
-                            :class="`m-topic-category`"
-                            :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
-                        >
-                            <img
-                                v-svg-inline
-                                class="u-icon"
-                                :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
-                            />
-                            <div>{{ post.category }}</div>
+            <div class="m-community-header">
+                <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
+                    <template v-slot:title_before>
+                        <div class="m-topic-category-box">
+                            <div
+                                :class="`m-topic-category`"
+                                :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+                            >
+                                <img
+                                    v-svg-inline
+                                    class="u-icon"
+                                    :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                                />
+                                <div>{{ post.category }}</div>
+                            </div>
                         </div>
-                    </div>
-                </template>
-            </PostHeader>
-            <el-divider content-position="left">JX3BOX</el-divider>
+                    </template>
+                </PostHeader>
+                <el-divider content-position="left">JX3BOX</el-divider>
+            </div>
 
             <div class="m-list-box">
                 <!--  楼主 -->
@@ -35,21 +37,22 @@
             <!-- 帖子回复e -->
 
             <!-- 分页 -->
-            <div class="m-pagination-box">
-                <el-pagination
-                    background
-                    layout="total, prev, pager, next, jumper"
-                    :hide-on-single-page="true"
-                    :page-size="per"
-                    :total="total"
-                    :current-page.sync="page"
-                    @current-change="changePage"
-                ></el-pagination>
-            </div>
-
-            <el-divider content-position="left">评论</el-divider>
-            <div class="u-editor">
-                <CommentEditor @submit="onReplyTopic" />
+            <div class="m-community-footer">
+                <div class="m-pagination-box">
+                    <el-pagination
+                        background
+                        layout="total, prev, pager, next, jumper"
+                        :hide-on-single-page="true"
+                        :page-size="per"
+                        :total="total"
+                        :current-page.sync="page"
+                        @current-change="changePage"
+                    ></el-pagination>
+                </div>
+                <el-divider content-position="left">评论</el-divider>
+                <div class="u-editor">
+                    <CommentEditor @submit="onReplyTopic" />
+                </div>
             </div>
         </div>
     </CommunitySingleLayout>
@@ -151,15 +154,17 @@ export default {
                 .then((res) => {
                     const list = res.data.data.list;
                     const page = res.data.data.page;
-                    if (list) {
+                    if (list == null) {
+                        this.replyList = [];
+                    } else {
                         this.replyList = list.map((item, i) => {
                             return {
                                 ...item,
                                 layer: (page.index - 1) * page.pageSize + i + 1,
                             };
                         });
-                        this.total = page.total;
                     }
+                    this.total = page.total;
                 })
                 .finally(() => {
                     this.loading = false;

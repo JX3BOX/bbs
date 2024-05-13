@@ -26,11 +26,15 @@ function getTopicReplyList(id, params) {
 function replyTopic(id, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply`, data);
 }
-// 删除主贴回复
+// 删除回贴
 function delReply(id) {
     return $next().delete(`${API_PREFIX}/community/discussion/my/reply/item/${id}`);
 }
 
+// 删除评论
+function delComment(id) {
+    return $next().delete(`${API_PREFIX}/community/discussion/my/comment/item/${id}`);
+}
 
 // 主贴回帖的评论
 function replyReply(id, replyId, data) {
@@ -55,7 +59,7 @@ function getCommentsList(id, replyId, params) {
  * @returns
  */
 function addBlock(userId) {
-    return $next().post(`/api/my-userlist/deny/${userId}`)
+    return $next().post(`/api/my-userlist/deny/${userId}`);
 }
 
 /**
@@ -63,8 +67,19 @@ function addBlock(userId) {
  * @param {*} data
  */
 function feedback(data) {
-    return $next().post(`/api/miscfeedback`, data)
+    return $next().post(`/api/miscfeedback`, data);
 }
 
-
-export { getTopicList, getTopicBucket, getTopicDetails, getTopicReplyList, replyTopic, replyReply, getCommentsList,delReply ,addBlock,feedback};
+export {
+    getTopicList,
+    getTopicBucket,
+    getTopicDetails,
+    getTopicReplyList,
+    replyTopic,
+    replyReply,
+    getCommentsList,
+    delReply,
+    delComment,
+    addBlock,
+    feedback,
+};

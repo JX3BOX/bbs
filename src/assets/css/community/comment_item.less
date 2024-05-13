@@ -73,6 +73,7 @@
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(232, 232, 232, 1);
+    padding: 0 24px;
     .u-box {
         padding-bottom: 8px;
         margin-left: 25px;
@@ -82,16 +83,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .el-button {
-            font-size: 14px;
-            height: auto;
-        }
-        .el-button--text {
-            padding: 0;
-        }
-        .el-button + .el-button {
-            margin-left: 12px;
-        }
         .u-btn {
             display: flex;
             align-items: center;
@@ -119,7 +110,6 @@
         font-size: 14px;
         color: rgba(166, 166, 166, 1);
         padding-bottom: 8px;
-        margin-left: 24px;
         border-bottom: 1px solid rgba(232, 232, 232, 1);
         margin-bottom: 4px;
         & > div {
@@ -142,7 +132,6 @@
 }
 
 .m-comment-wrapper__right-box {
-    padding-left: 24px;
     border-radius: 0 6px 6px 0;
     flex: 1;
     display: flex;
@@ -184,11 +173,12 @@
 .m-reply-list {
     margin-top: 8px;
     .m-comment-wrapper {
-        margin-bottom: 0px;
         padding: 0;
+        margin: 0;
     }
     .m-comment-wrapper__right {
         border-left: 0;
+        padding: 0;
     }
     .m-comment-wrapper__right-box {
         border-bottom: 0;
@@ -202,6 +192,13 @@
     }
     .u-toolbar {
         margin-bottom: 12px;
+        .el-button {
+            font-size: 14px;
+            height: auto;
+        }
+        .el-button--text {
+            padding: 0;
+        }
     }
     .u-mobile-time {
         display: none;
@@ -215,6 +212,7 @@
 
     .m-comment-wrapper {
         display: block;
+        padding: 16px 12px;
         .u-time {
             margin-bottom: 12px;
         }
@@ -252,6 +250,7 @@
     }
     .m-comment-wrapper__right {
         border: 0;
+        padding: 0;
     }
     .m-comment-wrapper__right-box {
         border: 0;

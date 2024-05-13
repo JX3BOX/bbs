@@ -1,5 +1,8 @@
 .m-community-single {
-    padding: 0 28px;
+    .m-community-footer,
+    .m-community-header {
+        padding: 0 28px;
+    }
     .m-topic-category-box {
         display: inline-block;
         padding-right: 8px;
@@ -34,13 +37,17 @@
 
 .m-list-box {
     background: #fafafa;
+    padding-bottom: 0.1px;
 }
 
 @media screen and (max-width: @ipad) {
     .m-community-single {
-        padding: 0 12px;
         .m-single-header {
             margin: 0;
+        }
+        .m-community-footer,
+        .m-community-header {
+            padding: 0 6px 0 10px;
         }
         .m-pagination-box {
             display: block;
