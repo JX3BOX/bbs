@@ -24,7 +24,9 @@ export default {
         onMiscfeedback() {
             const topicData = this.getTopicData();
             const replyData = this.getReplyData();
-            const user_name = this.post.user_info.display_name;
+            console.log(this.post);
+            const userInfo = this.post.user_info || this.post.ext_user_info;
+            const user_name = userInfo.display_name;
             this.$prompt(`请输入要举报的内容`, "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
