@@ -146,6 +146,7 @@
 .m-reply-user {
     display: flex;
     gap: 16px;
+    padding:10px;
     .u-avatar {
         width: 48px;
         height: 48px;
@@ -164,7 +165,8 @@
     .u-reply-user {
         margin: 4px 0 0 0;
         line-height: 28px;
-        font-size: 16px;
+        font-size: 14px;
+        color:#888;
     }
     .u-content {
         margin: 0 0 4px 0;
@@ -172,9 +174,12 @@
     > div {
         flex: 1;
     }
-    .u-toolbar div{
-        .flex;
-        gap:15px;
+    .u-toolbar{
+        margin-top:5px;
+        div{
+            .flex;
+            gap:15px;
+        }
     }
     .u-count{
         .fz(12px);
