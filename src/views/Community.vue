@@ -48,7 +48,7 @@ import TopicItem from "@/components/community/topic_item.vue";
 import { getTopicList } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
 import { getTopicBucket } from "@/service/community";
-import { formatCategoryList, modifyAlpha } from "@/utils/community";
+import { formatCategoryList } from "@/utils/community";
 export default {
     components: {
         CommunityLayout,

@@ -1,5 +1,5 @@
 <template>
-    <el-button type="text" size="small" :disabled="!allowReport" @click="onMiscfeedback">举报</el-button>
+    <el-button type="text" :disabled="!allowReport" @click="onMiscfeedback">举报</el-button>
 </template>
 
 <script>
@@ -39,7 +39,7 @@ export default {
                     }
                 },
             }).then(({ value }) => {
-                const content = `魔盒论坛《${topicData.title}》（来源：/community/${topicData.id}#${layerNum}）${layerStr}的${user_name}：${value}`;
+                const content = `魔盒论坛《${topicData.title}》${layerStr}的${user_name}：${value}`;
                 feedback({
                     // 平台
                     client: topicData.client,
@@ -51,6 +51,8 @@ export default {
                     subtype: "3",
                     // 来源：官网
                     type: "1",
+                    // 来源地址
+                    refer: `/community/${topicData.id}#${layerNum}`,
                 }).then(() => {
                     this.$message.success("举报成功");
                 });

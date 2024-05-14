@@ -24,9 +24,7 @@
                                 <ComplaintButton :post="post" />
                             </div>
                             <div>
-                                <el-button type="text" size="small" v-if="allowDelete" @click="deleteReply()"
-                                    >删除</el-button
-                                >
+                                <DeleteButton :post="post" type="comment" />
                                 <el-button type="text" size="small">黑洞</el-button>
                                 <span class="u-time">{{ post.updated_at }}</span>
                             </div>
@@ -51,12 +49,12 @@
 import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { replyReply, delComment } from "@/service/community";
+import { replyReply } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
 import ComplaintButton from "./complaint_button.vue";
-import User from "@jx3box/jx3box-common/js/user.js";
+import DeleteButton from "./delete_button.vue";
 
 export default {
     name: "CommentItem",
@@ -66,6 +64,7 @@ export default {
         ReplyForReply,
         AddBlockButton,
         ComplaintButton,
+        DeleteButton,
     },
     data() {
         return {
@@ -85,13 +84,6 @@ export default {
     },
     computed: {
         // 是否登录
-        isLogin: function () {
-            return User.isLogin();
-        },
-        allowDelete: function () {
-            // 登录  && 是自己
-            return this.isLogin && this.post.user_id == User.getInfo().uid;
-        },
         likeCountRender: function () {
             if (this.likeCount >= 100) {
                 return "(99+)";
@@ -120,18 +112,6 @@ export default {
     mounted() {},
     methods: {
         authorLink,
-        deleteReply: function () {
-            this.$confirm("确认是否删除该评论？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            }).then(() => {
-                delComment(this.post.id).then(() => {
-                    this.$message.success("删除成功");
-                    this.getCommentsList({ index: 1 });
-                });
-            });
-        },
         async formatContent(val) {
             const ins = new JX3_EMOTION(escapeHtml(val));
             this.renderContent = await ins._renderHTML();

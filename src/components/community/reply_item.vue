@@ -18,7 +18,7 @@
                         <div></div>
                         <div>
                             <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
-                            <el-button v-if="allowDelete" type="text" @click="deleteReply()">删除</el-button>
+                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
                             <ComplaintButton :post="post" />
                             <AddBlockButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
@@ -89,18 +89,20 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList, delReply } from "@/service/community";
+import { replyReply, getCommentsList } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
 import ComplaintButton from "./complaint_button.vue";
+import DeleteButton from "./delete_button.vue";
 
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList"],
     props: ["isMaster", "post"],
     components: {
+        DeleteButton,
         ComplaintButton,
         AddBlockButton,
         CommentUser,
@@ -139,13 +141,8 @@ export default {
         },
         // 是否允许黑洞
         allowBlackHole: function () {
-            // 登录 && 不是楼主
+            // 登录 && 不是主楼
             return this.isLogin && !this.isMaster;
-        },
-        // 是否允许删除
-        allowDelete: function () {
-            // 登录 && 不是楼主 && 是自己
-            return this.isLogin && !this.isMaster && this.post.user_id == User.getInfo().uid;
         },
         // 是否登录
         isLogin: function () {
@@ -198,17 +195,6 @@ export default {
                 this.getList();
             }
             this.isCollapse = !this.isCollapse;
-        },
-        deleteReply: function () {
-            this.$confirm("确认是否删除该评论？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            }).then(() => {
-                delReply(this.post.id).then(() => {
-                    this.getReplyList();
-                });
-            });
         },
         authorLink,
         async formatContent(val) {
