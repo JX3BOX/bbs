@@ -14,11 +14,7 @@
         >
             <publish-gate slot="op-append" />
             <template #op-prepend>
-                <AdminDirectMessage
-                    :user-id="user_id"
-                    :sourceId="String(post.id)"
-                    sourceType="community"
-                ></AdminDirectMessage>
+                <AdminDrop :post="post" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -46,7 +42,7 @@
 <script>
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
-import AdminDirectMessage from "@jx3box/jx3box-common-ui/src/bread/AdminDirectMessage.vue";
+import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
 export default {
     name: "Single",
@@ -73,7 +69,7 @@ export default {
     methods: { getAppIcon },
     components: {
         "publish-gate": publishGate,
-        AdminDirectMessage,
+        AdminDrop,
         PostTopic,
     },
 };

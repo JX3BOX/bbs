@@ -1,10 +1,10 @@
 import { $next, $cms } from "@jx3box/jx3box-common/js/https";
+const API_PREFIX = `/api/next2`;
 
 // 获取分类
 function getTopicBucket(params) {
     return $cms().get(`/api/cms/topic/bucket`, { params });
 }
-const API_PREFIX = `/api/next2`;
 
 // 获取公开的讨论主题帖子列表
 const getTopicList = (params) => {

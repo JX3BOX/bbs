@@ -18,7 +18,7 @@
                     :sourceId="String(post.ID)"
                     :sourceType="post.post_type"
                 ></AdminDirectMessage> -->
-                <AdminDrop :post="post" :user-id="user_id" />
+                <AdminDrop :post="post" :showMove="true" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -77,7 +77,7 @@ export default {
         Side,
         "publish-gate": publishGate,
         // AdminDirectMessage,
-        AdminDrop
+        AdminDrop,
     },
 };
 </script>
