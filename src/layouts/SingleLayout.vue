@@ -88,4 +88,9 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/app.less";
+.p-bbs-single {
+    .c-admin-drop {
+        margin-right: 0;
+    }
+}
 </style>
