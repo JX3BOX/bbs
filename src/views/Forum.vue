@@ -117,6 +117,8 @@
                 @current-change="changePage"
             ></el-pagination>
         </div>
+
+        <design-task v-model="showDesignTask" :post="currentPost"></design-task>
     </ListLayout>
 </template>
 <script>
@@ -132,6 +134,10 @@ import Tabs from "@/components/bbs/list_tabs.vue";
 import { getTopicBucket, getUserList } from "@/service/cms";
 import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 import list_guide_top from "@/components/bbs/list_guide_top.vue";
+import {getDesignLog} from "@/service/design";
+import DesignTask from "@jx3box/jx3box-common-ui/src/bread/DesignTask.vue";
+import bus from "@/utils/bus";
+import User from "@jx3box/jx3box-common/js/user";
 
 export default {
     name: "Index",
@@ -167,6 +173,9 @@ export default {
                 origin: "缘起",
                 wujie: "无界",
             },
+
+            showDesignTask: false,
+            currentPost: {},
         };
     },
     computed: {
@@ -263,7 +272,7 @@ export default {
 
             this.loading = true;
             return getPosts(query)
-                .then((res) => {
+                .then(async (res) => {
                     if (appendMode) {
                         this.data = this.data.concat(res.data?.data?.list);
                     } else {
@@ -278,6 +287,17 @@ export default {
                             aggregate: res.data?.data?.list.map((item) => this.reporterLink(item.ID)),
                         },
                     });
+
+                    if (User.hasPermission('push_banner') && !this.isPhone) {
+                        const ids = this.data.map(item => item.ID);
+                        const logs = await getDesignLog({ source_type: 'bbs', ids: ids.join(',') }).then(res => res.data.data);
+
+                        this.data = this.data.map(item => {
+                            const log = logs.find(log => log.source_id == item.ID) || null;
+                            this.$set(item, 'log', log);
+                            return item;
+                        });
+                    }
                 })
                 .finally(() => {
                     this.loading = false;
@@ -369,6 +389,11 @@ export default {
     mounted() {
         // this.loadCount();
         this.getTopicBucket();
+
+        bus.on("design-task", (post) => {
+            this.currentPost = post;
+            this.showDesignTask = true;
+        });
     },
     components: {
         listItem,
@@ -377,6 +402,7 @@ export default {
         tabs: Tabs,
         "list-notice": list_notice,
         "list-guide-top": list_guide_top,
+        DesignTask,
     },
 };
 </script>
