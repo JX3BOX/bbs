@@ -18,7 +18,7 @@
                     :sourceId="String(post.ID)"
                     :sourceType="post.post_type"
                 ></AdminDirectMessage> -->
-                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" show-move />
             </template>
             <template #title>
                 <span>
@@ -89,8 +89,8 @@ export default {
 <style lang="less">
 @import "~@/assets/css/app.less";
 .p-bbs-single {
-    .c-admin-drop {
-        margin-right: 0;
-    }
+    // .c-admin-drop {
+    //     margin-right: 0;
+    // }
 }
 </style>
