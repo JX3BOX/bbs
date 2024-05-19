@@ -66,9 +66,7 @@ export default {
             return this.post ? this.post.post_title : document.title;
         },
     },
-    mounted() {
-        console.log(this.post);
-    },
+    mounted() {},
     methods: { getAppIcon },
     components: {
         "publish-gate": publishGate,

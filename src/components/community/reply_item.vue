@@ -96,6 +96,7 @@ import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
+import { getLikes } from "@/service/next";
 
 export default {
     name: "ReplyItem",
@@ -184,8 +185,22 @@ export default {
             },
             immediate: true,
         },
+        commentsList: {
+            handler: function async() {
+                if (!this.commentsList.length) return;
+                const id = this.commentsList.map((item) => item.id);
+                const params = {
+                    post_type: "community",
+                    post_action: "likes",
+                    id: id.join(","),
+                };
+                getLikes(params).then((res) => {
+                    console.log(res);
+                });
+            },
+            immediate: true,
+        },
     },
-    mounted() {},
     methods: {
         onCollapseChange() {
             if (this.isCollapse) {
@@ -257,7 +272,11 @@ export default {
             if (this.isLike) return;
             this.likeCount++;
             if (!this.isLike) {
-                postStat("community", this.post.id, "likes");
+                if (this.isMaster) {
+                    postStat("community_topic", this.post.id, "likes");
+                } else {
+                    postStat("community_reply", this.post.id, "likes");
+                }
             }
             this.isLike = true;
         },
