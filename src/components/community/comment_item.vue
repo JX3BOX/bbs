@@ -16,7 +16,6 @@
                                 <el-button type="text" size="small" @click="addLike" class="">
                                     <div class="u-btn-content">
                                         <img
-                                            v-svg-inline
                                             width="12"
                                             height="14"
                                             src="@/assets/img/community/heart.svg"

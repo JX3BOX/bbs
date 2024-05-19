@@ -1,5 +1,5 @@
 <template>
-    <div class="m-comment-wrapper">
+    <div class="m-comment-wrapper" :id="`layer-${post.layer}`">
         <div class="m-comment-wrapper__left">
             <CommentUser :uid="userInfo.id" />
         </div>
@@ -198,7 +198,7 @@ export default {
                     id: id.join(","),
                 };
                 getLikes(params).then((res) => {
-                    console.log(res);
+                    // console.log(res);
                 });
             },
             immediate: true,
