@@ -84,6 +84,7 @@ export default {
     },
     data() {
         return {
+            layer: 0,
             stat: "",
             page: 1, //当前页数
             per: 10, //每页条目
@@ -92,6 +93,7 @@ export default {
             replyList: [],
             categoryList: [],
             loading: false,
+            number_queries: ["per", "page"],
         };
     },
     computed: {
@@ -128,14 +130,63 @@ export default {
             };
         },
     },
+    created() {
+        this.getJumpLayer();
+    },
     mounted() {
         if (!this.id) return this.$message.error("文章id不存在");
         this.getCategoryList();
         this.getDetails();
         this.getReplyList();
     },
+    watch: {
+        // 加载路由参数
+        "$route.query": {
+            deep: true,
+            immediate: true,
+            handler: function (query) {
+                if (Object.keys(query).length) {
+                    for (let key in query) {
+                        // for:element分页组件兼容性问题
+                        if (this.number_queries.includes(key)) {
+                            this[key] = ~~query[key];
+                        } else {
+                            this[key] = query[key];
+                        }
+                    }
+                }
+            },
+        },
+    },
 
     methods: {
+        getJumpLayer: function () {
+            const hash = window.location.hash;
+            const layer = hash.substring(1).split("?")[0];
+            if (layer) {
+                this.layer = layer;
+                this.page = Math.ceil((this.layer - 1) / this.per);
+            }
+        },
+        jumpLayer() {
+            this.$nextTick(() => {
+                const el = document.getElementById("layer-" + this.layer);
+                if (el) {
+                    el.scrollIntoView();
+                    window.scrollBy(0, -120); // 额外滚动
+                }
+            });
+        },
+        buildQuery: function (appendMode) {
+            let _query = {
+                index: this.page,
+                pageSize: this.per,
+                order_created_at: 0,
+            };
+            this.replaceRoute({ page: this.page });
+
+            return _query;
+        },
         getTopicData: function () {
             return this.post;
         },
@@ -144,13 +195,11 @@ export default {
                 this.post = res.data.data;
             });
         },
+
         getReplyList: function () {
             this.loading = true;
-            getTopicReplyList(this.id, {
-                index: this.page,
-                pageSize: this.per,
-                order_created_at: 0,
-            })
+            const params = this.buildQuery();
+            getTopicReplyList(this.id, params)
                 .then((res) => {
                     const list = res.data.data.list;
                     const page = res.data.data.page;
@@ -160,9 +209,12 @@ export default {
                         this.replyList = list.map((item, i) => {
                             return {
                                 ...item,
-                                layer: (page.index - 1) * page.pageSize + i + 1,
+                                layer: (page.index - 1) * page.pageSize + i + 2,
                             };
                         });
+                        if (this.layer) {
+                            this.jumpLayer();
+                        }
                     }
                     this.total = page.total;
                 })
@@ -187,6 +239,15 @@ export default {
             getTopicBucket({ type: "community", search: this.post.category }).then((res) => {
                 this.categoryList = formatCategoryList(res.data.data);
             });
+        },
+        // 路由绑定
+        replaceRoute: function (extend) {
+            return this.$router
+                .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
+                .then(() => {
+                    window.scrollTo(0, 0);
+                })
+                .catch((err) => {});
         },
     },
 };

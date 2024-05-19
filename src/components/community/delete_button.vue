@@ -1,5 +1,8 @@
 <template>
-    <el-button v-if="allowDelete" type="text" @click="onDeleteClick()">删除</el-button>
+    <el-button v-if="allowDelete" type="text" @click="onDeleteClick()">
+        <i class="el-icon-delete"></i>
+        删除
+    </el-button>
 </template>
 
 <script>

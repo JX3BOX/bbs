@@ -37,9 +37,23 @@
                 </div>
                 <div class="m-topic-hot__right">
                     <h2 class="u-title">
-                        <a :href="getPostUrl(data.id)">
-                            {{ data.title }}
-                        </a>
+                        <div v-if="data.is_star || data.is_top" class="u-status">
+                            <img
+                                v-svg-inline
+                                v-if="data.is_top"
+                                src="@/assets/img/community/is_top.svg"
+                                alt=""
+                                srcset=""
+                            />
+                            <img
+                                v-svg-inline
+                                v-if="data.is_star"
+                                src="@/assets/img/community/is_star.svg"
+                                alt=""
+                                srcset=""
+                            />
+                        </div>
+                        <a :href="getPostUrl(data.id)"> {{ data.title }} </a>
                     </h2>
                     <div v-if="data.tags && data.tags.length" class="m-topic-tag">
                         <span v-for="(item, index) in data.tags" :key="index">
@@ -156,6 +170,8 @@ export default {
         .u-title {
             margin: 0;
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
         }
         .u-title > a {
             font-size: 20px;
@@ -165,10 +181,9 @@ export default {
             // color: #4080ff;
             color:@color-link;
             margin: 0;
-            margin-bottom: 12px;
             &:hover {
-                // color: rgba(255, 64, 128, 1);
-                text-decoration: underline;
+                color: rgba(255, 64, 128, 1);
+                // text-decoration: underline;
             }
         }
         .m-topic-tag {

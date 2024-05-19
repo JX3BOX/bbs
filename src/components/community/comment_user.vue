@@ -58,8 +58,14 @@ export default {
 </script>
 
 <style lang="less">
+.m-comment-user {
+    position: sticky;
+    top: 130px;
+}
+
 @media screen and (max-width: @ipad) {
     .m-comment-user {
+        position: unset;
         .c-author-honor,
         .u-bio,
         .c-author-medals,

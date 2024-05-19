@@ -14,7 +14,7 @@
         >
             <publish-gate slot="op-append" />
             <template #op-prepend>
-                <AdminDrop :post="post" :user-id="user_id" />
+                <AdminDrop :is-community="true" :post="post" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -66,6 +66,7 @@ export default {
             return this.post ? this.post.post_title : document.title;
         },
     },
+    mounted() {},
     methods: { getAppIcon },
     components: {
         "publish-gate": publishGate,

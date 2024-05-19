@@ -18,7 +18,7 @@
                     :sourceId="String(post.ID)"
                     :sourceType="post.post_type"
                 ></AdminDirectMessage> -->
-                <AdminDrop :post="post" :showMove="true" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :showMove="true" :post="post"  :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -45,6 +45,7 @@ import Side from "@/components/bbs/single_side.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Single",
     props: [],
@@ -70,6 +71,9 @@ export default {
         title() {
             return this.post.post_title || document.title;
         },
+        isTeammate() {
+            return User.isTeammate();
+        },
     },
     methods: { getAppIcon },
     components: {
@@ -84,4 +88,9 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/app.less";
+.p-bbs-single {
+    .c-admin-drop {
+        margin-right: 0;
+    }
+}
 </style>

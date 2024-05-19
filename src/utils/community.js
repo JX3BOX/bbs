@@ -22,7 +22,7 @@ export function modifyAlpha(rgbaString, newAlpha) {
 
     // 如果匹配失败，返回原始的 rgba 字符串
     if (!matches) {
-        console.log("如果匹配失败，返回原始的 rgba 字符串：" + rgbaString);
+        // console.log("如果匹配失败，返回原始的 rgba 字符串：" + rgbaString);
         return rgbaString;
     }
 

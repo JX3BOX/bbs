@@ -28,6 +28,11 @@
             <span class="u-marks" v-if="item.mark && item.mark.length">
                 <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ mark | showMark }}</i>
             </span>
+
+            <span class="u-push" v-if="hasPermission">
+                <time v-if="showPushDate" class="u-push__time" :class="{'is-recent': isRecent()}">{{ pushDate }} 已推送</time>
+                <el-button class="u-push__btn" size="mini" type="warning" @click="onPush" icon="el-icon-s-promotion">推送</el-button>
+            </span>
         </h2>
 
         <!-- 字段 -->
@@ -82,6 +87,9 @@ import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import {showDate} from '@jx3box/jx3box-common/js/moment.js'
 import _bbsSubtypes from "@/assets/data/bbs_subtypes.json";
 import { random} from "lodash"
+import User from "@jx3box/jx3box-common/js/user";
+import dayjs from "dayjs";
+import bus from "@/utils/bus";
 export default {
     name: "ListItem",
     props: ['item','order', 'caller'],
@@ -97,6 +105,16 @@ export default {
     computed: {
         client() {
             return this.item?.client;
+        },
+        hasPermission() {
+            return User.hasPermission('push_banner');
+        },
+        pushDate({item}) {
+            const date = item?.log?.push_at
+            return showDate(new Date(date));
+        },
+        showPushDate() {
+            return Boolean(this.item?.log);
         },
     },
     watch: {},
@@ -117,7 +135,16 @@ export default {
         },
         showSubtype: function (val){
             return _bbsSubtypes[val]?.label || ""
-        }
+        },
+        showDate,
+        // 是否为30天内
+        isRecent: function () {
+            const date = this.item?.log?.push_at
+            return dayjs().diff(dayjs(date), "day") < 30;
+        },
+        onPush() {
+            bus.emit("design-task", this.item);
+        },
     },
     filters: {
         authorLink,
@@ -138,8 +165,7 @@ export default {
         },
         dateFormat : function (gmt){
             return showDate(new Date(gmt))
-        },
-
+        }
     },
     created: function() {},
     mounted: function() {},
