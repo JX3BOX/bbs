@@ -177,13 +177,11 @@ export default {
             font-size: 22px;
             cursor: pointer;
             line-height: 32px;
-            margin-bottom: 14px;
             color: #4080ff;
             margin: 0;
-            margin-bottom: 12px;
             &:hover {
-                // color: rgba(255, 64, 128, 1);
-                text-decoration: underline;
+                color: rgba(255, 64, 128, 1);
+                // text-decoration: underline;
             }
         }
         .m-topic-tag {
