@@ -158,11 +158,12 @@ export default {
             margin-bottom: 12px;
         }
         .u-title > a {
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             line-height: 32px;
             margin-bottom: 14px;
-            color: #4080ff;
+            // color: #4080ff;
+            color:@color-link;
             margin: 0;
             margin-bottom: 12px;
             &:hover {
@@ -183,7 +184,7 @@ export default {
                 height: 20px;
             }
             .m-topic-userInfo__name {
-                font-size: 15px;
+                font-size: 14px;
             }
         }
 

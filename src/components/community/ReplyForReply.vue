@@ -97,6 +97,7 @@ export default {
 
 <style lang="less">
 .c-comment-subbox {
+    margin-bottom: 10px;
     .u-subbox-label {
         margin-bottom: 10px;
         .fz(14px);
