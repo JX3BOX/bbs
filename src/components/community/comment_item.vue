@@ -13,19 +13,33 @@
                         <p class="u-content" v-html="renderContent"></p>
                         <div class="u-toolbar">
                             <div>
-                                <el-button type="text" size="small" @click="addLike"
-                                    >赞
-                                    <span class="u-count" v-if="!!likeCountRender"
-                                        >({{ likeCountRender }})</span
-                                    ></el-button
-                                >
-                                <el-button type="text" size="small" @click="onShowReply">回复</el-button>
+                                <el-button type="text" size="small" @click="addLike" class="">
+                                    <div class="u-btn-content">
+                                        <img
+                                            v-svg-inline
+                                            width="12"
+                                            height="14"
+                                            src="@/assets/img/community/heart.svg"
+                                            alt=""
+                                            srcset=""
+                                        />
+                                        赞
+                                        <span class="u-count" v-if="!!likeCountRender"> ({{ likeCountRender }})</span>
+                                    </div>
+                                </el-button>
+                                <el-button type="text" size="small" @click="onShowReply">
+                                    <i class="el-icon-chat-round"></i>
+                                    <span>回复</span>
+                                </el-button>
                                 <AddBlockButton :post="post" />
                                 <ComplaintButton :post="post" />
                             </div>
                             <div>
                                 <DeleteButton :post="post" type="comment" />
-                                <el-button type="text" size="small">黑洞</el-button>
+                                <el-button type="text" size="small">
+                                    <i class="el-icon-delete"></i>
+                                    黑洞
+                                </el-button>
                                 <span class="u-time">{{ post.updated_at }}</span>
                             </div>
                         </div>

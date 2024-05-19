@@ -38,8 +38,20 @@
                 <div class="m-topic-hot__right">
                     <h2 class="u-title">
                         <div v-if="data.is_star || data.is_top" class="u-status">
-                            <img v-if="data.is_top" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
-                            <img v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
+                            <img
+                                v-svg-inline
+                                v-if="data.is_top"
+                                src="@/assets/img/community/is_top.svg"
+                                alt=""
+                                srcset=""
+                            />
+                            <img
+                                v-svg-inline
+                                v-if="data.is_star"
+                                src="@/assets/img/community/is_star.svg"
+                                alt=""
+                                srcset=""
+                            />
                         </div>
                         <a :href="getPostUrl(data.id)"> {{ data.title }} </a>
                     </h2>

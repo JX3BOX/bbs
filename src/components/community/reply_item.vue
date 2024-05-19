@@ -17,7 +17,10 @@
                     <div class="u-toolbar">
                         <div></div>
                         <div>
-                            <el-button v-if="allowBlackHole" type="text">黑洞</el-button>
+                            <el-button v-if="allowBlackHole" type="text">
+                                <i class="el-icon-delete"></i>
+                                黑洞
+                            </el-button>
                             <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
                             <ComplaintButton :post="post" />
                             <AddBlockButton :post="post" />
