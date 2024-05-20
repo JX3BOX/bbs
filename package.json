@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "bbs",
   "private": true,
   "scripts": {
@@ -57,18 +56,6 @@
     "root": true,
     "env": {
       "node": true
-=======
-    "name": "bbs",
-    "private": true,
-    "scripts": {
-        "dev": "cross-env DEV_SERVER=true vue-cli-service serve",
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "preview": "cross-env BUILD_MODE=preview vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "inspect": "vue inspect > output.js",
-        "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common-ui@latest @jx3box/jx3box-common@latest @jx3box/jx3box-data@latest @jx3box/jx3box-emotion@latest @jx3box/jx3box-comment-ui@latest @jx3box/jx3box-editor@latest"
->>>>>>> 8c0ab5c79d936ba4f6bf2ca949d9a61eb3aa26a2
     },
     "dependencies": {
         "@jx3box/jx3box-comment-ui": "^1.8.8",
