@@ -17,13 +17,13 @@
                     <div class="u-toolbar">
                         <div></div>
                         <div>
+                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
                             <el-button v-if="allowBlackHole" type="text">
-                                <i class="el-icon-delete"></i>
+                                <i class="el-icon-attract"></i>
                                 黑洞
                             </el-button>
-                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
-                            <ComplaintButton :post="post" />
                             <AddBlockButton :post="post" />
+                            <ComplaintButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
                                 <div class="u-btn">
                                     <img src="@/assets/img/community/reply.svg" alt="" />

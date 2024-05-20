@@ -30,15 +30,15 @@
                                     <i class="el-icon-chat-round"></i>
                                     <span>回复</span>
                                 </el-button>
-                                <AddBlockButton :post="post" />
-                                <ComplaintButton :post="post" />
                             </div>
                             <div>
                                 <DeleteButton :post="post" type="comment" />
                                 <el-button type="text" size="small">
-                                    <i class="el-icon-delete"></i>
+                                    <i class="el-icon-attract"></i>
                                     黑洞
                                 </el-button>
+                                <AddBlockButton :post="post" />
+                                <ComplaintButton :post="post" />
                                 <span class="u-time">{{ post.updated_at }}</span>
                             </div>
                         </div>

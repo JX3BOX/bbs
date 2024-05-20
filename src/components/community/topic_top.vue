@@ -167,6 +167,10 @@ export default {
         width: 100%;
         display: flex;
         flex-direction: column;
+        .u-status{
+            .flex;
+            align-items: center;
+        }
         .u-title {
             margin: 0;
             margin-bottom: 12px;
@@ -182,8 +186,8 @@ export default {
             color:@color-link;
             margin: 0;
             &:hover {
-                color: rgba(255, 64, 128, 1);
-                // text-decoration: underline;
+                //color: rgba(255, 64, 128, 1);
+                 text-decoration: underline;
             }
         }
         .m-topic-tag {
