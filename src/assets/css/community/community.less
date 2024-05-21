@@ -4,9 +4,7 @@
         padding: 20px;
         border-radius: 6px;
         border: 1px solid rgba(232, 232, 232, 1);
-
         &:hover {
-            // background: #f5f6f7;
             background: rgba(250, 251, 252, 1);
         }
     }
@@ -169,13 +167,21 @@
                 cursor: pointer;
                 font-size: 15px;
                 line-height: 28px;
-                // color: rgba(64, 128, 255, 1);
-                color:@color-link;
+                color: rgba(64, 128, 255, 1);
+                color: @color-link;
                 margin: 0;
+                text-decoration: none;
                 .bold;
                 &:hover {
-                    //color: rgba(255, 64, 128, 1);
-                     text-decoration: underline;
+                    color: rgba(255, 64, 128, 1);
+                }
+                > svg {
+                    position: relative;
+                    top: -1px;
+                    display: inline-block;
+                    width: 24px;
+                    height: 24px;
+                    vertical-align: middle;
                 }
             }
         }

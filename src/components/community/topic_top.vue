@@ -36,25 +36,13 @@
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
-                    <h2 class="u-title">
-                        <div v-if="data.is_star || data.is_top" class="u-status">
-                            <img
-                                svg-inline
-                                v-if="data.is_top"
-                                src="@/assets/img/community/is_top.svg"
-                                alt=""
-                                srcset=""
-                            />
-                            <img
-                                svg-inline
-                                v-if="data.is_star"
-                                src="@/assets/img/community/is_star.svg"
-                                alt=""
-                                srcset=""
-                            />
-                        </div>
-                        <a :href="getPostUrl(data.id)"> {{ data.title }} </a>
-                    </h2>
+                    <a :href="getPostUrl(data.id)" class="u-title">
+                        <img svg-inline v-if="data.is_top" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+                        <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
+                        <span>
+                            {{ data.title }}
+                        </span>
+                    </a>
                     <div v-if="data.tags && data.tags.length" class="m-topic-tag">
                         <span v-for="(item, index) in data.tags" :key="index">
                             {{ item }}
@@ -120,7 +108,11 @@ export default {
         },
         getBanner: function (val) {
             if (val) {
-                return getThumbnail(val, [336 * 2, 176 * 2]);
+                if (val.indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(val, [336 * 2, 176 * 2]);
+                } else {
+                    return val;
+                }
             } else {
                 // 从1-39中随机选一个
                 const randomNum = random(1, 39);
@@ -171,20 +163,22 @@ export default {
         display: flex;
         flex-direction: column;
         .u-title {
-            margin: 0;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-        }
-        .u-title > a {
             font-size: 22px;
             cursor: pointer;
             line-height: 32px;
             color: #4080ff;
-            margin: 0;
+            font-weight: bold;
             &:hover {
                 color: rgba(255, 64, 128, 1);
-                // text-decoration: underline;
+            }
+            > svg {
+                position: relative;
+                top: -1px;
+                width: 24px;
+                height: 24px;
+                display: inline-block;
+                vertical-align: middle;
             }
         }
         .m-topic-tag {

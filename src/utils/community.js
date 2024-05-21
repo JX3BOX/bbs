@@ -48,11 +48,6 @@ export function formatCategoryList(categories) {
             mark: item.mark,
             remark: item.remark,
         };
-        if (item.name === "警示") {
-            data.color = color;
-            data.hoverColor = "rgba(242, 229, 218, 1)";
-            data.activeColor = "#000";
-        }
         return data;
     });
 }

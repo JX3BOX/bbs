@@ -19,7 +19,11 @@
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
                     <img :src="getBanner(data.banner_img)" alt="" srcset="" />
                 </a>
-                <a :href="getPostUrl(data.id)" class="u-title">{{ data.title }}</a>
+                <a :href="getPostUrl(data.id)" class="u-title">
+                    <img svg-inline v-if="data.is_top" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+                    <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
+                    <span>{{ data.title }}</span>
+                </a>
                 <div v-if="data.tags && data.tags.length" class="m-topic-tag">
                     <span v-for="(item, index) in data.tags" :key="index">
                         {{ item }}
