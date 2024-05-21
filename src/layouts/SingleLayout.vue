@@ -18,7 +18,7 @@
                     :sourceId="String(post.ID)"
                     :sourceType="post.post_type"
                 ></AdminDirectMessage> -->
-                <AdminDrop v-if="isTeammate" :showMove="true" :post="post"  :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" show-move />
             </template>
             <template #title>
                 <span>
@@ -47,7 +47,7 @@ import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import User from "@jx3box/jx3box-common/js/user";
 export default {
-    name: "Single",
+    name: "SingleLayout",
     props: [],
     data: function () {
         return {
@@ -89,8 +89,8 @@ export default {
 <style lang="less">
 @import "~@/assets/css/app.less";
 .p-bbs-single {
-    .c-admin-drop {
-        margin-right: 0;
-    }
+    // .c-admin-drop {
+    //     margin-right: 0;
+    // }
 }
 </style>
