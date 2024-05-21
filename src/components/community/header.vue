@@ -13,7 +13,7 @@
                 popper-class="m-community-header__popover"
                 v-for="(item, index) in showNavList"
                 :key="index"
-                placement="top"
+                :placement="(index + 1) / lineCount > 1 ? 'bottom' : 'top'"
                 trigger="hover"
                 :content="item.remark"
             >
@@ -22,7 +22,6 @@
                     :href="item.href || 'javascript:;'"
                     :class="`
                     ${selectedCategory === item.value && 'u-active'}
-                    ${item.icon === 'thunder' && 'is-thunder'}
                     ${item.mark && 'has-mark'}
                     u-item`"
                     @click="handleChange(item)"
@@ -37,7 +36,6 @@
                         class="u-icon"
                         :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                     />
-
                     <img
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
                         v-svg-inline

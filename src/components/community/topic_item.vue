@@ -93,7 +93,11 @@ export default {
         authorLink,
         getBanner: function (val) {
             if (val) {
-                return getThumbnail(val, [168 * 2, 88 * 2]);
+                if (val.indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(val, [168 * 2, 88 * 2]);
+                } else {
+                    return val;
+                }
             } else {
                 // 从1-39中随机选一个
                 const randomNum = random(1, 39);
@@ -102,7 +106,10 @@ export default {
             }
         },
         getSquareBanner: function (val) {
-            return getThumbnail(val, 48 * 2);
+            if (val.indexOf("jx3box.com") >= 0) {
+                return getThumbnail(val, 48 * 2);
+            }
+            return val;
         },
         showAvatar: function () {
             return showAvatar(this.data?.ext_user_info?.avatar);

@@ -39,14 +39,14 @@
                     <h2 class="u-title">
                         <div v-if="data.is_star || data.is_top" class="u-status">
                             <img
-                                v-svg-inline
+                                svg-inline
                                 v-if="data.is_top"
                                 src="@/assets/img/community/is_top.svg"
                                 alt=""
                                 srcset=""
                             />
                             <img
-                                v-svg-inline
+                                svg-inline
                                 v-if="data.is_star"
                                 src="@/assets/img/community/is_star.svg"
                                 alt=""
@@ -132,7 +132,10 @@ export default {
             return `/community/${id}`;
         },
         getSquareBanner: function (val) {
-            return getThumbnail(val, 48 * 2);
+            if (val.indexOf("jx3box.com") >= 0) {
+                return getThumbnail(val, 48 * 2);
+            }
+            return val;
         },
     },
 };
@@ -167,10 +170,6 @@ export default {
         width: 100%;
         display: flex;
         flex-direction: column;
-        .u-status{
-            .flex;
-            align-items: center;
-        }
         .u-title {
             margin: 0;
             margin-bottom: 12px;
@@ -178,16 +177,14 @@ export default {
             align-items: center;
         }
         .u-title > a {
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
             line-height: 32px;
-            margin-bottom: 14px;
-            // color: #4080ff;
-            color:@color-link;
+            color: #4080ff;
             margin: 0;
             &:hover {
-                //color: rgba(255, 64, 128, 1);
-                 text-decoration: underline;
+                color: rgba(255, 64, 128, 1);
+                // text-decoration: underline;
             }
         }
         .m-topic-tag {
@@ -203,7 +200,7 @@ export default {
                 height: 20px;
             }
             .m-topic-userInfo__name {
-                font-size: 14px;
+                font-size: 15px;
             }
         }
 
