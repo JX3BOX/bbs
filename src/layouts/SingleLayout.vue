@@ -47,7 +47,7 @@ import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import User from "@jx3box/jx3box-common/js/user";
 export default {
-    name: "Single",
+    name: "SingleLayout",
     props: [],
     data: function () {
         return {
