@@ -31,7 +31,7 @@
 
                 <!-- 帖子回复s -->
                 <div class="m-reply-box">
-                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item"> /> </ReplyItem>
+                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" />
                 </div>
             </div>
             <!-- 帖子回复e -->

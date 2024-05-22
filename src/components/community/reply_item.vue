@@ -6,7 +6,11 @@
         <div class="m-comment-wrapper__right">
             <div class="m-comment-wrapper__right-box">
                 <div>
-                    <div class="u-layer">{{ isMaster ? "楼主" : post.layer + "楼" }}</div>
+                    <div class="u-layer">
+                        {{ isMaster ? "楼主" : post.layer + "楼" }}
+
+                        <el-button @click="onEditClick" v-if="isPostOwner" class="u-edit-btn" size="mini" type="warning" icon="el-icon-edit">编辑</el-button>
+                    </div>
                     <div class="u-content">
                         <Article v-if="isMaster" :content="post.content || ''" />
                         <div v-else v-html="renderContent" />
@@ -170,6 +174,10 @@ export default {
             }
             return "";
         },
+        // 是否为层主
+        isPostOwner() {
+            return this.userId == User.getInfo()?.uid
+        }
     },
     watch: {
         "post.content": {
@@ -283,6 +291,9 @@ export default {
             }
             this.isLike = true;
         },
+        onEditClick() {
+            location.href = `#/community/reply/${this.post.id}`;
+        }
     },
 };
 </script>
