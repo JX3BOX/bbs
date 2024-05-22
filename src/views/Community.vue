@@ -1,49 +1,53 @@
 <template>
     <CommunityLayout>
         <div v-loading="loading">
-            <Header :categoryList="categoryList" />
-            <!-- 置顶文章 -->
-            <TopicTop v-if="topTopicData" :data="topTopicData" />
-            <!-- 移动端兼容置顶文章 -->
-            <div v-if="topTopicData" class="m-topic-list m-topic-hot__mini">
-                <TopicItem :data="topTopicData" />
+            <CommunityHeader :categoryList="categoryList" />
+            <CommunitySearch />
+            <div class="m-community-content">
+                <!-- 置顶文章 -->
+                <TopicTop v-if="topTopicData" :data="topTopicData" />
+                <!-- 移动端兼容置顶文章 -->
+                <div v-if="topTopicData" class="m-topic-list m-topic-hot__mini">
+                    <TopicItem :data="topTopicData" />
+                </div>
+
+                <div class="m-topic-list" v-if="list.length">
+                    <TopicItem v-for="(item, index) in list" :key="index" :data="item" />
+                </div>
+
+                <!-- 下一页 -->
+                <el-button
+                    class="m-topic-pages"
+                    :style="{
+                        fontSize: hasNextPage ? '14px' : '12px',
+                    }"
+                    :type="hasNextPage ? 'primary' : 'text'"
+                    @click="appendPage"
+                    :loading="loading"
+                    :disabled="!hasNextPage"
+                    :icon="hasNextPage ? 'el-icon-arrow-down' : ''"
+                    >{{ hasNextPage ? "加载更多" : "没有更多了" }}</el-button
+                >
+
+                <!-- 分页 -->
+                <el-pagination
+                    background
+                    layout="total, prev, pager, next, jumper"
+                    :hide-on-single-page="true"
+                    :page-size="per"
+                    :total="total"
+                    :current-page.sync="page"
+                    @current-change="changePage"
+                ></el-pagination>
             </div>
-
-            <div class="m-topic-list" v-if="list.length">
-                <TopicItem v-for="(item, index) in list" :key="index" :data="item" />
-            </div>
-
-            <!-- 下一页 -->
-            <el-button
-                class="m-topic-pages"
-                :style="{
-                    fontSize: hasNextPage ? '14px' : '12px',
-                }"
-                :type="hasNextPage ? 'primary' : 'text'"
-                @click="appendPage"
-                :loading="loading"
-                :disabled="!hasNextPage"
-                :icon="hasNextPage ? 'el-icon-arrow-down' : ''"
-                >{{ hasNextPage ? "加载更多" : "没有更多了" }}</el-button
-            >
-
-            <!-- 分页 -->
-            <el-pagination
-                background
-                layout="total, prev, pager, next, jumper"
-                :hide-on-single-page="true"
-                :page-size="per"
-                :total="total"
-                :current-page.sync="page"
-                @current-change="changePage"
-            ></el-pagination>
         </div>
     </CommunityLayout>
 </template>
 
 <script>
 import CommunityLayout from "@/layouts/CommunityLayout.vue";
-import Header from "@/components/community/header.vue";
+import CommunityHeader from "@/components/community/header.vue";
+import CommunitySearch from "@/components/community/search.vue";
 import TopicItem from "@/components/community/topic_item.vue";
 import { getTopicList } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
@@ -52,7 +56,8 @@ import { formatCategoryList } from "@/utils/community";
 export default {
     components: {
         CommunityLayout,
-        Header,
+        CommunityHeader,
+        CommunitySearch,
         TopicItem,
         TopicTop,
     },

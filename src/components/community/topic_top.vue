@@ -180,6 +180,12 @@ export default {
                 display: inline-block;
                 vertical-align: middle;
             }
+            > svg + svg {
+                margin-left: 8px;
+            }
+            > span {
+                margin-left: 4px;
+            }
         }
         .m-topic-tag {
             margin-bottom: 12px;

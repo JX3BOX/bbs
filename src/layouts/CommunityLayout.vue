@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="m-community-layout">
         <Header></Header>
         <Breadcrumb
             name="魔盒论坛"
@@ -54,18 +54,17 @@ export default {
         Info,
         Side,
     },
-    // created: function () {
-    //     const regex = /\/bbs\/?#\/?(\w+?)\/(\d+)/
-    //     location.pathname.match(regex) && (location.href = location.pathname.replace(regex, '/$1/$2'))
-    // },
 };
 </script>
 
 <style lang="less">
+.m-community-layout {
+    background: #fafbfc;
+    .m-main {
+        padding: 0;
+    }
+}
 .m-bbs-right-side {
-    //&.c-sidebar-right.is-close {
-    //transform: translateX(0) !important;
-    //}
     .c-sidebar-right-inner {
         background: #fff;
     }

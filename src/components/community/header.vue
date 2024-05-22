@@ -102,6 +102,7 @@
 
 <script>
 export default {
+    name: "CommunityHeader",
     props: ["categoryList"],
     inject: ["onCategoryChange"],
     data() {
