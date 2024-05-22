@@ -2,7 +2,7 @@
     <div :class="`m-community-search ${isFocus && 'is-focus'}`">
         <div class="m-search-button" @click="onSearch">
             <i class="el-icon-search"></i>
-            <span class="u-button-text">茶馆一下</span>
+            <span class="u-button-text">搜一下</span>
         </div>
         <div class="m-search-input">
             <input

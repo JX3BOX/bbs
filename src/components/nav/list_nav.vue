@@ -26,7 +26,7 @@
             <a href="/community" :class="{ 'is-active': routeActive('community') }">
                 <i class="el-icon-cold-drink"></i>
                 <span>论坛</span>
-                <em>BBS</em>
+                <em>Community</em>
             </a>
             <a href="/bbs" :class="{ 'is-active': routeActive('bbs') }">
                 <i class="el-icon-coffee-cup"></i>
