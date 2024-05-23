@@ -2,7 +2,7 @@
     <CommunityLayout>
         <div v-loading="loading">
             <CommunityHeader :categoryList="categoryList" />
-            <CommunitySearch />
+            <CommunitySearch @search="onSearch" />
             <div class="m-community-content">
                 <!-- 置顶文章 -->
                 <TopicTop v-if="topTopicData" :data="topTopicData" />
@@ -49,7 +49,7 @@ import CommunityLayout from "@/layouts/CommunityLayout.vue";
 import CommunityHeader from "@/components/community/header.vue";
 import CommunitySearch from "@/components/community/search.vue";
 import TopicItem from "@/components/community/topic_item.vue";
-import { getTopicList } from "@/service/community";
+import { getTopicList, globalSearch } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
 import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
@@ -111,6 +111,14 @@ export default {
         },
     },
     methods: {
+        onSearch(v) {
+            globalSearch({
+                q: v,
+                filter_name: "community_discussion_topic,community_discussion_topic_reply",
+            }).then((res) => {
+                console.log(res);
+            });
+        },
         getCategoryList() {
             getTopicBucket({ type: "community" }).then((res) => {
                 this.categoryList = formatCategoryList(res.data.data);

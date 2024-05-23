@@ -33,6 +33,9 @@ export default {
                 this.$refs.input.focus();
                 return;
             }
+            if (this.search) {
+                this.$emit("search", this.search);
+            }
         },
         onBlur() {
             if (!this.search) {

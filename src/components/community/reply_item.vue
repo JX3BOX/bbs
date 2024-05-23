@@ -9,7 +9,31 @@
                     <div class="u-layer">
                         {{ isMaster ? "楼主" : post.layer + "楼" }}
 
-                        <el-button @click="onEditClick" v-if="isPostOwner" class="u-edit-btn" size="mini" type="warning" icon="el-icon-edit">编辑</el-button>
+                        <div class="u-layer-toolbar">
+                            <el-button
+                                class="u-layer-btn"
+                                @click="onEditClick"
+                                v-if="isPostOwner"
+                                type="warning"
+                                icon="el-icon-edit"
+                                >编辑</el-button
+                            >
+                            <el-button
+                                v-if="isMaster"
+                                :class="`u-layer-btn u-only-btn ${onlyAuthor && 'u-unset'}`"
+                                type="primary"
+                                @click="setOnlyAuthor(!onlyAuthor)"
+                            >
+                                <img
+                                    v-show="!onlyAuthor"
+                                    svg-inline
+                                    width="14"
+                                    height="14"
+                                    src="@/assets/img/community/only-author.svg"
+                                />
+                                {{ onlyAuthor ? "取消只看楼主" : "只看楼主" }}
+                            </el-button>
+                        </div>
                     </div>
                     <div class="u-content">
                         <Article v-if="isMaster" :content="post.content || ''" />
@@ -107,7 +131,7 @@ import { getLikes } from "@/service/next";
 
 export default {
     name: "ReplyItem",
-    inject: ["getTopicData", "getReplyList"],
+    inject: ["getTopicData", "getReplyList", "setOnlyAuthor"],
     props: ["isMaster", "post"],
     components: {
         DeleteButton,
@@ -138,6 +162,10 @@ export default {
         };
     },
     computed: {
+        onlyAuthor: function () {
+            const v = this.$route.query.onlyAuthor;
+            return (v == "true" || v == true) && true;
+        },
         likeCountRender: function () {
             if (this.likeCount >= 100) {
                 return "99+";
@@ -176,8 +204,8 @@ export default {
         },
         // 是否为层主
         isPostOwner() {
-            return this.userId == User.getInfo()?.uid
-        }
+            return this.userId == User.getInfo()?.uid;
+        },
     },
     watch: {
         "post.content": {
@@ -293,7 +321,7 @@ export default {
         },
         onEditClick() {
             location.href = `#/community/reply/${this.post.id}`;
-        }
+        },
     },
 };
 </script>

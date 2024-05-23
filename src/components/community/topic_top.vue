@@ -36,8 +36,8 @@
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
-                    <a :href="getPostUrl(data.id)" class="u-title">
-                        <img svg-inline v-if="data.is_top" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+                    <a :href="getPostUrl(data.id)" class="u-title" target="_blank">
+                        <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                         <span>
                             {{ data.title }}
@@ -98,6 +98,9 @@ export default {
         },
         styles: function () {
             return this.getCategoryStyle(this.data.category || "");
+        },
+        isTop: function () {
+            return this.data.is_top || this.data.is_category_top;
         },
     },
     methods: {

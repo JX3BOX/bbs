@@ -65,7 +65,6 @@ import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
 import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
-import { post } from "jquery";
 import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
 
@@ -80,6 +79,7 @@ export default {
         return {
             getTopicData: () => this.post,
             getReplyList: this.getReplyList,
+            setOnlyAuthor: this.setOnlyAuthor,
         };
     },
     data() {
@@ -93,6 +93,7 @@ export default {
             replyList: [],
             categoryList: [],
             loading: false,
+            onlyAuthor: false,
             number_queries: ["per", "page"],
         };
     },
@@ -177,13 +178,25 @@ export default {
                 }
             });
         },
+        /**
+         * 传入 true ｜ false  只看楼主、取消只看楼主
+         * @param val bool
+         */
+        setOnlyAuthor(val) {
+            this.page = 1;
+            this.onlyAuthor = val;
+            this.getReplyList();
+        },
         buildQuery: function (appendMode) {
             let _query = {
                 index: this.page,
                 pageSize: this.per,
                 order_created_at: 0,
             };
-            this.replaceRoute({ page: this.page });
+            if (this.onlyAuthor) {
+                _query.user_id = this.post.user_id;
+            }
+            this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
 
             return _query;
         },

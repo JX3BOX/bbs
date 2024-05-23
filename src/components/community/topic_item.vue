@@ -19,8 +19,8 @@
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
                     <img :src="getBanner(data.banner_img)" alt="" srcset="" />
                 </a>
-                <a :href="getPostUrl(data.id)" class="u-title">
-                    <img svg-inline v-if="data.is_top" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+                <a :href="getPostUrl(data.id)" class="u-title" target="_blank">
+                    <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                     <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                     <span>{{ data.title }}</span>
                 </a>
@@ -90,6 +90,9 @@ export default {
             } else {
                 return "";
             }
+        },
+        isTop: function () {
+            return this.data.is_top || this.data.is_category_top;
         },
     },
     methods: {

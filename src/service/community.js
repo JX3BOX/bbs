@@ -1,6 +1,7 @@
 import { $next, $cms } from "@jx3box/jx3box-common/js/https";
+import axios from "axios";
 const API_PREFIX = `/api/next2`;
-
+const gs_url = process.env.NODE_ENV === "development" ? "" : "https://gs.jx3box.com";
 // 获取分类
 function getTopicBucket(params) {
     return $cms().get(`/api/cms/topic/bucket`, { params });
@@ -70,7 +71,14 @@ function feedback(data) {
     return $next().post(`/api/miscfeedback`, data);
 }
 
+function globalSearch(params) {
+    return axios.get(`${gs_url}/api/search`, {
+        params: params,
+    });
+}
+
 export {
+    globalSearch,
     getTopicList,
     getTopicBucket,
     getTopicDetails,
