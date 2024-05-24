@@ -10,7 +10,7 @@ import { delComment, delReply } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "DeleteButton",
-    inject: ["getTopicData", "getReplyList", "getCommentList"],
+    inject: ["getTopicData", "getReplyList", "getCommentList", "onSearch"],
     props: ["isMaster", "post", "type"],
     computed: {
         topicData: function () {
@@ -64,7 +64,8 @@ export default {
                 type: "warning",
             }).then(() => {
                 delReply(this.post.id).then(() => {
-                    this.getReplyList();
+                    // 调用父组件的方法，刷新回到第一页
+                    this.onSearch();
                 });
             });
         },

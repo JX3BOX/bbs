@@ -121,7 +121,7 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentList, replyTopic } from "@/service/community";
+import { replyReply, getCommentList } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -133,7 +133,7 @@ import { getLikes } from "@/service/next";
 
 export default {
     name: "ReplyItem",
-    inject: ["getTopicData", "getReplyList", "setOnlyAuthor"],
+    inject: ["getTopicData", "getReplyList", "setOnlyAuthor", "onReplyTopic"],
     props: ["isMaster", "post"],
     components: {
         DeleteButton,
@@ -237,12 +237,9 @@ export default {
     },
     methods: {
         onForward() {
-            replyTopic(this.id, {
-                client: location.href.includes("origin") ? "origin" : "std",
+            this.onReplyTopic({
                 content: this.post.content,
-                extra_images: this.post.extra_images,
-            }).then(() => {
-                this.getReplyList();
+                attachmentList: this.post.attachmentList,
             });
         },
         onCollapseChange() {
@@ -332,12 +329,16 @@ export default {
                 post_action: "likes",
                 id,
             };
-            await getLikes(params).then((res) => {
-                list = commentList.map((item) => {
-                    item.likes = res.data.data[`community_comment-${item.id}`]?.likes || 0;
-                    return item;
+            await getLikes(params)
+                .then((res) => {
+                    list = commentList.map((item) => {
+                        item.likes = res.data.data[`community_comment-${item.id}`]?.likes || 0;
+                        return item;
+                    });
+                })
+                .catch(() => {
+                    list = commentList;
                 });
-            });
             return list;
         },
         onEditClick() {

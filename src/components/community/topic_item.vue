@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <a class="u-box-content" :href="getPostUrl(data.id)">
+            <a class="u-box-content" :href="getPostUrl(data.id)" target="_blank">
                 <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
                     <div v-html="introduction"></div>
                 </a>
