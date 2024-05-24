@@ -225,11 +225,11 @@ export default {
             getTopicReplyList(this.id, params)
                 .then(async (res) => {
                     var list = res.data.data.list;
-                    list = await this.getLikes(list);
                     const page = res.data.data.page;
                     if (list == null) {
                         this.replyList = [];
                     } else {
+                        list = await this.getLikes(list);
                         this.replyList = list.map((item, i) => {
                             return {
                                 ...item,
