@@ -16,7 +16,7 @@
                                 <el-button type="text" size="small" @click="addLike" class="">
                                     <div class="u-btn-content">
                                         <i :class="`u-like-icon ${isLike && 'is-like'}`">{{ isLike ? "♥" : "♡" }}</i>
-                                        赞
+                                        {{ isLike ? "已赞" : "赞" }}
                                         <span class="u-count" v-if="likeCount"> ({{ likeCountRender }})</span>
                                     </div>
                                 </el-button>

@@ -45,6 +45,10 @@
                     <div class="u-toolbar">
                         <div></div>
                         <div>
+                            <el-button type="text" @click="onForward()">
+                                <i class="el-icon-copy-document"></i>
+                                转述
+                            </el-button>
                             <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
                             <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" />
                             <AddBlockButton :post="post" />
@@ -117,7 +121,7 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentList } from "@/service/community";
+import { replyReply, getCommentList, replyTopic } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -161,9 +165,12 @@ export default {
         };
     },
     computed: {
+        id: function () {
+            return this.$route.params.id;
+        },
         onlyAuthor: function () {
             const v = this.$route.query.onlyAuthor;
-            return (v == "true" || v == true) && true;
+            return (v == true || v == "true") && true;
         },
         likeCountRender: function () {
             if (this.likeCount >= 100) {
@@ -210,8 +217,9 @@ export default {
             },
             immediate: true,
         },
-        "post.comments": {
+        post: {
             handler: async function () {
+                this.commentList = [];
                 if (this.post.comments) {
                     this.commentList = await this.getLikes(this.post.comments);
                 }
@@ -228,6 +236,15 @@ export default {
         },
     },
     methods: {
+        onForward() {
+            replyTopic(this.id, {
+                client: location.href.includes("origin") ? "origin" : "std",
+                content: this.post.content,
+                extra_images: this.post.extra_images,
+            }).then(() => {
+                this.getReplyList();
+            });
+        },
         onCollapseChange() {
             if (this.isCollapse) {
                 this.commentList = this.post.comments;
@@ -272,7 +289,7 @@ export default {
         },
         getList(postData = {}) {
             if (this.isMaster) return;
-            const id = this.$route.params.id;
+            const id = this.id;
             const replyId = this.post.id;
             if (id && replyId) {
                 getCommentList(id, replyId, {

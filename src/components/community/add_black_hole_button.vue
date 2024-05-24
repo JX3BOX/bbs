@@ -1,8 +1,10 @@
 <template>
-    <el-button type="text" v-if="!isMaster" :disabled="!allowBlockHole" @click="addBlockHole()">
-        <i class="el-icon-circle-close"></i>
-        黑洞
-    </el-button>
+    <el-tooltip effect="dark" content="拉入黑洞后仅层主自己可见" placement="top">
+        <el-button type="text" v-if="!isMaster" :disabled="!allowBlockHole" @click="addBlockHole()">
+            <i class="el-icon-circle-close"></i>
+            黑洞
+        </el-button>
+    </el-tooltip>
 </template>
 
 <script>

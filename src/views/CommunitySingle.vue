@@ -186,9 +186,9 @@ export default {
          * 传入 true ｜ false  只看楼主、取消只看楼主
          * @param val bool
          */
-        setOnlyAuthor(val) {
+        setOnlyAuthor(v) {
             this.page = 1;
-            this.onlyAuthor = val;
+            this.onlyAuthor = v;
             this.getReplyList();
         },
         buildQuery: function (appendMode) {
@@ -197,7 +197,7 @@ export default {
                 pageSize: this.per,
                 order_created_at: 0,
             };
-            if (this.onlyAuthor) {
+            if (this.onlyAuthor && (this.onlyAuthor == true || this.onlyAuthor == "true")) {
                 _query.user_id = this.post.user_id;
             }
             this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
