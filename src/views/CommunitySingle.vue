@@ -29,7 +29,7 @@
                     <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" />
                 </div>
 
-                <!-- 帖子回复s -->
+                <!-- 帖子回复 -->
                 <div class="m-reply-box">
                     <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" />
                 </div>
@@ -49,7 +49,7 @@
                         @current-change="changePage"
                     ></el-pagination>
                 </div>
-                <el-divider content-position="left">评论</el-divider>
+                <el-divider content-position="left">回帖</el-divider>
                 <div class="u-editor">
                     <CommentEditor @submit="onReplyTopic" />
                 </div>
