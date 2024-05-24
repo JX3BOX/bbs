@@ -3,7 +3,7 @@
         <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
             <div class="m-community-header">
-                <PostHeader :post="postHeader" :stat="{ likes: 0, views: 0 }">
+                <PostHeader :post="postHeader" :stat="stat">
                     <template v-slot:title_before>
                         <div class="m-topic-category-box">
                             <div
@@ -67,6 +67,10 @@ import CommentEditor from "@/components/community/comment_editor.vue";
 import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
 import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
+import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import {getLikes} from "@/service/next"
+
+const appKey = "community_topic";
 
 export default {
     components: {
@@ -206,7 +210,15 @@ export default {
         getDetails: function () {
             getTopicDetails(this.id).then((res) => {
                 this.post = res.data.data;
+
+                getStat(appKey, this.id).then((res) => {
+                    this.stat = res.data
+
+                    this.$set(this.post, "likes", this.stat.likes || 0);
+                });
+                postStat(appKey, this.id);
             });
+
         },
 
         getReplyList: function () {
@@ -228,6 +240,21 @@ export default {
                         if (this.layer) {
                             this.jumpLayer();
                         }
+
+                        const ids = this.replyList.map((item) => `community_reply-${item.id}`).join(",");
+
+                        getLikes({
+                            post_type: "community_reply",
+                            post_action: "likes",
+                            id: ids
+                        }).then(likeRes => {
+                            const data = likeRes.data?.data;
+                            this.replyList = this.replyList.map(item => {
+                                item.likes = data[`community_reply-${item.id}`]?.likes || 0;
+                                this.$set(item, "likes", data[`community_reply-${item.id}`]?.likes);
+                                return item;
+                            });
+                        })
                     }
                     this.total = page.total;
                 })

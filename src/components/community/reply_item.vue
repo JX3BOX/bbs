@@ -239,6 +239,14 @@ export default {
             },
             immediate: true,
         },
+        "post.likes": {
+            handler: function (val) {
+                console.log(val);
+                if (val) {
+                    this.likeCount = val
+                }
+            },
+        }
     },
     methods: {
         onCollapseChange() {

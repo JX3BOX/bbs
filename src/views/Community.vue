@@ -2,7 +2,7 @@
     <CommunityLayout>
         <div v-loading="loading">
             <CommunityHeader :categoryList="categoryList" />
-            <CommunitySearch @search="onSearch" />
+            <!-- <CommunitySearch @search="onSearch" /> -->
             <div class="m-community-content">
                 <!-- 置顶文章 -->
                 <TopicTop v-if="topTopicData" :data="topTopicData" />
@@ -57,7 +57,7 @@ export default {
     components: {
         CommunityLayout,
         CommunityHeader,
-        CommunitySearch,
+        // CommunitySearch,
         TopicItem,
         TopicTop,
     },
