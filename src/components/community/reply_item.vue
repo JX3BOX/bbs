@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="u-time">{{ post.updated_at || post.created_at }}</div>
+                    <div class="u-time">{{ post.created_at || post.updated_at }}</div>
                     <div class="u-toolbar">
                         <div></div>
                         <div>
@@ -243,10 +243,10 @@ export default {
             handler: function (val) {
                 console.log(val);
                 if (val) {
-                    this.likeCount = val
+                    this.likeCount = val;
                 }
             },
-        }
+        },
     },
     methods: {
         onCollapseChange() {
