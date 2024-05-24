@@ -68,7 +68,7 @@ import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/commun
 import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
-import {getLikes} from "@/service/next"
+import { getLikes } from "@/service/next";
 
 const appKey = "community_topic";
 
@@ -212,21 +212,20 @@ export default {
                 this.post = res.data.data;
 
                 getStat(appKey, this.id).then((res) => {
-                    this.stat = res.data
-
+                    this.stat = res.data;
                     this.$set(this.post, "likes", this.stat.likes || 0);
                 });
                 postStat(appKey, this.id);
             });
-
         },
 
         getReplyList: function () {
             this.loading = true;
             const params = this.buildQuery();
             getTopicReplyList(this.id, params)
-                .then((res) => {
-                    const list = res.data.data.list;
+                .then(async (res) => {
+                    var list = res.data.data.list;
+                    list = await this.getLikes(list);
                     const page = res.data.data.page;
                     if (list == null) {
                         this.replyList = [];
@@ -240,27 +239,28 @@ export default {
                         if (this.layer) {
                             this.jumpLayer();
                         }
-
-                        const ids = this.replyList.map((item) => `community_reply-${item.id}`).join(",");
-
-                        getLikes({
-                            post_type: "community_reply",
-                            post_action: "likes",
-                            id: ids
-                        }).then(likeRes => {
-                            const data = likeRes.data?.data;
-                            this.replyList = this.replyList.map(item => {
-                                item.likes = data[`community_reply-${item.id}`]?.likes || 0;
-                                this.$set(item, "likes", data[`community_reply-${item.id}`]?.likes);
-                                return item;
-                            });
-                        })
                     }
                     this.total = page.total;
                 })
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        async getLikes(replyList) {
+            const ids = replyList.map((item) => `community_reply-${item.id}`);
+            let id = ids.join(",");
+            let list = [];
+            await getLikes({
+                post_type: "community_reply",
+                post_action: "likes",
+                id,
+            }).then((res) => {
+                list = replyList.map((item) => {
+                    item.likes = res.data.data[`community_reply-${item.id}`]?.likes || 0;
+                    return item;
+                });
+            });
+            return list;
         },
         onReplyTopic({ attachmentList, content }) {
             if (!this.id) return this.$message.error("文章id不存在");

@@ -90,8 +90,8 @@
                 </div>
             </div>
             <!-- 评论列表 -->
-            <div v-if="!isMaster && commentsList.length" class="m-reply-list">
-                <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
+            <div v-if="!isMaster && commentList.length" class="m-reply-list">
+                <CommentItem v-for="item in commentList" :key="item.id" :post="item" />
             </div>
 
             <!-- 分页 -->
@@ -117,7 +117,7 @@ import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList } from "@/service/community";
+import { replyReply, getCommentList } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -144,7 +144,7 @@ export default {
     provide() {
         return {
             getReplyData: () => this.post,
-            getCommentsList: this.getList,
+            getCommentList: this.getList,
         };
     },
     data() {
@@ -157,7 +157,7 @@ export default {
             likeCount: 0,
             showReplyForReplyFrom: false,
             renderContent: "",
-            commentsList: [],
+            commentList: [],
         };
     },
     computed: {
@@ -211,25 +211,10 @@ export default {
             immediate: true,
         },
         "post.comments": {
-            handler: function () {
+            handler: async function () {
                 if (this.post.comments) {
-                    this.commentsList = this.post.comments;
+                    this.commentList = await this.getLikes(this.post.comments);
                 }
-            },
-            immediate: true,
-        },
-        commentsList: {
-            handler: function async() {
-                if (!this.commentsList.length) return;
-                const id = this.commentsList.map((item) => item.id);
-                const params = {
-                    post_type: "community",
-                    post_action: "likes",
-                    id: id.join(","),
-                };
-                getLikes(params).then((res) => {
-                    // console.log(res);
-                });
             },
             immediate: true,
         },
@@ -239,12 +224,13 @@ export default {
                     this.likeCount = val;
                 }
             },
+            immediate: true,
         },
     },
     methods: {
         onCollapseChange() {
             if (this.isCollapse) {
-                this.commentsList = this.post.comments;
+                this.commentList = this.post.comments;
             } else {
                 this.page = 1;
                 this.getList();
@@ -289,17 +275,18 @@ export default {
             const id = this.$route.params.id;
             const replyId = this.post.id;
             if (id && replyId) {
-                getCommentsList(id, replyId, {
+                getCommentList(id, replyId, {
                     index: this.page,
                     pageSize: this.per,
                     ...postData,
-                }).then((res) => {
-                    const list = res.data.data.list;
+                }).then(async (res) => {
+                    var list = res.data.data.list;
+
                     if (list) {
-                        this.commentsList = list;
+                        this.commentList = await this.getLikes(list);
                         this.isCollapse = true;
                     } else {
-                        this.commentsList = [];
+                        this.commentList = [];
                     }
                     this.page = res.data.data.page.index;
                     this.total = res.data.data.page.total;
@@ -319,6 +306,22 @@ export default {
                 }
             }
             this.isLike = true;
+        },
+        async getLikes(commentList) {
+            const id = commentList.map((item) => `community_comment-${item.id}`).join(",");
+            let list = [];
+            const params = {
+                post_type: "community_comment",
+                post_action: "likes",
+                id,
+            };
+            await getLikes(params).then((res) => {
+                list = commentList.map((item) => {
+                    item.likes = res.data.data[`community_comment-${item.id}`]?.likes || 0;
+                    return item;
+                });
+            });
+            return list;
         },
         onEditClick() {
             window.location.href = editLink("community", this.post?.id);

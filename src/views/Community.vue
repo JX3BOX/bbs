@@ -115,9 +115,7 @@ export default {
             globalSearch({
                 q: v,
                 filter_name: "community_discussion_topic,community_discussion_topic_reply",
-            }).then((res) => {
-                console.log(res);
-            });
+            }).then((res) => {});
         },
         getCategoryList() {
             getTopicBucket({ type: "community" }).then((res) => {

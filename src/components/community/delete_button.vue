@@ -10,7 +10,7 @@ import { delComment, delReply } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "DeleteButton",
-    inject: ["getTopicData", "getReplyList", "getCommentsList"],
+    inject: ["getTopicData", "getReplyList", "getCommentList"],
     props: ["isMaster", "post", "type"],
     computed: {
         topicData: function () {
@@ -76,7 +76,7 @@ export default {
             }).then(() => {
                 delComment(this.post.id).then(() => {
                     this.$message.success("删除成功");
-                    this.getCommentsList({ index: 1 });
+                    this.getCommentList({ index: 1 });
                 });
             });
         },
