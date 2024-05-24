@@ -228,9 +228,7 @@ export default {
         },
         "post.likes": {
             handler: function (val) {
-                if (val) {
-                    this.likeCount = val;
-                }
+                this.likeCount = val;
             },
             immediate: true,
         },

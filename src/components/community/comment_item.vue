@@ -88,11 +88,9 @@ export default {
             },
             immediate: true,
         },
-        post: {
+        "post.likes": {
             handler: function (val) {
-                if (val) {
-                    this.likeCount = val.likes;
-                }
+                this.likeCount = val;
             },
             immediate: true,
         },
