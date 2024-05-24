@@ -10,7 +10,7 @@
         border: 1px solid rgba(232, 232, 232, 1);
         &:hover {
             // background: rgba(250, 251, 252, 1);
-            border-color:@color-link;
+            border-color: @color-link;
         }
     }
 }
@@ -69,8 +69,8 @@
         cursor: pointer;
         padding: 2px 6px;
         // background: rgba(227, 242, 255, 1);
-        background-color:#4080ff;
-        color:#fff;
+        background-color: #4080ff;
+        color: #fff;
         border-radius: 3px;
         line-height: 20px;
         // &:hover {
@@ -234,7 +234,7 @@
 }
 @media screen and (max-width: @ipad) {
     .m-topic-list {
-        column-count: 1;
+        column-count: unset;
         margin-bottom: 0;
         .m-topic-box {
             .m-topic-box__content {
@@ -268,5 +268,17 @@
     }
     .m-topic-hot__mini {
         display: block;
+    }
+    .m-community-header {
+        .m-community-header__special-box {
+            justify-content: space-between;
+            gap: 0;
+        }
+        .m-community-header__special-list > a {
+            padding-left: 8px;
+        }
+        .m-community-publish {
+            width: 150px;
+        }
     }
 }

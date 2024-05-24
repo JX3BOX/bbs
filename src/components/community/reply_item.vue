@@ -13,7 +13,7 @@
                             <el-button
                                 class="u-layer-btn"
                                 @click="onEditClick"
-                                v-if="isPostOwner"
+                                v-if="isPostOwner && isMaster"
                                 type="warning"
                                 icon="el-icon-edit"
                                 >编辑</el-button
