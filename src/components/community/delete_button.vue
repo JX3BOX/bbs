@@ -34,8 +34,13 @@ export default {
             if (this.post.user_id == User.getInfo().uid) {
                 return true;
             }
-            // 我是楼主 我全能删
-            if (this.topicData.user_id == User.getInfo().uid) {
+
+            // 这是一条回帖  && 我是楼主
+            if (this.type === "reply" && this.topicData.user_id == User.getInfo().uid) {
+                return true;
+            }
+            //  这是一条评论 && 回复的是我 我可以删除
+            if (this.type === "comment" && this.post.reply_for_user_id == User.getInfo().uid) {
                 return true;
             }
 

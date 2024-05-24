@@ -33,10 +33,7 @@
                             </div>
                             <div>
                                 <DeleteButton :post="post" type="comment" />
-                                <el-button type="text" size="small">
-                                    <i class="el-icon-attract"></i>
-                                    黑洞
-                                </el-button>
+                                <AddBlackHoleButton :post="post" type="comment" />
                                 <AddBlockButton :post="post" />
                                 <ComplaintButton :post="post" />
                                 <span class="u-time">{{ post.updated_at }}</span>
@@ -66,6 +63,8 @@ import { replyReply } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
+import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
+
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 
@@ -76,6 +75,7 @@ export default {
     components: {
         ReplyForReply,
         AddBlockButton,
+        AddBlackHoleButton,
         ComplaintButton,
         DeleteButton,
     },

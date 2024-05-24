@@ -14,7 +14,7 @@
         >
             <publish-gate slot="op-append" />
             <template #op-prepend>
-                <AdminDrop :is-community="true" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isLogin" :is-community="true" :post="post" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -44,6 +44,7 @@ import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
+import user from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Single",
     props: ["post"],
@@ -59,6 +60,9 @@ export default {
         };
     },
     computed: {
+        isLogin: function () {
+            return user.isLogin();
+        },
         user_id: function () {
             return this.post ? this.post.user_id : "";
         },

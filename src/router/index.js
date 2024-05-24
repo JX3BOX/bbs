@@ -29,6 +29,7 @@ const routes = [
     { name: "index", path: "/", redirect: { name: "bbs" }, component: Forum },
     { name: "bbs", path: "/bbs", component: Forum },
     { name: "community", path: "/community", component: Community },
+    { path: "/community/topic/:id", redirect: "/community/:id" },
     { name: "community-single", path: "/community/:id", component: CommunitySingle },
     { name: "single", path: "/bbs/:id", component: Single },
     { name: "namespace", path: "/namespace", component: Namespace },

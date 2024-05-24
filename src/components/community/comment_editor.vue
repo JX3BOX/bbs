@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form" :model="newComment" class="c-comment-box">
+    <el-form ref="form" :model="newComment" class="c-comment-box m-comment-reply">
         <el-form-item>
             <el-input
                 rows="3"
@@ -11,21 +11,16 @@
                 :id="inputId"
             ></el-input>
             <div class="c-comment-tools">
-                <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i>
-                <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
-                <quickReply @reply="onQuickReply"></quickReply>
-                <!-- <div class="c-comment-secret">
-                    <el-checkbox class="u-secret" v-model="is_secret" border size="mini"
-                        >悄悄话
-                        <el-tooltip
-                            class="item"
-                            effect="dark"
-                            content="勾选悄悄话后仅作者和你可见，并且不可再变更状态"
-                            placement="top"
-                        >
-                            <i class="el-icon-info"></i> </el-tooltip
-                    ></el-checkbox>
-                </div> -->
+                <div class="u-tools">
+                    <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i>
+                    <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
+                    <quickReply @reply="onQuickReply"></quickReply>
+                </div>
+            </div>
+            <div class="u-toolbar">
+                <el-button type="primary" @click="onSubmit" class="u-publish" :disabled="disableSubmitBtn"
+                    >跟帖</el-button
+                >
             </div>
             <Uploader
                 class="u-uploader"
@@ -34,11 +29,6 @@
                 @onError="attachmentUplodError"
                 v-if="showUploader"
             />
-            <div class="u-toolbar">
-                <el-button type="primary" @click="onSubmit" class="u-publish" :disabled="disableSubmitBtn"
-                    >跟帖</el-button
-                >
-            </div>
         </el-form-item>
     </el-form>
 </template>
@@ -143,37 +133,41 @@ export default {
 </script>
 
 <style lang="less">
-.c-comment-tools {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    height: 48px;
-
+.m-comment-reply {
+    .u-tools {
+        .flex;
+        width: 100%;
+        align-items: center;
+        overflow: hidden;
+        height: 48px;
+    }
     .u-upload-icon {
         font-size: 24px;
         cursor: pointer;
         margin-right: 10px;
         color: #3d454d;
     }
-}
-.c-comment-secret {
-    margin-left: 15px;
-
-    .u-secret {
-        display: flex;
-        align-items: center;
-        .el-checkbox__inner {
-            display: block;
+    .c-comment-secret {
+        margin-left: 15px;
+        .u-secret {
+            display: flex;
+            align-items: center;
+            .el-checkbox__inner {
+                display: block;
+            }
+        }
+    }
+    .c-comment-emotion {
+        margin: 0;
+        position: relative;
+        top: 7px;
+    }
+    .u-publish {
+        margin-bottom: 4px;
+        background: #4080ff;
+        &:hover {
+            opacity: 0.9;
         }
     }
 }
-.c-comment-emotion {
-    margin: 0;
-    position: relative;
-    top: 7px;
-}
-// .u-toolbar {
-//     display: flex;
-//     justify-content: flex-end;
-// }
 </style>

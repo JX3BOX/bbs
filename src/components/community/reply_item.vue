@@ -46,10 +46,7 @@
                         <div></div>
                         <div>
                             <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
-                            <el-button v-if="allowBlackHole" type="text">
-                                <i class="el-icon-attract"></i>
-                                黑洞
-                            </el-button>
+                            <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" />
                             <AddBlockButton :post="post" />
                             <ComplaintButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
@@ -119,12 +116,13 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentsList } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
+import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
@@ -141,6 +139,7 @@ export default {
         ReplyForReply,
         CommentItem,
         Article,
+        AddBlackHoleButton,
     },
     provide() {
         return {
@@ -174,11 +173,6 @@ export default {
             } else {
                 return "";
             }
-        },
-        // 是否允许黑洞
-        allowBlackHole: function () {
-            // 登录 && 不是主楼
-            return this.isLogin && !this.isMaster;
         },
         // 是否登录
         isLogin: function () {
@@ -241,7 +235,6 @@ export default {
         },
         "post.likes": {
             handler: function (val) {
-                console.log(val);
                 if (val) {
                     this.likeCount = val;
                 }
@@ -328,7 +321,7 @@ export default {
             this.isLike = true;
         },
         onEditClick() {
-            location.href = `#/community/reply/${this.post.id}`;
+            window.location.href = editLink("community", this.post?.id);
         },
     },
 };
