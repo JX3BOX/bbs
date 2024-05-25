@@ -112,7 +112,8 @@
                                                 class="u-op-item u-op-gift"
                                                 >打赏</el-checkbox
                                             >
-                                            <a v-else
+                                            <a
+                                                v-else
                                                 class="u-like"
                                                 :class="{ on: item.data.isLike }"
                                                 title="赞"
@@ -120,7 +121,9 @@
                                             >
                                                 <i class="like-icon">{{ item.data.isLike ? "♥" : "♡" }}</i>
                                                 <span class="like-text">Like</span>
-                                                <span class="like-count" v-if="item.data.count">{{ item.data.count }}</span>
+                                                <span class="like-count" v-if="item.data.count">{{
+                                                    item.data.count
+                                                }}</span>
                                             </a>
                                         </div>
                                     </div>

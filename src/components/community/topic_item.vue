@@ -33,7 +33,7 @@
                     class="m-topic-collection"
                     v-if="data.collection_id && data.collection.id && data.collection.title"
                 >
-                    <a :href="`/collection/${data.collection_id}`">
+                    <a :href="`/collection/${data.collection_id}`" target="_blank">
                         <span class="u-label">小册</span>
                         <span class="u-value">{{ data.collection.title }}</span>
                     </a>

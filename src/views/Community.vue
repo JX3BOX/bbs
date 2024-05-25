@@ -103,7 +103,6 @@ export default {
     computed: {
         // 是否显示加载更多
         hasNextPage: function () {
-            console.log(this.page, this.per, this.total);
             return this.pages >= 1 && this.per * this.page < this.total;
         },
     },

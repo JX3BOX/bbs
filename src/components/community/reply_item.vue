@@ -8,32 +8,6 @@
                 <div>
                     <div class="u-layer">
                         {{ isMaster ? "楼主" : post.layer + "楼" }}
-
-                        <div class="u-layer-toolbar">
-                            <el-button
-                                class="u-layer-btn"
-                                @click="onEditClick"
-                                v-if="isPostOwner && isMaster"
-                                type="warning"
-                                icon="el-icon-edit"
-                                >编辑</el-button
-                            >
-                            <el-button
-                                v-if="isMaster"
-                                :class="`u-layer-btn u-only-btn ${onlyAuthor && 'u-unset'}`"
-                                type="primary"
-                                @click="setOnlyAuthor(!onlyAuthor)"
-                            >
-                                <img
-                                    v-show="!onlyAuthor"
-                                    svg-inline
-                                    width="14"
-                                    height="14"
-                                    src="@/assets/img/community/only-author.svg"
-                                />
-                                {{ onlyAuthor ? "取消只看楼主" : "只看楼主" }}
-                            </el-button>
-                        </div>
                     </div>
                     <div class="u-content">
                         <Article v-if="isMaster" :content="post.content || ''" />
@@ -120,7 +94,7 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -132,7 +106,7 @@ import { getLikes } from "@/service/next";
 
 export default {
     name: "ReplyItem",
-    inject: ["getTopicData", "getReplyList", "setOnlyAuthor", "onReplyTopic"],
+    inject: ["getTopicData", "getReplyList", "onReplyTopic"],
     props: ["isMaster", "post"],
     components: {
         DeleteButton,
@@ -201,10 +175,6 @@ export default {
                 return this.post.ext_user_info.id;
             }
             return "";
-        },
-        // 是否为层主
-        isPostOwner() {
-            return this.userId == User.getInfo()?.uid;
         },
     },
     watch: {
@@ -337,9 +307,6 @@ export default {
                     list = commentList;
                 });
             return list;
-        },
-        onEditClick() {
-            window.location.href = editLink("community", this.post?.id);
         },
     },
 };

@@ -2,56 +2,68 @@
     <header class="m-single-header" v-if="post">
         <!-- 标题 -->
         <div class="m-single-title">
-            <span class="u-title u-sub-block" :href="url" :title="title">
-                <i class="u-original" v-if="isOriginal">原创</i>
+            <span class="u-title u-sub-block">
                 <slot name="title_before"></slot>
                 <i class="u-private" v-if="post.post_status != 'publish' || !!~~post.visible">
-                    <i class="el-icon-lock" v-if="post.post_status == 'draft' || post.post_status == 'pending' || !!~~post.visible" style="color:#fb9b24"></i>
-                    <i class="el-icon-delete" v-if="post.post_status == 'dustbin'" style="color:#c00"></i>
+                    <i
+                        class="el-icon-lock"
+                        v-if="post.post_status == 'draft' || post.post_status == 'pending' || !!~~post.visible"
+                        style="color: #fb9b24"
+                    ></i>
+                    <i class="el-icon-delete" v-if="post.post_status == 'dustbin'" style="color: #c00"></i>
                 </i>
                 <span class="u-title-text">{{ title }}</span>
+                <div class="u-title-toolbar">
+                    <el-button size="small" @click="onEditClick" v-if="isPostOwner" type="warning" icon="el-icon-edit"
+                        >编辑</el-button
+                    >
+                    <el-button
+                        size="small"
+                        :class="`u-only-btn ${onlyAuthor && 'u-unset'}`"
+                        type="primary"
+                        @click="setOnlyAuthor(!onlyAuthor)"
+                    >
+                        <img svg-inline v-show="!onlyAuthor" src="@/assets/img/community/only-author.svg" />
+                        {{ onlyAuthor ? "取消只看楼主" : "只看楼主" }}
+                    </el-button>
+                </div>
             </span>
         </div>
 
         <!-- 信息 -->
         <div class="m-single-info">
-            <!-- 用户名 -->
-            <div class="u-author u-sub-block">
-                <i class="u-author-icon">
-                    <img svg-inline src="@jx3box/jx3box-common-ui/assets/img/single/author.svg" />
-                </i>
-                <a class="u-name" :href="author_link">{{ author_name }}</a>
-            </div>
-
-            <!-- 自定义字段 -->
-            <!-- <template v-if="metas && metas.length">
-            <div class="u-meta u-sub-block" v-for="(meta_value,meta_key) in metas" :key="meta_key">
-                <em class="u-label">{{meta_key}}</em>
-                <span class="u-value">{{meta_value}}</span>
-            </div>
-            </template> -->
             <slot></slot>
+            <span v-if="isTop" class="u-status u-sub-block top">
+                <img svg-inlinesrc="@/assets/img/community/is_top_inline.svg" alt="" />
+                置顶
+            </span>
 
-            <!-- 客户端 -->
-            <div class="u-meta u-sub-block">
-                <em class="u-label">适用客户端</em>
-                <span class="u-value u-client" :class="'i-client-' + client">{{ showClientLabel(client) }}</span>
-            </div>
+            <span v-if="isStar" class="u-status u-sub-block star">
+                <img svg-inline src="@/assets/img/community/is_star_inline.svg" alt="" />
+                精选
+            </span>
+
+            <!-- 帖子分类 -->
+            <span class="u-status u-sub-block" :style="`background-color: ${styles.color};`">
+                <img v-svg-inline :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
+                {{ post.category }}
+            </span>
+
+            <!-- 标签 -->
+            <span v-for="(item, index) in tags" :key="index" class="u-podate u-tag u-sub-block"> {{ item }} </span>
+            1
+            <!-- 小册 -->
+            <a v-if="collection" class="u-podate u-book u-sub-block" :href="collection.url" target="_blank">
+                <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
+                {{ collection.name }}
+            </a>
 
             <!-- 发布日期 -->
-            <span class="u-podate u-sub-block"  :title="'发布日期:' + post_time">
+            <span class="u-podate u-sub-block" :title="'发布日期:' + post_time">
                 <i class="u-icon-podate">
                     <img svg-inline src="@jx3box/jx3box-common-ui/assets/img/single/podate.svg" />
                 </i>
                 <time>{{ post_date }}</time>
-            </span>
-
-            <!-- 最后更新 -->
-            <span class="u-modate u-sub-block" :title="'最后更新:' + update_time">
-                <i class="u-icon-modate">
-                    <img svg-inline src="@jx3box/jx3box-common-ui/assets/img/single/modate.svg" />
-                </i>
-                <time>{{ update_date }}</time>
             </span>
 
             <!-- 查看次数 -->
@@ -75,100 +87,141 @@
 </template>
 
 <script>
-import { __Root,__clients } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __Root, __clients } from "@jx3box/jx3box-common/data/jx3box.json";
 import { showDate, showTime } from "@jx3box/jx3box-common/js/moment";
-import { editLink, authorLink } from "@jx3box/jx3box-common/js/utils.js";
+import { editLink } from "@jx3box/jx3box-common/js/utils.js";
 import User from "@jx3box/jx3box-common/js/user.js";
 import $ from "jquery";
+import { formatCategoryList } from "@/utils/community";
+import { getTopicBucket } from "@/service/cms";
 export default {
     name: "single-header",
     props: ["post", "stat"],
-    data: function() {
+    inject: ["setOnlyAuthor"],
+    data: function () {
         return {
+            categoryList: [],
             wordCount: 0,
         };
     },
     computed: {
-        url: function() {
-            return location.href;
+        onlyAuthor: function () {
+            const v = this.$route.query.onlyAuthor;
+            return (v == true || v == "true") && true;
         },
-        isOriginal: function() {
-            return !!~~this.post?.original;
+        // 是否为拥有者
+        isPostOwner() {
+            return this.post?.user_id == User.getInfo()?.uid;
         },
-        title: function() {
-            return this.post?.post_title || "无标题";
+        collection: function () {
+            if (this.post.collection && this.post.collection.title) {
+                return {
+                    name: this.post.collection.title,
+                    url: `/collection/${data.collection_id}`,
+                };
+            }
+            return null;
         },
-        author_link: function() {
-            return authorLink(this.post?.post_author);
+        tags: function () {
+            return this.post?.tags;
         },
-        author_name: function() {
-            return this.post?.author_info?.display_name || "匿名";
+        isStar: function () {
+            return this.post?.is_star;
         },
-        post_date: function() {
-            return showDate(new Date(this.post?.post_date));
+        isTop: function () {
+            return this.post?.is_top || this.post?.is_category_top;
         },
-        update_date: function() {
-            return showDate(new Date(this.post?.post_modified));
+        title: function () {
+            return this.post?.title || "无标题";
         },
-        post_time: function() {
-            return showTime(new Date(this.post?.post_date));
+        post_date: function () {
+            return showDate(new Date(this.post?.created_at));
         },
-        update_time: function() {
-            return showTime(new Date(this.post?.post_modified));
+        update_date: function () {
+            return showDate(new Date(this.post?.updated_at));
         },
-        views: function() {
+        post_time: function () {
+            return showTime(new Date(this.post?.created_at));
+        },
+        update_time: function () {
+            return showTime(new Date(this.post?.updated_at));
+        },
+        views: function () {
             return this.stat?.views || "-";
         },
-        edit_link: function() {
+        edit_link: function () {
             return editLink(this.post?.post_type, this.post?.ID);
         },
-        canEdit: function() {
-            return this.post?.post_author == User.getInfo().uid || User.isEditor();
+        canEdit: function () {
+            return this.post?.user_id == User.getInfo().uid || User.isEditor();
         },
-        client: function() {
-            return this.post?.client || "std";
+        styles: function () {
+            let item = this.categoryList.find((item) => item.value === this.post.category);
+            if (item) {
+                return item;
+            } else {
+                return {
+                    icon: `game`,
+                    hoverColor: "rgba(235, 244, 255, 1)",
+                    color: "rgba(64, 128, 255, 1)",
+                };
+            }
         },
     },
     watch: {
         post: {
             deep: true,
-            handler: function(val) {
+            handler: function (val) {
                 this.countWords();
             },
-        }
+        },
     },
     methods: {
-        showClientLabel: function(val) {
+        showClientLabel: function (val) {
             return __clients[val];
         },
-        countWords: function (){
+        countWords: function () {
             this.$nextTick(() => {
                 // 需要去除空格 \n \g
-                const text = $('.c-article').text()?.replace(/[\s|\n|\r|\t|\g|\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\，|\。|\？|\：|\；|\‘|\’|\”|\“|\、|\·|\！|\（|\）|\》|\《|\『|\』]/g, '');
+                const text = $(".c-article")
+                    .text()
+                    ?.replace(
+                        /[\s|\n|\r|\t|\g|\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\，|\。|\？|\：|\；|\‘|\’|\”|\“|\、|\·|\！|\（|\）|\》|\《|\『|\』]/g,
+                        ""
+                    );
 
                 this.wordCount = text?.length || 0;
-            })
-        }
+            });
+        },
+        getCategoryList() {
+            getTopicBucket({ type: "community", search: this.post.category }).then((res) => {
+                this.categoryList = formatCategoryList(res.data.data);
+            });
+        },
+        onEditClick() {
+            window.location.href = editLink("community", this.post?.id);
+        },
     },
-    mounted: function() {
+    mounted: function () {
+        this.getCategoryList();
     },
 };
 </script>
 
 <style lang="less">
-.i-client-all{
+.i-client-all {
     border: 1px solid #a26ef7;
     color: #a26ef7;
 }
-.i-client-std{
+.i-client-std {
     border: 1px solid #f0b400;
     color: #f0b400;
 }
-.i-client-origin{
+.i-client-origin {
     border: 1px solid #0eb7ce;
     color: #0eb7ce;
 }
-.i-client-wujie{
+.i-client-wujie {
     border: 1px solid #fc79bf;
     color: #fc79bf;
 }
@@ -228,6 +281,29 @@ export default {
         margin-right: 5px;
         color: #111;
     }
+    .u-title-toolbar {
+        .fr;
+        .u-only-btn {
+            position: relative;
+            background: rgba(64, 128, 255, 1);
+            display: inline-block;
+            height: 32px;
+            &.u-unset {
+                background: rgba(212, 48, 48, 1);
+                border-color: rgba(212, 48, 48, 1);
+            }
+            &:hover {
+                opacity: 0.8;
+            }
+            svg {
+                vertical-align: middle;
+                position: relative;
+                top: -1px;
+                width: 12px;
+                height: 12px;
+            }
+        }
+    }
 }
 @media screen and (max-width: @phone) {
     .m-single-title {
@@ -248,7 +324,7 @@ export default {
 .m-single-info {
     margin-top: 10px;
     .clearfix;
-    .fz(12px, 20px);
+    .fz(14px, 22px);
     color: #666;
 
     .u-client {
@@ -266,14 +342,57 @@ export default {
 
     svg {
         fill: #666;
-        .size(16px);
+        .size(14px);
         .y;
         .mr(3px);
     }
 
     .u-sub-block {
-        .mr(15px);
+        .mr(8px);
         .fl;
+    }
+
+    .u-status {
+        .flex;
+        gap: 4px;
+        align-items: center;
+        color: white;
+        height: 22px;
+        padding: 4px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        user-select: none;
+        &.top {
+            background: rgba(255, 105, 105, 1);
+        }
+        &.star {
+            background: rgba(255, 187, 105, 1);
+        }
+    }
+    .u-tag {
+        .fz(14px,22px);
+        padding: 0 4px;
+        border-radius: 4px;
+        background: rgba(227, 242, 255, 1);
+        color: rgba(64, 128, 255, 1);
+    }
+    .u-book {
+        .fz(12px,22px);
+        position: relative;
+        padding-left: 27px;
+        padding-right: 8px;
+        border-radius: 4px;
+        border: 1px solid rgba(146, 148, 151, 1);
+        color: rgba(146, 148, 151, 1);
+
+        svg {
+            position: absolute;
+            left: 12px;
+            top: 0;
+            width: 11px;
+            height: 16px;
+            margin-right: 0;
+        }
     }
 
     .u-author {

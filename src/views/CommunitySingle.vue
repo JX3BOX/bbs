@@ -3,23 +3,7 @@
         <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
             <div class="m-community-header">
-                <PostHeader :post="postHeader" :stat="stat">
-                    <template v-slot:title_before>
-                        <div class="m-topic-category-box">
-                            <div
-                                :class="`m-topic-category`"
-                                :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
-                            >
-                                <img
-                                    v-svg-inline
-                                    class="u-icon"
-                                    :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
-                                />
-                                <div>{{ post.category }}</div>
-                            </div>
-                        </div>
-                    </template>
-                </PostHeader>
+                <PostHeader :post="post" :stat="stat"></PostHeader>
                 <el-divider content-position="left">JX3BOX</el-divider>
             </div>
 
@@ -65,8 +49,6 @@ import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
 import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
-import { getTopicBucket } from "@/service/community";
-import { formatCategoryList } from "@/utils/community";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
@@ -121,30 +103,12 @@ export default {
         id: function () {
             return this.$route.params.id;
         },
-        postHeader: function () {
-            if (!this.post.id) return;
-            return {
-                ID: this.post.id,
-                post_type: "community",
-                post_title: this.post.title,
-                author_info: {
-                    display_name: this.post.ext_user_info.display_name || "",
-                    user_avatar: this.post.ext_user_info.avatar,
-                    user_avatar_frame: this.post.ext_user_info.user_avatar_frame,
-                    deleted: 0,
-                },
-                post_date: this.post.created_at,
-                post_modified: this.post.updated_at,
-                star: 10,
-            };
-        },
     },
     created() {
         this.getJumpLayer();
     },
     mounted() {
         if (!this.id) return this.$message.error("文章id不存在");
-        this.getCategoryList();
         this.getDetails();
         this.getReplyList();
     },
@@ -337,11 +301,6 @@ export default {
         changePage(page) {
             this.page = page;
             this.getReplyList();
-        },
-        getCategoryList() {
-            getTopicBucket({ type: "community", search: this.post.category }).then((res) => {
-                this.categoryList = formatCategoryList(res.data.data);
-            });
         },
         // 路由绑定
         replaceRoute: function (extend) {
