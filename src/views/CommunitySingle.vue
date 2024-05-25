@@ -53,7 +53,7 @@ import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
 
-const appKey = "community_topic";
+const appKey = "community";
 
 export default {
     components: {

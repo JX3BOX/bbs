@@ -51,7 +51,6 @@
 
             <!-- 标签 -->
             <span v-for="(item, index) in tags" :key="index" class="u-podate u-tag u-sub-block"> {{ item }} </span>
-            1
             <!-- 小册 -->
             <a v-if="collection" class="u-podate u-book u-sub-block" :href="collection.url" target="_blank">
                 <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />

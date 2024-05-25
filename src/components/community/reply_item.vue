@@ -14,6 +14,19 @@
                         <div v-else v-html="renderContent" />
                     </div>
                 </div>
+                <!-- 打赏 只有主楼有打赏-->
+                <Thx
+                    v-if="isMaster"
+                    class="m-single-thx"
+                    :postId="id"
+                    postType="community"
+                    :postTitle="post.title"
+                    :userId="post.user_id"
+                    :adminBoxcoinEnable="true"
+                    :userBoxcoinEnable="true"
+                    :client="post.client"
+                />
+                <!-- 操作按钮 -->
                 <div>
                     <div class="u-time">{{ post.created_at || post.updated_at }}</div>
                     <div class="u-toolbar">
@@ -34,6 +47,7 @@
                                 </div>
                             </el-button>
                             <el-button
+                                v-if="!isMaster"
                                 :disabled="isLike"
                                 type="primary"
                                 size="small"
@@ -49,6 +63,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- 回复的输入框 ，判断主楼不需要展示主楼是跟帖 -->
                 <ReplyForReply
                     v-if="showReplyForReplyFrom"
                     :username="userInfo.display_name"
@@ -57,6 +72,8 @@
                     @doReply="doReply"
                 />
             </div>
+
+            <!-- 折叠评论 -->
             <div v-if="!isMaster && post.comments_count > 3" class="m-comment-collapse">
                 <div v-if="isCollapse" @click="onCollapseChange">
                     <img width="14" src="@/assets/img/community/collapse_1.svg" alt="" />
@@ -103,6 +120,7 @@ import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
+import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
 
 export default {
     name: "ReplyItem",
@@ -281,7 +299,7 @@ export default {
             this.likeCount++;
             if (!this.isLike) {
                 if (this.isMaster) {
-                    postStat("community_topic", this.post.id, "likes");
+                    postStat("community", this.post.id, "likes");
                 } else {
                     postStat("community_reply", this.post.id, "likes");
                 }
