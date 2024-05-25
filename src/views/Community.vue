@@ -2,11 +2,11 @@
     <CommunityLayout>
         <CommunityHeader :categoryList="categoryList" />
         <CommunitySearch @search="onSearch" ref="searchInput" />
-        <div class="m-community-content">
+        <div class="m-community-content" v-loading="loading">
             <div v-if="isSearch">
                 <CommunitySearchList :list="searchList" @search="onSearch" @close="onCloseSearch" />
             </div>
-            <div v-else v-loading="loading">
+            <div v-else>
                 <!-- 置顶文章 -->
                 <TopicTop v-if="topTopicData" :data="topTopicData" />
                 <!-- 移动端兼容置顶文章 -->
@@ -178,7 +178,6 @@ export default {
             this.col = 1;
         },
         onSearch(params) {
-            console.log(params);
             this.isSearch = true;
 
             // 初始化分页数据 s
@@ -203,7 +202,7 @@ export default {
             this.loadData();
         },
         // 翻页加载
-        changePage: function (i) {
+        changePage: function () {
             if (this.isSearch) {
                 this.loadSearchData();
             } else {
@@ -266,6 +265,7 @@ export default {
             if (appendMode) {
                 this.page += 1;
             }
+            this.loading = true;
             globalSearch({
                 ...this.searchParams,
                 pageIndex: this.page,
@@ -282,7 +282,9 @@ export default {
                     this.pages = page.pageTotal;
                     this.page = page.pageIndex;
                 })
-                .finally(() => {});
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         // 获取分类列表
         getCategoryList() {

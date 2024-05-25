@@ -11,6 +11,7 @@
                     v-model="search"
                     @blur="onBlur"
                     @focus="isFocus = true"
+                    v-on:keyup.enter="onSearch"
                     class="u-input"
                     placeholder="查找帖子"
                     type="text"
@@ -143,123 +144,6 @@ export default {
     }
     .m-community-search.is-focus {
         width: 100%;
-    }
-}
-// ---list
-
-@bg: #f6f8fa;
-@visited: #05037b;
-@pink: #f39;
-@desc: #555;
-@gray: #888;
-@space: 20px;
-@ipad: 1024px;
-@ipad-y: 767px;
-
-.m-search_all {
-    .r(4px);
-    .mt(20px);
-    box-shadow: 0 0 5px #dcdfe6;
-    background-color: #fff;
-    padding: 20px;
-    .m-result {
-        padding: 0 20px;
-        .u-item {
-            .w(100%);
-            .flex;
-            .mb(20px);
-            gap: 10px;
-            justify-content: space-between;
-            .u-img {
-                .r(10px);
-                .h(48px);
-                max-width: 120px;
-            }
-            .u-info {
-                .flex;
-                flex-direction: column;
-            }
-        }
-    }
-}
-// --item
-.m-post {
-    a {
-        color: @color-link;
-    }
-    .u-list {
-        padding: 0;
-        margin: 0;
-    }
-
-    .u-item {
-        margin-bottom: @space;
-        list-style: none;
-        *zoom: 1;
-        // &:after {
-        //     content: "";
-        //     display: table;
-        //     clear: both;
-        // }
-    }
-
-    .u-link {
-        .mt(5px);
-        display: block;
-    }
-
-    .u-title {
-        font-size: 16px;
-        line-height: 1.5;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
-        }
-        &:hover .u-text {
-            box-shadow: 0 1px 0 @color-link;
-        }
-    }
-    .u-link {
-        font-size: 12px;
-        line-height: 2;
-        color: @gray;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .u-date {
-        background-color: @bg;
-        color: @pink;
-        border-radius: 2px;
-        padding: 2px 5px;
-        font-weight: 600;
-    }
-
-    .u-pic {
-        float: left;
-        margin-right: 10px;
-    }
-
-    .u-desc {
-        font-size: 13px;
-        line-height: 1.6;
-        color: @desc;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
-        }
-    }
-    .u-client {
-        font-style: normal;
-        font-size: 12px;
-        padding: 2px 6px;
-        border-radius: 3px;
-        margin-right: 5px;
-    }
-
-    .u-type {
-        margin-left: 10px;
     }
 }
 </style>
