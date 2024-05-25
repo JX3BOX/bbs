@@ -17,7 +17,7 @@ export default {
     props: {
         subtype: {
             type: String,
-            default: "sidebar",
+            default: "bbs",
         },
     },
     data() {
@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         loadData() {
-            getConfigBanner({ client: this.client, status: 1, per: 10, type: "bbs", subtype: this.subtype }).then(
+            getConfigBanner({ client: this.client, status: 1, per: 10, type: "banner", subtype: this.subtype }).then(
                 (res) => {
                     this.list = res.data.data?.list || [];
                 }
