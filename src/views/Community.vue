@@ -1,7 +1,7 @@
 <template>
     <CommunityLayout>
         <CommunityHeader :categoryList="categoryList" />
-        <CommunitySearch @search="onSearch" />
+        <CommunitySearch @search="onSearch" ref="searchInput" />
         <div class="m-community-content">
             <div v-if="isSearch">
                 <CommunitySearchList :list="searchList" @search="onSearch" @close="onCloseSearch" />
@@ -161,7 +161,10 @@ export default {
                 q: "",
                 filter_name: "community_discussion_topic,community_discussion_topic_reply",
             };
-            this.loadData();
+            if (this.$refs.searchInput) {
+                this.$refs.searchInput.closeSearch();
+            }
+            this.this.loadData();
         },
         handleResize() {
             if (window.innerWidth > 1920) {
@@ -195,6 +198,9 @@ export default {
         },
         onCategoryChange: function (category) {
             this.category = category;
+            if (this.$refs.searchInput) {
+                this.$refs.searchInput.closeSearch();
+            }
             this.loadData();
         },
         // 翻页加载

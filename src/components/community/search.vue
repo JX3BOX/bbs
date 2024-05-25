@@ -25,7 +25,6 @@ export default {
     name: "CommunitySearch",
     data() {
         return {
-            showSearch: false,
             searchList: [],
             isFocus: false,
             search: "",
@@ -38,7 +37,6 @@ export default {
                 return;
             }
             if (this.search) {
-                this.showSearch = true;
                 this.$emit("search", {
                     q: this.search,
                 });
@@ -47,8 +45,11 @@ export default {
         onBlur() {
             if (!this.search) {
                 this.isFocus = false;
-                this.showSearch = false;
             }
+        },
+        closeSearch() {
+            this.search = "";
+            this.isFocus = false;
         },
     },
 };
