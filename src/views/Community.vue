@@ -164,7 +164,7 @@ export default {
             if (this.$refs.searchInput) {
                 this.$refs.searchInput.closeSearch();
             }
-            this.this.loadData();
+            this.loadData();
         },
         handleResize() {
             if (window.innerWidth > 1920) {
@@ -282,7 +282,6 @@ export default {
                     this.total = page.total;
                     this.pages = page.pageTotal;
                     this.page = page.pageIndex;
-                    console.log(page.pageIndex);
                 })
                 .finally(() => {});
         },

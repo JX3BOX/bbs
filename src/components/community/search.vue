@@ -28,28 +28,29 @@ export default {
             searchList: [],
             isFocus: false,
             search: "",
+            inSearch: false,
         };
     },
     methods: {
         onSearch() {
-            if (!this.isFocus) {
+            if (!this.isFocus && !this.inSearch) {
                 this.$refs.input.focus();
                 return;
             }
-            if (this.search) {
-                this.$emit("search", {
-                    q: this.search,
-                });
-            }
+            this.inSearch = true;
+            this.$emit("search", {
+                q: this.search,
+            });
         },
         onBlur() {
-            if (!this.search) {
+            if (!this.search && !this.inSearch) {
                 this.isFocus = false;
             }
         },
         closeSearch() {
             this.search = "";
             this.isFocus = false;
+            this.inSearch = false;
         },
     },
 };
