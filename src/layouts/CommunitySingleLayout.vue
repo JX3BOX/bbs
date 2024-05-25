@@ -23,9 +23,6 @@
             </template>
         </Breadcrumb>
 
-        <LeftSidebar>
-            <Nav />
-        </LeftSidebar>
         <div>
             <Main :withoutRight="false">
                 <div class="m-community-single__main">
@@ -44,7 +41,6 @@
 </template>
 
 <script>
-import Nav from "@/components/nav/Nav.vue";
 import Info from "@/components/Info.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
@@ -77,7 +73,6 @@ export default {
         AdminDrop,
         PostTopic,
         Info,
-        Nav,
     },
 };
 </script>
