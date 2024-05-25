@@ -49,7 +49,7 @@ function replyReply(id, replyId, data) {
  * @param {*} params
  * @returns
  */
-function getCommentsList(id, replyId, params) {
+function getCommentList(id, replyId, params) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/item/${replyId}/comments/list`, {
         params,
     });
@@ -85,7 +85,7 @@ export {
     getTopicReplyList,
     replyTopic,
     replyReply,
-    getCommentsList,
+    getCommentList,
     delReply,
     delComment,
     addBlock,

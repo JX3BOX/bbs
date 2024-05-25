@@ -13,7 +13,7 @@
                             <el-button
                                 class="u-layer-btn"
                                 @click="onEditClick"
-                                v-if="isPostOwner"
+                                v-if="isPostOwner && isMaster"
                                 type="warning"
                                 icon="el-icon-edit"
                                 >编辑</el-button
@@ -41,15 +41,16 @@
                     </div>
                 </div>
                 <div>
-                    <div class="u-time">{{ post.updated_at || post.created_at }}</div>
+                    <div class="u-time">{{ post.created_at || post.updated_at }}</div>
                     <div class="u-toolbar">
                         <div></div>
                         <div>
-                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
-                            <el-button v-if="allowBlackHole" type="text">
-                                <i class="el-icon-attract"></i>
-                                黑洞
+                            <el-button type="text" @click="onForward()">
+                                <i class="el-icon-copy-document"></i>
+                                转述
                             </el-button>
+                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
+                            <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" />
                             <AddBlockButton :post="post" />
                             <ComplaintButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
@@ -93,8 +94,8 @@
                 </div>
             </div>
             <!-- 评论列表 -->
-            <div v-if="!isMaster && commentsList.length" class="m-reply-list">
-                <CommentItem v-for="item in commentsList" :key="item.id" :post="item" />
+            <div v-if="!isMaster && commentList.length" class="m-reply-list">
+                <CommentItem v-for="item in commentList" :key="item.id" :post="item" />
             </div>
 
             <!-- 分页 -->
@@ -119,19 +120,20 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { replyReply, getCommentsList } from "@/service/community";
+import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
+import { replyReply, getCommentList } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
+import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
 
 export default {
     name: "ReplyItem",
-    inject: ["getTopicData", "getReplyList", "setOnlyAuthor"],
+    inject: ["getTopicData", "getReplyList", "setOnlyAuthor", "onReplyTopic"],
     props: ["isMaster", "post"],
     components: {
         DeleteButton,
@@ -141,11 +143,12 @@ export default {
         ReplyForReply,
         CommentItem,
         Article,
+        AddBlackHoleButton,
     },
     provide() {
         return {
             getReplyData: () => this.post,
-            getCommentsList: this.getList,
+            getCommentList: this.getList,
         };
     },
     data() {
@@ -158,13 +161,16 @@ export default {
             likeCount: 0,
             showReplyForReplyFrom: false,
             renderContent: "",
-            commentsList: [],
+            commentList: [],
         };
     },
     computed: {
+        id: function () {
+            return this.$route.params.id;
+        },
         onlyAuthor: function () {
             const v = this.$route.query.onlyAuthor;
-            return (v == "true" || v == true) && true;
+            return (v == true || v == "true") && true;
         },
         likeCountRender: function () {
             if (this.likeCount >= 100) {
@@ -174,11 +180,6 @@ export default {
             } else {
                 return "";
             }
-        },
-        // 是否允许黑洞
-        allowBlackHole: function () {
-            // 登录 && 不是主楼
-            return this.isLogin && !this.isMaster;
         },
         // 是否登录
         isLogin: function () {
@@ -216,42 +217,32 @@ export default {
             },
             immediate: true,
         },
-        "post.comments": {
-            handler: function () {
+        post: {
+            handler: async function () {
+                this.commentList = [];
                 if (this.post.comments) {
-                    this.commentsList = this.post.comments;
+                    this.commentList = await this.getLikes(this.post.comments);
                 }
-            },
-            immediate: true,
-        },
-        commentsList: {
-            handler: function async() {
-                if (!this.commentsList.length) return;
-                const id = this.commentsList.map((item) => item.id);
-                const params = {
-                    post_type: "community",
-                    post_action: "likes",
-                    id: id.join(","),
-                };
-                getLikes(params).then((res) => {
-                    // console.log(res);
-                });
             },
             immediate: true,
         },
         "post.likes": {
             handler: function (val) {
-                console.log(val);
-                if (val) {
-                    this.likeCount = val
-                }
+                this.likeCount = val;
             },
-        }
+            immediate: true,
+        },
     },
     methods: {
+        onForward() {
+            this.onReplyTopic({
+                content: this.post.content,
+                attachmentList: this.post.attachmentList,
+            });
+        },
         onCollapseChange() {
             if (this.isCollapse) {
-                this.commentsList = this.post.comments;
+                this.commentList = this.post.comments;
             } else {
                 this.page = 1;
                 this.getList();
@@ -293,20 +284,21 @@ export default {
         },
         getList(postData = {}) {
             if (this.isMaster) return;
-            const id = this.$route.params.id;
+            const id = this.id;
             const replyId = this.post.id;
             if (id && replyId) {
-                getCommentsList(id, replyId, {
+                getCommentList(id, replyId, {
                     index: this.page,
                     pageSize: this.per,
                     ...postData,
-                }).then((res) => {
-                    const list = res.data.data.list;
+                }).then(async (res) => {
+                    var list = res.data.data.list;
+
                     if (list) {
-                        this.commentsList = list;
+                        this.commentList = await this.getLikes(list);
                         this.isCollapse = true;
                     } else {
-                        this.commentsList = [];
+                        this.commentList = [];
                     }
                     this.page = res.data.data.page.index;
                     this.total = res.data.data.page.total;
@@ -327,8 +319,28 @@ export default {
             }
             this.isLike = true;
         },
+        async getLikes(commentList) {
+            const id = commentList.map((item) => `community_comment-${item.id}`).join(",");
+            let list = [];
+            const params = {
+                post_type: "community_comment",
+                post_action: "likes",
+                id,
+            };
+            await getLikes(params)
+                .then((res) => {
+                    list = commentList.map((item) => {
+                        item.likes = res.data.data[`community_comment-${item.id}`]?.likes || 0;
+                        return item;
+                    });
+                })
+                .catch(() => {
+                    list = commentList;
+                });
+            return list;
+        },
         onEditClick() {
-            location.href = `#/community/reply/${this.post.id}`;
+            window.location.href = editLink("community", this.post?.id);
         },
     },
 };

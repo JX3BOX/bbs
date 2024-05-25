@@ -10,11 +10,11 @@
             :feedbackEnable="true"
             :crumbEnable="true"
             :showExtend="true"
-            :subtypeMap="subtypeMap"
         >
+            <Info />
             <publish-gate slot="op-append" />
             <template #op-prepend>
-                <AdminDrop :is-community="true" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isLogin" :is-community="true" :post="post" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -22,6 +22,10 @@
                 </span>
             </template>
         </Breadcrumb>
+
+        <LeftSidebar>
+            <Nav />
+        </LeftSidebar>
         <div>
             <Main :withoutRight="false">
                 <div class="m-community-single__main">
@@ -40,25 +44,25 @@
 </template>
 
 <script>
+import Nav from "@/components/nav/Nav.vue";
+import Info from "@/components/Info.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
+import user from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Single",
     props: ["post"],
     data: function () {
         return {
             id: getAppID(),
-            subtypeMap: {
-                1: "攻略心得",
-                2: "萌新指南",
-                3: "江湖故事",
-                4: "煮酒论剑",
-            },
         };
     },
     computed: {
+        isLogin: function () {
+            return user.isLogin();
+        },
         user_id: function () {
             return this.post ? this.post.user_id : "";
         },
@@ -72,6 +76,8 @@ export default {
         "publish-gate": publishGate,
         AdminDrop,
         PostTopic,
+        Info,
+        Nav,
     },
 };
 </script>

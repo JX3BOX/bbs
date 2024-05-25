@@ -15,15 +15,9 @@
                             <div>
                                 <el-button type="text" size="small" @click="addLike" class="">
                                     <div class="u-btn-content">
-                                        <img
-                                            width="12"
-                                            height="14"
-                                            src="@/assets/img/community/heart.svg"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                        赞
-                                        <span class="u-count" v-if="!!likeCountRender"> ({{ likeCountRender }})</span>
+                                        <i :class="`u-like-icon ${isLike && 'is-like'}`">{{ isLike ? "♥" : "♡" }}</i>
+                                        {{ isLike ? "已赞" : "赞" }}
+                                        <span class="u-count" v-if="likeCount"> ({{ likeCountRender }})</span>
                                     </div>
                                 </el-button>
                                 <el-button type="text" size="small" @click="onShowReply">
@@ -33,10 +27,7 @@
                             </div>
                             <div>
                                 <DeleteButton :post="post" type="comment" />
-                                <el-button type="text" size="small">
-                                    <i class="el-icon-attract"></i>
-                                    黑洞
-                                </el-button>
+                                <AddBlackHoleButton :post="post" type="comment" />
                                 <AddBlockButton :post="post" />
                                 <ComplaintButton :post="post" />
                                 <span class="u-time">{{ post.updated_at }}</span>
@@ -53,7 +44,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <CommentItem v-for="item in commentsList" :key="item.id" :data="item" /> -->
         </div>
     </div>
 </template>
@@ -66,25 +56,29 @@ import { replyReply } from "@/service/community";
 import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
+import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
+
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 
 export default {
     name: "CommentItem",
     props: ["post"],
-    inject: ["getTopicData", "getReplyData", "getCommentsList"],
+    inject: ["getTopicData", "getReplyData", "getCommentList"],
     components: {
         ReplyForReply,
         AddBlockButton,
+        AddBlackHoleButton,
         ComplaintButton,
         DeleteButton,
     },
     data() {
         return {
+            isLike: false,
             likeCount: 0,
             renderContent: "",
             showReplyForReplyFrom: false,
-            commentsList: [],
+            commentList: [],
         };
     },
     watch: {
@@ -94,14 +88,20 @@ export default {
             },
             immediate: true,
         },
+        "post.likes": {
+            handler: function (val) {
+                this.likeCount = val;
+            },
+            immediate: true,
+        },
     },
     computed: {
         // 是否登录
         likeCountRender: function () {
             if (this.likeCount >= 100) {
-                return "(99+)";
+                return "99+";
             } else if (this.likeCount != 0) {
-                return `${this.likeCount}`;
+                return this.likeCount;
             } else {
                 return "";
             }
@@ -142,7 +142,7 @@ export default {
                     reply_for_user_id: userId,
                 })
                     .then(() => {
-                        this.getCommentsList();
+                        this.getCommentList();
                     })
                     .finally(() => {
                         this.showReplyForReplyFrom = false;
@@ -157,7 +157,7 @@ export default {
             if (this.isLike) return;
             this.likeCount++;
             if (!this.isLike) {
-                postStat("community", this.post.id, "likes");
+                postStat("community_comment", this.post.id, "likes");
             }
             this.isLike = true;
         },
@@ -165,4 +165,20 @@ export default {
 };
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.u-btn-content {
+    .u-like-icon {
+        font-weight: 500;
+        font-size: 16px;
+        font-family: BlinkMacSystemFont, Helvetica;
+    }
+    .is-like {
+        color: red;
+    }
+    &:hover {
+        .u-like-icon {
+            color: red;
+        }
+    }
+}
+</style>

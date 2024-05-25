@@ -10,7 +10,7 @@ import { delComment, delReply } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "DeleteButton",
-    inject: ["getTopicData", "getReplyList", "getCommentsList"],
+    inject: ["getTopicData", "getReplyList", "getCommentList", "onSearch"],
     props: ["isMaster", "post", "type"],
     computed: {
         topicData: function () {
@@ -34,8 +34,13 @@ export default {
             if (this.post.user_id == User.getInfo().uid) {
                 return true;
             }
-            // 我是楼主 我全能删
-            if (this.topicData.user_id == User.getInfo().uid) {
+
+            // 这是一条回帖  && 我是楼主
+            if (this.type === "reply" && this.topicData.user_id == User.getInfo().uid) {
+                return true;
+            }
+            //  这是一条评论 && 回复的是我 我可以删除
+            if (this.type === "comment" && this.post.reply_for_user_id == User.getInfo().uid) {
                 return true;
             }
 
@@ -59,7 +64,8 @@ export default {
                 type: "warning",
             }).then(() => {
                 delReply(this.post.id).then(() => {
-                    this.getReplyList();
+                    // 调用父组件的方法，刷新回到第一页
+                    this.onSearch();
                 });
             });
         },
@@ -71,7 +77,7 @@ export default {
             }).then(() => {
                 delComment(this.post.id).then(() => {
                     this.$message.success("删除成功");
-                    this.getCommentsList({ index: 1 });
+                    this.getCommentList({ index: 1 });
                 });
             });
         },

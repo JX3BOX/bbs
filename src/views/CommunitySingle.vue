@@ -68,7 +68,8 @@ import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/commun
 import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
-import {getLikes} from "@/service/next"
+import { getLikes } from "@/service/next";
+import User from "@jx3box/jx3box-common/js/user";
 
 const appKey = "community_topic";
 
@@ -84,6 +85,8 @@ export default {
             getTopicData: () => this.post,
             getReplyList: this.getReplyList,
             setOnlyAuthor: this.setOnlyAuthor,
+            onReplyTopic: this.onReplyTopic,
+            onSearch: this.onSearch,
         };
     },
     data() {
@@ -93,6 +96,7 @@ export default {
             page: 1, //当前页数
             per: 10, //每页条目
             total: 0, //总条目数
+            pageTotal: 0, //总页数
             post: {},
             replyList: [],
             categoryList: [],
@@ -165,6 +169,9 @@ export default {
     },
 
     methods: {
+        /**
+         * 获取url楼诚参数
+         */
         getJumpLayer: function () {
             const hash = window.location.hash;
             const layer = hash.substring(1).split("?")[0];
@@ -173,31 +180,43 @@ export default {
                 this.page = Math.ceil((this.layer - 1) / this.per);
             }
         },
-        jumpLayer() {
+        /**
+         * 跳转到指定楼层
+         * @param layer 楼层
+         */
+        jumpLayer(layer) {
+            const _layer = layer || this.layer;
             this.$nextTick(() => {
-                const el = document.getElementById("layer-" + this.layer);
+                const el = document.getElementById("layer-" + _layer);
                 if (el) {
                     el.scrollIntoView();
                     window.scrollBy(0, -120); // 额外滚动
                 }
             });
         },
+        onSearch() {
+            this.page = 1;
+            this.$nextTick(() => {
+                this.getReplyList();
+            });
+        },
         /**
          * 传入 true ｜ false  只看楼主、取消只看楼主
          * @param val bool
          */
-        setOnlyAuthor(val) {
+        setOnlyAuthor(v) {
             this.page = 1;
-            this.onlyAuthor = val;
+            this.onlyAuthor = v;
             this.getReplyList();
         },
+
         buildQuery: function (appendMode) {
             let _query = {
                 index: this.page,
                 pageSize: this.per,
                 order_created_at: 0,
             };
-            if (this.onlyAuthor) {
+            if (this.onlyAuthor && (this.onlyAuthor == true || this.onlyAuthor == "true")) {
                 _query.user_id = this.post.user_id;
             }
             this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
@@ -212,56 +231,67 @@ export default {
                 this.post = res.data.data;
 
                 getStat(appKey, this.id).then((res) => {
-                    this.stat = res.data
-
+                    this.stat = res.data;
                     this.$set(this.post, "likes", this.stat.likes || 0);
                 });
                 postStat(appKey, this.id);
             });
-
         },
-
         getReplyList: function () {
             this.loading = true;
             const params = this.buildQuery();
-            getTopicReplyList(this.id, params)
-                .then((res) => {
-                    const list = res.data.data.list;
+            return getTopicReplyList(this.id, params)
+                .then(async (res) => {
+                    var list = res.data.data.list;
                     const page = res.data.data.page;
                     if (list == null) {
                         this.replyList = [];
                     } else {
+                        // 把点赞数量请求过来填充进去
+                        list = await this.getLikes(list);
+                        // 补充楼层字段
                         this.replyList = list.map((item, i) => {
                             return {
                                 ...item,
                                 layer: (page.index - 1) * page.pageSize + i + 2,
                             };
                         });
+                        // 如果有楼层参数 跳转到指定楼层
                         if (this.layer) {
                             this.jumpLayer();
                         }
-
-                        const ids = this.replyList.map((item) => `community_reply-${item.id}`).join(",");
-
-                        getLikes({
-                            post_type: "community_reply",
-                            post_action: "likes",
-                            id: ids
-                        }).then(likeRes => {
-                            const data = likeRes.data?.data;
-                            this.replyList = this.replyList.map(item => {
-                                item.likes = data[`community_reply-${item.id}`]?.likes || 0;
-                                this.$set(item, "likes", data[`community_reply-${item.id}`]?.likes);
-                                return item;
-                            });
-                        })
                     }
                     this.total = page.total;
+                    this.pageTotal = page.pageTotal;
+                    this.$nextTick(() => {
+                        this.page = page.index;
+                    });
                 })
                 .finally(() => {
                     this.loading = false;
                 });
         },
+        async getLikes(replyList) {
+            const ids = replyList.map((item) => `community_reply-${item.id}`);
+            let id = ids.join(",");
+            let list = [];
+            await getLikes({
+                post_type: "community_reply",
+                post_action: "likes",
+                id,
+            })
+                .then((res) => {
+                    list = replyList.map((item) => {
+                        item.likes = res.data.data[`community_reply-${item.id}`]?.likes || 0;
+                        return item;
+                    });
+                })
+                .catch(() => {
+                    list = replyList;
+                });
+            return list;
+        },
+        /** 回帖 */
         onReplyTopic({ attachmentList, content }) {
             if (!this.id) return this.$message.error("文章id不存在");
             replyTopic(this.id, {
@@ -269,10 +299,43 @@ export default {
                 content: content,
                 extra_images: attachmentList,
             }).then((res) => {
-                this.getReplyList();
+                this.onReplyTopicSuccess(res.data.data);
             });
         },
-        changePage() {
+        /**
+         * 回复成功后的操作
+         * 如果当前的回复不需要翻页，可以不用重新渲染列表
+         * 如果当前的回复条数已经超过一页，可以直接跳转到最后一页
+         */
+        onReplyTopicSuccess(data) {
+            if (this.replyList.length + 1 <= this.per) {
+                const userInfo = User.getInfo();
+                const len = this.replyList.length;
+                const layer = this.replyList[len - 1].layer + 1;
+                this.replyList.push({
+                    ...data,
+                    layer,
+                    user_info: {
+                        id: Number(userInfo.uid),
+                        display_name: userInfo.name,
+                        avatar: userInfo.avatar,
+                    },
+                });
+                this.$nextTick(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                });
+            } else {
+                this.total = this.total + 1;
+                this.page = Math.ceil((this.total + 1) / this.per);
+                this.$nextTick(() => {
+                    this.getReplyList().finally(() => {
+                        window.scrollTo(0, document.body.scrollHeight);
+                    });
+                });
+            }
+        },
+        changePage(page) {
+            this.page = page;
             this.getReplyList();
         },
         getCategoryList() {

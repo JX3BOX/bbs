@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form" class="c-comment-subbox">
+    <el-form ref="form" class="c-comment-subbox m-comment-editor">
         <div class="u-subbox-label">
             回复
             <el-link type="primary" target="_blank" :href="userHref">＠{{ username }}</el-link>
@@ -10,19 +10,17 @@
         </el-form-item>
         <el-form-item>
             <div class="c-comment-tools">
-                <!-- <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i> -->
                 <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
+                <el-button
+                    class="u-publish"
+                    size="mini"
+                    type="primary"
+                    @click="submintReply()"
+                    :disabled="disableSubmitBtn"
+                    >提交</el-button
+                >
+                <el-button size="mini" type="text" @click="hideForm()">收起</el-button>
             </div>
-            <!-- <Uploader
-                v-if="showUploader"
-                ref="uploader"
-                @onFinish="attachmentUploadFinish"
-                @onError="attachmentUplodError"
-            /> -->
-        </el-form-item>
-        <el-form-item>
-            <el-button size="mini" type="primary" @click="submintReply()" :disabled="disableSubmitBtn">提交</el-button>
-            <el-button size="mini" type="text" @click="hideForm()">收起</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -96,16 +94,30 @@ export default {
 </script>
 
 <style lang="less">
-.c-comment-subbox {
+.m-comment-editor {
     margin-bottom: 10px;
     .u-subbox-label {
         margin-bottom: 10px;
         .fz(14px);
         .flex;
-        gap:3px;
+        gap: 3px;
     }
     .el-form-item {
         margin: 0;
+    }
+
+    .u-publish {
+        margin-bottom: 4px;
+        background: #4080ff;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    .c-comment-emotion {
+        display: inline-block;
+        height: 24px;
+        margin: 0 4px 0 0;
+        vertical-align: middle;
     }
 }
 </style>
