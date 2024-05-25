@@ -122,7 +122,6 @@ import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentList } from "@/service/community";
-import { escapeHtml } from "@/utils/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
@@ -251,7 +250,7 @@ export default {
         },
         authorLink,
         async formatContent(val) {
-            const ins = new JX3_EMOTION(escapeHtml(val));
+            const ins = new JX3_EMOTION(val);
             this.renderContent = await ins._renderHTML();
         },
         onShowReply() {

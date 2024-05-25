@@ -53,7 +53,6 @@ import ReplyForReply from "./ReplyForReply.vue";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { replyReply } from "@/service/community";
-import { escapeHtml } from "@/utils/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
 import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
@@ -126,7 +125,7 @@ export default {
     methods: {
         authorLink,
         async formatContent(val) {
-            const ins = new JX3_EMOTION(escapeHtml(val));
+            const ins = new JX3_EMOTION(val);
             this.renderContent = await ins._renderHTML();
         },
         onShowReply() {

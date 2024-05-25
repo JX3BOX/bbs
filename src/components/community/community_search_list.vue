@@ -30,7 +30,7 @@
                             回帖
                         </el-tag>
 
-                        <span class="u-text">{{ item.title || "无标题" }}</span>
+                        <span class="u-text">{{ item.title || item.content || "无内容" }}</span>
                     </a>
                     <span class="u-link">
                         <span class="u-date">{{ item.updated_at }}</span> @ {{ item.author }}
