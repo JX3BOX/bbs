@@ -277,8 +277,31 @@
         .m-community-header__special-list > a {
             padding-left: 8px;
         }
-        .m-community-publish {
-            width: 150px;
-        }
+        // .m-community-publish {
+        //     width: 150px;
+        // }
     }
+}
+
+
+.m-community-pages{
+    overflow: auto;
+}
+@media screen and (max-width:@phone){
+    .m-community-content{
+        padding:15px;
+    }
+    .m-community-header{
+        padding:15px;
+        margin-bottom: 0;
+    }
+    .m-community-header__special-list{
+        .none !important;
+    }
+    .m-community-header__special-box{
+        margin-left:10px;
+    }
+}
+@media screen and (max-width:@ip5){
+
 }

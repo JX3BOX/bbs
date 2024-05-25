@@ -31,6 +31,7 @@
 
                 <!-- 分页 -->
                 <el-pagination
+                    class="m-community-pages"
                     background
                     layout="total, prev, pager, next, jumper"
                     :hide-on-single-page="true"

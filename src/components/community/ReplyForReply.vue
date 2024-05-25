@@ -106,17 +106,18 @@ export default {
         margin: 0;
     }
 
-    .u-publish {
-        margin-bottom: 4px;
-        background: #4080ff;
-        &:hover {
-            opacity: 0.9;
-        }
-    }
+    // .u-publish {
+        // margin-bottom: 4px;
+        // background: #4080ff;
+        // border:none;
+        // &:hover {
+        //     background-color:lighten(#4080ff, 2%);
+        // }
+    // }
     .c-comment-emotion {
         display: inline-block;
         height: 24px;
-        margin: 0 4px 0 0;
+        margin: 0 10px 0 0;
         vertical-align: middle;
     }
 }
