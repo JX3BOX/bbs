@@ -50,9 +50,9 @@
             </span>
 
             <!-- 标签 -->
-            <span v-for="(item, index) in tags" :key="index" class="u-podate u-tag u-sub-block"> {{ item }} </span>
+            <span v-for="(item, index) in tags" :key="index" class="u-tag u-sub-block"> {{ item }} </span>
             <!-- 小册 -->
-            <a v-if="collection" class="u-podate u-book u-sub-block" :href="collection.url" target="_blank">
+            <a v-if="collection" class="u-book u-sub-block" :href="collection.url" target="_blank">
                 <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
                 {{ collection.name }}
             </a>
@@ -285,6 +285,7 @@ export default {
         .u-only-btn {
             position: relative;
             background: rgba(64, 128, 255, 1);
+            border:1px solid rgba(64, 128, 255, 1);
             display: inline-block;
             height: 32px;
             &.u-unset {
@@ -323,7 +324,7 @@ export default {
 .m-single-info {
     margin-top: 10px;
     .clearfix;
-    .fz(14px, 22px);
+    .fz(12px, 22px);
     color: #666;
 
     .u-client {
@@ -347,20 +348,21 @@ export default {
     }
 
     .u-sub-block {
-        .mr(8px);
+        .mr(12px);
         .fl;
     }
 
     .u-status {
         .flex;
-        gap: 4px;
+        gap: 1px;
         align-items: center;
         color: white;
         height: 22px;
-        padding: 4px;
+        padding: 4px 6px;
         border-radius: 4px;
         box-sizing: border-box;
         user-select: none;
+        margin-right: 6px;
         &.top {
             background: rgba(255, 105, 105, 1);
         }
@@ -369,11 +371,14 @@ export default {
         }
     }
     .u-tag {
-        .fz(14px,22px);
-        padding: 0 4px;
+        margin-right: 6px;
+        padding: 0 6px;
         border-radius: 4px;
         background: rgba(227, 242, 255, 1);
         color: rgba(64, 128, 255, 1);
+    }
+    .u-podate{
+        margin-left:10px;
     }
     .u-book {
         .fz(12px,22px);

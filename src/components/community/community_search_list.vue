@@ -1,7 +1,7 @@
 <template>
     <!-- 搜索展示 -->
     <div class="m-search_all">
-        <div>
+        <div class="m-search-toolbar">
             <el-radio-group v-model="filter_name" size="small">
                 <el-radio-button label="community_discussion_topic,community_discussion_topic_reply"
                     >全部</el-radio-button
@@ -9,7 +9,7 @@
                 <el-radio-button label="community_discussion_topic">帖子</el-radio-button>
                 <el-radio-button label="community_discussion_topic_reply">回帖</el-radio-button>
             </el-radio-group>
-            <el-button size="small u-close-btn" @click="closeSearch">关闭搜索</el-button>
+            <el-button size="small" class="u-close-btn" type="info" @click="closeSearch" icon="el-icon-close">关闭搜索</el-button>
         </div>
         <ul class="m-result m-post" v-if="list.length">
             <li class="u-item" v-for="(item, i) in list" :key="i">
@@ -18,22 +18,22 @@
                         <!-- <i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{
                             clientKey(item.client)
                         }}</i> -->
-                        <el-tag class="u-type" size="small" v-if="item.name === 'community_discussion_topic'">
-                            帖子
+                        <el-tag type="warning" class="u-type" size="small" v-if="item.name === 'community_discussion_topic'">
+                            <i class="el-icon-collection-tag"></i> 帖子
                         </el-tag>
                         <el-tag
                             class="u-type"
-                            type="warning"
+                            type="info"
                             size="small"
                             v-if="item.name === 'community_discussion_topic_reply'"
                         >
-                            回帖
+                            <i class="el-icon-chat-line-round"></i> 回帖
                         </el-tag>
 
                         <span class="u-text">{{ item.title || item.content || "无内容" }}</span>
                     </a>
                     <span class="u-link">
-                        <span class="u-date">{{ item.updated_at }}</span> @ {{ item.author }}
+                        <span class="u-date"><i class="el-icon-time"></i> {{ item.updated_at }}</span> <i class="el-icon-user"></i> {{ item.author }}
                     </span>
                 </div>
             </li>
@@ -86,7 +86,7 @@ export default {
 @bg: #f6f8fa;
 @visited: #05037b;
 @pink: #f39;
-@desc: #555;
+@desc: #888;
 @gray: #888;
 @space: 20px;
 @ipad: 1024px;
@@ -166,11 +166,11 @@ export default {
     }
 
     .u-date {
-        background-color: @bg;
-        color: @pink;
+        // background-color: @bg;
+        // color: @pink;
         border-radius: 2px;
         padding: 2px 5px;
-        font-weight: 600;
+        // font-weight: 600;
     }
 
     .u-pic {
@@ -198,5 +198,10 @@ export default {
     .u-type {
         margin-right: 10px;
     }
+}
+
+.m-search-toolbar{
+    .flex;
+    justify-content: space-between;
 }
 </style>

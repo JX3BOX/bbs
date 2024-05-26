@@ -59,7 +59,7 @@ export default {
 
 <style lang="less" scoped>
 .m-search-wrapper {
-    padding: 12px 32px;
+    padding: 20px 32px;
 }
 .m-community-search {
     width: 180px;
