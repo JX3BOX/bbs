@@ -2,7 +2,7 @@
     <el-form ref="form" :model="newComment" class="c-comment-box m-comment-reply">
         <el-form-item>
             <el-input
-                rows="3"
+                rows="6"
                 type="textarea"
                 :maxlength="maxLength"
                 show-word-limit
@@ -165,9 +165,11 @@ export default {
     .u-publish {
         margin-bottom: 4px;
         background: #4080ff;
+        border:1px solid #4080ff;
         &:hover {
             opacity: 0.9;
         }
+        .size(180px,42px);
     }
 }
 </style>

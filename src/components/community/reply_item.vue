@@ -37,7 +37,7 @@
                                 转述
                             </el-button>
                             <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
-                            <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" />
+                            <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
                             <AddBlockButton :post="post" />
                             <ComplaintButton :post="post" />
                             <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
@@ -116,7 +116,7 @@ import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
-import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
+// import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
@@ -134,7 +134,7 @@ export default {
         ReplyForReply,
         CommentItem,
         Article,
-        AddBlackHoleButton,
+        // AddBlackHoleButton,
     },
     provide() {
         return {
