@@ -152,7 +152,7 @@ export default {
             });
         },
         loadMenu() {
-            getConfigBanner({ client: this.client, status: 1, per: 10, type: "bbs", subtype: "sidebar" }).then(
+            getConfigBanner({ client: this.client, status: 1, per: 10, type: "banner", subtype: "bbs" }).then(
                 (res) => {
                     this.slideList = res.data.data.list;
                 }
