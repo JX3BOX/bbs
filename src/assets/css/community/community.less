@@ -1,12 +1,12 @@
 .m-community-content {
-    padding: 32px 30px;
+    padding: 32px 6px;
 }
 
 .m-topic-list {
     width: 100%;
     .m-topic-box {
         break-inside: avoid;
-        margin-right: 48px;
+        margin: 0 24px 0 24px;
         margin-bottom: 24px;
         border-radius: 10px;
         .u-content-aside {
@@ -231,17 +231,13 @@
 .m-community-pages {
     overflow: auto;
 }
-@media screen and (max-width: @pc) {
-    // .m-topic-list {
-    //     column-count: 2;
-    // }
-}
+
 @media screen and (max-width: @ipad) {
     .m-topic-list {
         column-count: unset;
         margin-bottom: 0;
         .m-topic-box {
-            margin-right: 0;
+            margin: 0;
             .m-topic-box__content {
                 flex-direction: column;
             }
@@ -282,9 +278,6 @@
         .m-community-header__special-list > a {
             padding-left: 8px;
         }
-        // .m-community-publish {
-        //     width: 150px;
-        // }
     }
 }
 
