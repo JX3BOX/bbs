@@ -11,7 +11,7 @@
                     </div>
                     <div class="u-content">
                         <Article v-if="isMaster" :content="post.content || ''" />
-                        <div v-else v-html="renderContent" />
+                        <div class="u-layer-reply" v-else v-html="renderContent" />
                     </div>
                 </div>
                 <!-- 打赏 只有主楼有打赏-->
