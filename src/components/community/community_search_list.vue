@@ -1,7 +1,7 @@
 <template>
     <!-- 搜索展示 -->
     <div class="m-search_all">
-        <div class="m-search-toolbar" ref="toolbar" :class="{ 'is-sticky': isSticky }">
+        <div class="m-search-toolbar" ref="toolbar">
             <el-radio-group v-model="filter_name" size="small">
                 <el-radio-button label="community_discussion_topic,community_discussion_topic_reply"
                     >全部</el-radio-button
