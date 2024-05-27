@@ -27,12 +27,12 @@
                     :client="post.client"
                 />
                 <!-- 操作按钮 -->
-                <div>
+                <div class="u-toolbar-box">
                     <div class="u-time">{{ post.created_at || post.updated_at }}</div>
                     <div class="u-toolbar">
                         <div></div>
                         <div>
-                            <el-button type="text" @click="onForward()">
+                            <el-button type="text" v-if="allowForward" @click="onForward()">
                                 <i class="el-icon-copy-document"></i>
                                 转述
                             </el-button>
@@ -40,7 +40,13 @@
                             <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
                             <AddBlockButton :post="post" />
                             <ComplaintButton :post="post" />
-                            <el-button type="primary" size="small" class="u-reply-btn" @click="onShowReply()">
+                            <el-button
+                                type="primary"
+                                size="small"
+                                class="u-reply-btn"
+                                :style="styles"
+                                @click="onShowReply()"
+                            >
                                 <div class="u-btn">
                                     <img src="@/assets/img/community/reply.svg" alt="" />
                                     <span>{{ isMaster ? "跟帖" : "回复" }}</span>
@@ -156,8 +162,20 @@ export default {
         };
     },
     computed: {
+        // 主楼的跟帖按钮占位宽度 * 2
+        styles: function () {
+            if (this.isMaster) {
+                return {
+                    width: "150px",
+                };
+            }
+            return {};
+        },
         id: function () {
             return this.$route.params.id;
+        },
+        allowForward() {
+            return !this.isMaster;
         },
         onlyAuthor: function () {
             const v = this.$route.query.onlyAuthor;

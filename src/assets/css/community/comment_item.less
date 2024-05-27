@@ -26,7 +26,7 @@
             position: relative;
         }
     }
-    .u-time {
+    .u-toolbar-box .u-time {
         text-align: right;
         color: rgba(148, 148, 148, 1);
         font-size: 14px;
@@ -37,6 +37,7 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+
         .el-button {
             height: 32px;
         }
@@ -47,7 +48,13 @@
         }
         .el-button--text {
             padding: 0 11px;
+            opacity: 0.7;
+            &:hover {
+                color: #0366d6;
+                opacity: 1;
+            }
         }
+
         .el-button + .el-button {
             margin-left: 12px;
         }
@@ -97,6 +104,7 @@
         .u-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
         }
         .u-reply-btn {
