@@ -15,7 +15,7 @@
             <!-- <Info /> -->
             <publish-gate slot="op-append" />
             <template #op-prepend>
-                <AdminDrop v-if="isLogin" :is-community="true" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :is-community="true" :post="finalPost" :user-id="user_id" />
             </template>
             <template #title>
                 <span>
@@ -42,15 +42,13 @@
 </template>
 
 <script>
-import Info from "@/components/Info.vue";
 import TopStickyInfo from "@/components/community/top_sticky_info.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
-import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
-import user from "@jx3box/jx3box-common/js/user";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
-    name: "Single",
+    name: "CommunitySingleLayout",
     props: ["post"],
     data: function () {
         return {
@@ -58,15 +56,23 @@ export default {
         };
     },
     computed: {
-        isLogin: function () {
-            return user.isLogin();
+        isTeammate() {
+            return User.isTeammate();
         },
         user_id: function () {
             return this.post ? this.post.user_id : "";
         },
         title() {
-            return this.post ? this.post.post_title : document.title;
+            return this.post ? this.post.title : document.title;
         },
+        finalPost() {
+            return {
+                ...this.post,
+                post_title: this.post.title,
+                ID: this.post.id,
+                post_type: "community",
+            }
+        }
     },
     mounted() {},
     methods: { getAppIcon },
