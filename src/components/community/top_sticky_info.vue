@@ -11,7 +11,7 @@
                     <img svg-inline src="@/assets/img/community/is_star_inline.svg" alt="" />
                 </span>
 
-                <span v-for="(item, index) in tags" :key="index" class="u-tag u-meta u-sub-block"> {{ item }} </span>
+                <span v-for="(item, index) in tags" :key="index" class="u-tag u-meta u-sub-block" :style="{backgroundColor: item.color}"> {{ item.label }} </span>
 
                 <a v-if="collection" class="u-book u-sub-block u-meta" :href="collection.url" target="_blank">
                     <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
@@ -35,13 +35,13 @@ export default {
             if (this.post.collection && this.post.collection.title) {
                 return {
                     name: this.post.collection.title,
-                    url: `/collection/${data.collection_id}`,
+                    url: `/collection/${this.post.collection.id}`,
                 };
             }
             return null;
         },
         tags: function () {
-            return this.post?.tags;
+            return this.post?.color_tag;
         },
         isStar: function () {
             return this.post?.is_star;
