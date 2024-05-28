@@ -16,14 +16,15 @@
         </div>
         <div class="u-box m-topic-box__content">
             <div class="u-content-aside">
-                <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
-                    <img :src="getBanner(data.banner_img)" alt="" srcset="" />
-                </a>
-                <a :href="getPostUrl(data.id)" class="u-title" target="_blank">
+                <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank">
                     <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                     <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                     <span>{{ data.title }}</span>
                 </a>
+                <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
+                    <img :src="getBanner(data.banner_img)" alt="" srcset="" />
+                </a>
+
                 <div v-if="data.tags && data.tags.length" class="m-topic-tag">
                     <span v-for="(item, index) in data.tags" :key="index">
                         {{ item }}
@@ -49,10 +50,15 @@
 
             <a class="u-box-content" :href="getPostUrl(data.id)" target="_blank">
                 <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
+                    <span class="m-topic-title" target="_blank">
+                        <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+                        <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
+                        <span>{{ data.title }}</span>
+                    </span>
                     <div v-html="introduction"></div>
                 </a>
-                <div class="m-topic-imgs">
-                    <a class="m-topic-imgs__item" v-for="(item, index) in data.extra_images" :key="index">
+                <div v-if="data.extra_images && data.extra_images.length" class="m-topic-imgs">
+                    <a class="u-item" v-for="(item, index) in data.extra_images" :key="index">
                         <img :src="getSquareBanner(item)" />
                     </a>
                 </div>

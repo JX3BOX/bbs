@@ -1,5 +1,5 @@
 <template>
-    <div class="m-search-wrapper">
+    <div class="m-search-wrapper" :class="{ 'u-sticky': inSearch }">
         <div :class="`m-community-search ${isFocus && 'is-focus'}`">
             <div class="m-search-button" @click="onSearch">
                 <i class="el-icon-search"></i>
@@ -59,7 +59,12 @@ export default {
 
 <style lang="less" scoped>
 .m-search-wrapper {
+    backdrop-filter: blur(10px);
+    top: 100px;
     padding: 20px 32px;
+}
+.u-sticky {
+    position: sticky;
 }
 .m-community-search {
     width: 180px;

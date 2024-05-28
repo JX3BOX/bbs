@@ -1,7 +1,7 @@
 <template>
     <!-- 搜索展示 -->
     <div class="m-search_all">
-        <div class="m-search-toolbar">
+        <div class="m-search-toolbar" ref="toolbar">
             <el-radio-group v-model="filter_name" size="small">
                 <el-radio-button label="community_discussion_topic,community_discussion_topic_reply"
                     >全部</el-radio-button
@@ -9,16 +9,21 @@
                 <el-radio-button label="community_discussion_topic">帖子</el-radio-button>
                 <el-radio-button label="community_discussion_topic_reply">回帖</el-radio-button>
             </el-radio-group>
-            <el-button size="small" class="u-close-btn" type="info" @click="closeSearch" icon="el-icon-close">关闭搜索</el-button>
+            <el-button size="small" class="u-close-btn" type="info" @click="closeSearch" icon="el-icon-close"
+                >关闭搜索</el-button
+            >
         </div>
         <ul class="m-result m-post" v-if="list.length">
             <li class="u-item" v-for="(item, i) in list" :key="i">
                 <div class="u-info">
                     <a class="u-title" :href="resultLink(item)" target="_blank">
-                        <!-- <i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{
-                            clientKey(item.client)
-                        }}</i> -->
-                        <el-tag type="warning" class="u-type" size="small" v-if="item.name === 'community_discussion_topic'">
+                        <!-- <i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{ clientKey(item.client) }}</i> -->
+                        <el-tag
+                            type="warning"
+                            class="u-type"
+                            size="small"
+                            v-if="item.name === 'community_discussion_topic'"
+                        >
                             <i class="el-icon-collection-tag"></i> 帖子
                         </el-tag>
                         <el-tag
@@ -30,17 +35,19 @@
                             <i class="el-icon-chat-line-round"></i> 回帖
                         </el-tag>
 
-                        <span class="u-text">{{ item.title || item.content || "无内容" }}</span>
+                        <span class="u-text" v-html="highlightText(item.title || item.content || '无内容')"></span>
                     </a>
                     <span class="u-link">
-                        <span class="u-date"><i class="el-icon-time"></i> {{ item.updated_at }}</span> <i class="el-icon-user"></i> {{ item.author }}
+                        <span class="u-date"><i class="el-icon-time"></i> {{ item.updated_at }}</span>
+                        <i class="el-icon-user"></i> {{ item.author }}
                     </span>
                 </div>
             </li>
         </ul>
         <div v-else>
-            <el-alert class="m-null" title="没有搜索到相关数据" type="info" show-icon> </el-alert>
+            <el-alert class="m-null" title="没有搜索到相关数据" type="info" show-icon></el-alert>
         </div>
+        <slot></slot>
     </div>
 </template>
 
@@ -50,6 +57,10 @@ import { __clients, __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "CommunitySearchList",
     props: {
+        keyword: {
+            type: String,
+            default: "",
+        },
         list: {
             type: Array,
             default: () => [],
@@ -78,6 +89,12 @@ export default {
         clientKey(val) {
             return __clients[val];
         },
+        // 高亮搜索关键字
+        highlightText(text) {
+            const regex = new RegExp(`(${this.keyword})`, "gi");
+            text = text.replace(regex, '<span style="background-color: #ffff00; color: #ff0000;">$1</span>');
+            return text;
+        },
     },
 };
 </script>
@@ -97,11 +114,10 @@ export default {
 .m-search_all {
     .r(4px);
     .mb(32px);
-    box-shadow: 0 0 5px #dcdfe6;
     background-color: #fff;
-    padding: 20px;
     .m-result {
-        padding: 0;
+        padding: 0 30px 30px;
+        margin: 0;
         .u-item {
             .w(100%);
             .flex;
@@ -200,8 +216,15 @@ export default {
     }
 }
 
-.m-search-toolbar{
+.m-search-toolbar {
     .flex;
+    padding: 15px 30px;
+    margin: 0 0 20px;
+    // background: white;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 170px;
     justify-content: space-between;
+    border-bottom: 1px solid #eee;
 }
 </style>

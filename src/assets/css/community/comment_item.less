@@ -30,7 +30,7 @@
             white-space: pre-wrap;
         }
     }
-    .u-time {
+    .u-toolbar-box .u-time {
         text-align: right;
         color: rgba(148, 148, 148, 1);
         font-size: 14px;
@@ -41,6 +41,7 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+
         .el-button {
             height: 32px;
         }
@@ -52,6 +53,7 @@
         .el-button--text {
             padding: 0 11px;
         }
+
         .el-button + .el-button {
             margin-left: 12px;
         }
@@ -73,6 +75,14 @@
                 }
             }
         }
+    }
+}
+.m-comment-wrapper{
+    .el-button--text{
+        opacity: 0.7;
+    }
+    &:hover .el-button--text{
+        opacity: 1;
     }
 }
 .m-comment-wrapper__left {
@@ -101,6 +111,7 @@
         .u-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
         }
         .u-reply-btn {

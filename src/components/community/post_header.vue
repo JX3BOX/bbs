@@ -4,6 +4,20 @@
         <div class="m-single-title">
             <span class="u-title u-sub-block">
                 <slot name="title_before"></slot>
+                <div class="m-topic-category-box">
+                    <div
+                        :class="`m-topic-category`"
+                        :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+                    >
+                        <img
+                            v-svg-inline
+                            class="u-icon"
+                            :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                        />
+                        <div>{{ post.category }}</div>
+                    </div>
+                </div>
+
                 <i class="u-private" v-if="post.post_status != 'publish' || !!~~post.visible">
                     <i
                         class="el-icon-lock"
@@ -44,10 +58,10 @@
             </span>
 
             <!-- 帖子分类 -->
-            <span class="u-status u-sub-block" :style="`background-color: ${styles.color};`">
+            <!-- <span class="u-status u-sub-block" :style="`background-color: ${styles.color};`">
                 <img v-svg-inline :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
                 {{ post.category }}
-            </span>
+            </span> -->
 
             <!-- 标签 -->
             <span v-for="(item, index) in tags" :key="index" class="u-tag u-sub-block"> {{ item }} </span>
@@ -77,10 +91,25 @@
             </span>
 
             <!-- 编辑 -->
-            <a class="u-edit u-sub-block" :href="edit_link" v-if="canEdit">
+            <!-- <a class="u-edit u-sub-block" :href="edit_link" v-if="canEdit">
                 <i class="u-icon-edit el-icon-edit-outline"></i>
                 <span>编辑</span>
-            </a>
+            </a> -->
+        </div>
+
+        <div class="u-title-toolbar u-phone-show">
+            <el-button size="small" @click="onEditClick" v-if="isPostOwner" type="warning" icon="el-icon-edit"
+                >编辑</el-button
+            >
+            <el-button
+                size="small"
+                :class="`u-only-btn ${onlyAuthor && 'u-unset'}`"
+                type="primary"
+                @click="setOnlyAuthor(!onlyAuthor)"
+            >
+                <img svg-inline v-show="!onlyAuthor" src="@/assets/img/community/only-author.svg" />
+                {{ onlyAuthor ? "取消只看楼主" : "只看楼主" }}
+            </el-button>
         </div>
     </header>
 </template>
@@ -280,28 +309,40 @@ export default {
         margin-right: 5px;
         color: #111;
     }
-    .u-title-toolbar {
-        .fr;
-        .u-only-btn {
+}
+
+.u-title-toolbar.u-phone-show {
+    display: none;
+    align-items: center;
+    .el-button--small,
+    .el-button--small.is-round {
+        padding: 0 10px;
+        height: 25px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+}
+.u-title-toolbar {
+    .fr;
+    .u-only-btn {
+        position: relative;
+        background: rgba(64, 128, 255, 1);
+        border: 1px solid rgba(64, 128, 255, 1);
+        display: inline-block;
+        height: 32px;
+        &.u-unset {
+            background: rgba(212, 48, 48, 1);
+            border-color: rgba(212, 48, 48, 1);
+        }
+        &:hover {
+            opacity: 0.8;
+        }
+        svg {
+            vertical-align: middle;
             position: relative;
-            background: rgba(64, 128, 255, 1);
-            border:1px solid rgba(64, 128, 255, 1);
-            display: inline-block;
-            height: 32px;
-            &.u-unset {
-                background: rgba(212, 48, 48, 1);
-                border-color: rgba(212, 48, 48, 1);
-            }
-            &:hover {
-                opacity: 0.8;
-            }
-            svg {
-                vertical-align: middle;
-                position: relative;
-                top: -1px;
-                width: 12px;
-                height: 12px;
-            }
+            top: -1px;
+            width: 12px;
+            height: 12px;
         }
     }
 }
@@ -377,8 +418,8 @@ export default {
         background: rgba(227, 242, 255, 1);
         color: rgba(64, 128, 255, 1);
     }
-    .u-podate{
-        margin-left:10px;
+    .u-podate {
+        margin-left: 10px;
     }
     .u-book {
         .fz(12px,22px);
@@ -416,8 +457,6 @@ export default {
         .r(2px);
         font-style: normal;
     }
-    .u-value {
-    }
 
     .u-views {
         i {
@@ -448,9 +487,22 @@ export default {
     }
 }
 @media screen and (max-width: @phone) {
+    .u-title {
+        .u-title-toolbar {
+            display: none;
+        }
+    }
+    .u-title-toolbar.u-phone-show {
+        display: flex;
+        float: unset;
+        padding: 0;
+    }
     .m-single-info {
         .u-podate {
             .none;
+        }
+        & > * {
+            margin-bottom: 8px;
         }
     }
 }

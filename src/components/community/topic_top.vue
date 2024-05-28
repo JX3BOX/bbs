@@ -27,7 +27,7 @@
                     <div class="m-topic-imgs">
                         <a
                             :href="getPostUrl(data.id)"
-                            class="m-topic-imgs__item"
+                            class="u-item"
                             v-for="(item, index) in data.extra_images"
                             :key="index"
                         >
@@ -70,17 +70,25 @@
                 </div>
             </div>
         </div>
+        <!-- 移动端兼容置顶文章 -->
+        <div class="m-topic-list m-topic-hot__mini">
+            <TopicItem :data="data" />
+        </div>
     </div>
 </template>
 
 <script>
 import { getTimeAgo } from "@/utils/dateFormat";
+import TopicItem from "@/components/community/topic_item.vue";
 import { random } from "lodash";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 export default {
     props: ["data"],
     inject: ["getCategoryStyle", "onCategoryChange"],
+    components: {
+        TopicItem,
+    },
     computed: {
         introduction: function () {
             const data = this.data;
@@ -135,3 +143,97 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+.m-topic-hot {
+    margin: 0 24px 24px 24px;
+    .m-topic-hot__left {
+        min-width: 336px;
+        width: 336px;
+        padding-right: 24px;
+        margin-right: 24px;
+        border-right: 1px solid rgba(229, 229, 229, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        .u-cover {
+            cursor: pointer;
+            width: 100%;
+            height: 176px;
+            overflow: hidden;
+            border-radius: 8px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+    .m-topic-hot__right {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        .u-title {
+            margin-bottom: 12px;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 32px;
+            color: #4080ff;
+            font-weight: bold;
+            &:hover {
+                color: rgba(255, 64, 128, 1);
+            }
+            > svg {
+                position: relative;
+                top: -1px;
+                width: 24px;
+                height: 24px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            > svg + svg {
+                margin-left: 8px;
+            }
+            > span {
+                margin-left: 4px;
+            }
+        }
+        .m-topic-tag {
+            margin-bottom: 12px;
+        }
+        .m-topic-collection {
+            margin-bottom: 12px;
+        }
+        .m-topic-userInfo {
+            margin-bottom: 28px;
+            .m-topic-userInfo__avatar {
+                width: 20px;
+                height: 20px;
+            }
+            .m-topic-userInfo__name {
+                font-size: 15px;
+            }
+        }
+
+        .m-topic-content {
+            display: -webkit-box;
+            -webkit-line-clamp: 4; /* 控制显示的行数 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+    }
+}
+.m-topic-hot__mini {
+    display: none;
+}
+@media screen and (max-width: @ipad) {
+    .m-topic-hot {
+        display: none;
+    }
+    .m-topic-hot__mini {
+        display: block;
+    }
+}
+</style>

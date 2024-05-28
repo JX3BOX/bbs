@@ -11,7 +11,8 @@
             :crumbEnable="true"
             :showExtend="true"
         >
-            <Info />
+            <TopStickyInfo :post="post" />
+            <!-- <Info /> -->
             <publish-gate slot="op-append" />
             <template #op-prepend>
                 <AdminDrop v-if="isLogin" :is-community="true" :post="post" :user-id="user_id" />
@@ -31,9 +32,9 @@
                         <Footer></Footer>
                     </div>
 
-                    <div class="m-community-single__right">
+                    <!-- <div class="m-community-single__right">
                         <PostTopic v-if="post.id" type="community" :id="~~post.id" />
-                    </div>
+                    </div> -->
                 </div>
             </Main>
         </div>
@@ -42,6 +43,7 @@
 
 <script>
 import Info from "@/components/Info.vue";
+import TopStickyInfo from "@/components/community/top_sticky_info.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
@@ -71,8 +73,9 @@ export default {
     components: {
         "publish-gate": publishGate,
         AdminDrop,
-        PostTopic,
-        Info,
+        TopStickyInfo,
+        // PostTopic,
+        // Info,
     },
 };
 </script>
