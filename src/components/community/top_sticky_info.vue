@@ -122,8 +122,8 @@ export default {
             .fz(14px,22px);
             padding: 0 6px;
             border-radius: 4px;
-            background: rgba(227, 242, 255, 1);
-            color: rgba(64, 128, 255, 1);
+            background: @color;
+            color: #fff;
         }
         .u-podate {
             margin-left: 10px;
