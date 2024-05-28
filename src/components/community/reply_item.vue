@@ -19,7 +19,7 @@
                     v-if="isMaster"
                     class="m-single-thx"
                     :postId="id"
-                    postType="community"
+                    postType="community_topic"
                     :postTitle="post.title"
                     :userId="post.user_id"
                     :adminBoxcoinEnable="true"
