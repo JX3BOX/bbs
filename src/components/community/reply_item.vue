@@ -167,6 +167,7 @@ export default {
             if (this.isMaster) {
                 return {
                     width: "150px",
+                    height:"38px"
                 };
             }
             return {};
