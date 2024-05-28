@@ -92,7 +92,7 @@ export default {
         // 高亮搜索关键字
         highlightText(text) {
             const regex = new RegExp(`(${this.keyword})`, "gi");
-            text = text.replace(regex, '<span style="background-color: #00ff00; color: #ff0000;">$1</span>');
+            text = text.replace(regex, '<span style="background-color: #ffff00; color: #ff0000;">$1</span>');
             return text;
         },
     },
