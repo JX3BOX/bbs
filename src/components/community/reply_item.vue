@@ -1,13 +1,13 @@
 <template>
-    <div class="m-comment-wrapper" :id="`layer-${post.layer}`">
+    <div class="m-comment-wrapper" :id="`floor-${post.floor}`">
         <div class="m-comment-wrapper__left">
             <CommentUser :uid="userInfo.id" />
         </div>
         <div class="m-comment-wrapper__right">
             <div class="m-comment-wrapper__right-box">
                 <div>
-                    <div class="u-layer">
-                        {{ isMaster ? "楼主" : post.layer + "楼" }}
+                    <div class="u-floor">
+                        {{ isMaster ? "楼主" : post.floor + "楼" }}
                     </div>
                     <div class="u-content">
                         <Article v-if="isMaster" :content="post.content || ''" />

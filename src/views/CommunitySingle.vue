@@ -73,7 +73,7 @@ export default {
     },
     data() {
         return {
-            layer: 0,
+            floor: 0,
             stat: "",
             page: 1, //当前页数
             per: 10, //每页条目
@@ -105,7 +105,7 @@ export default {
         },
     },
     created() {
-        this.getJumpLayer();
+        this.getJumpFloor();
     },
     mounted() {
         if (!this.id) return this.$message.error("文章id不存在");
@@ -136,22 +136,22 @@ export default {
         /**
          * 获取url楼诚参数
          */
-        getJumpLayer: function () {
+        getJumpFloor: function () {
             const hash = window.location.hash;
-            const layer = hash.substring(1).split("?")[0];
-            if (layer) {
-                this.layer = layer;
-                this.page = Math.ceil((this.layer - 1) / this.per);
+            const floor = hash.substring(1).split("?")[0];
+            if (floor) {
+                this.floor = floor;
+                this.page = Math.ceil((floor - 1) / this.per);
             }
         },
         /**
          * 跳转到指定楼层
-         * @param layer 楼层
+         * @param floor 楼层
          */
-        jumpLayer(layer) {
-            const _layer = layer || this.layer;
+        jumpFloor(floor) {
+            const _floor = floor || this.floor;
             this.$nextTick(() => {
-                const el = document.getElementById("layer-" + _layer);
+                const el = document.getElementById("floor-" + _floor);
                 if (el) {
                     el.scrollIntoView();
                     window.scrollBy(0, -120); // 额外滚动
@@ -217,12 +217,11 @@ export default {
                         this.replyList = list.map((item, i) => {
                             return {
                                 ...item,
-                                layer: (page.index - 1) * page.pageSize + i + 2,
                             };
                         });
                         // 如果有楼层参数 跳转到指定楼层
-                        if (this.layer) {
-                            this.jumpLayer();
+                        if (this.floor) {
+                            this.jumpFloor();
                         }
                     }
                     this.total = page.total;
@@ -275,10 +274,8 @@ export default {
             if (this.replyList.length + 1 <= this.per) {
                 const userInfo = User.getInfo();
                 const len = this.replyList.length;
-                const layer = this.replyList[len - 1].layer + 1;
                 this.replyList.push({
                     ...data,
-                    layer,
                     user_info: {
                         id: Number(userInfo.uid),
                         display_name: userInfo.name,

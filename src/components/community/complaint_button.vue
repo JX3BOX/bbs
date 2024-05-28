@@ -28,7 +28,7 @@ export default {
             const replyData = this.getReplyData();
             const userInfo = this.post.user_info || this.post.ext_user_info;
             const user_name = userInfo.display_name;
-            const layerNum = replyData.layer || 0;
+            const layerNum = replyData.floor || 0;
             const layerStr = layerNum ? layerNum + "楼" : "楼主";
 
             this.$prompt(`请输入要举报的内容`, "提示", {

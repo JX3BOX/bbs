@@ -48,7 +48,7 @@
         <div class="m-single-info">
             <slot></slot>
             <span v-if="isTop" class="u-status u-sub-block top">
-                <img svg-inlinesrc="@/assets/img/community/is_top_inline.svg" alt="" />
+                <img svg-inline src="@/assets/img/community/is_top_inline.svg" alt="" />
                 置顶
             </span>
 
@@ -72,7 +72,7 @@
             </a>
 
             <!-- 发布日期 -->
-            <span class="u-podate u-sub-block" :title="'发布日期:' + post_time">
+            <span class="u-sub-block" :title="'发布日期:' + post_time">
                 <i class="u-icon-podate">
                     <img svg-inline src="@jx3box/jx3box-common-ui/assets/img/single/podate.svg" />
                 </i>
@@ -145,7 +145,7 @@ export default {
             if (this.post.collection && this.post.collection.title) {
                 return {
                     name: this.post.collection.title,
-                    url: `/collection/${data.collection_id}`,
+                    url: `/collection/${this.post.collection_id}`,
                 };
             }
             return null;
@@ -423,6 +423,8 @@ export default {
     }
     .u-book {
         .fz(12px,22px);
+        height: 22px;
+        box-sizing: border-box;
         position: relative;
         padding-left: 27px;
         padding-right: 8px;
