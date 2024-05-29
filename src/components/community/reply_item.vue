@@ -346,7 +346,7 @@ export default {
             this.likeCount++;
             if (!this.isLike) {
                 if (this.isMaster) {
-                    postStat("community", this.post.id, "likes");
+                    postStat("community_topic", this.post.id, "likes");
                 } else {
                     postStat("community_reply", this.post.id, "likes");
                 }
