@@ -4,7 +4,7 @@
         <div class="m-single-title">
             <span class="u-title u-sub-block">
                 <slot name="title_before"></slot>
-                <div class="m-topic-category-box">
+                <div class="m-topic-category-box" v-if="styles">
                     <div
                         :class="`m-topic-category`"
                         :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
@@ -187,13 +187,8 @@ export default {
             let item = this.categoryList.find((item) => item.value === this.post.category);
             if (item) {
                 return item;
-            } else {
-                return {
-                    icon: `game`,
-                    hoverColor: "rgba(235, 244, 255, 1)",
-                    color: "rgba(64, 128, 255, 1)",
-                };
             }
+            return null;
         },
     },
     watch: {

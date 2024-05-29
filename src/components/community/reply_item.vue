@@ -1,18 +1,22 @@
 <template>
-    <div class="m-comment-wrapper" :id="`floor-${post.floor}`">
-        <div class="m-comment-wrapper__left">
+    <div class="m-reply-wrapper" :id="`floor-${post.floor}`">
+        <div class="m-reply-left">
             <CommentUser :uid="userInfo.id" />
-        </div>
-        <div class="m-comment-wrapper__right">
-            <div class="m-comment-wrapper__right-box">
+            <div class="u-top-right u-mobile-show">
                 <div>
-                    <div class="u-floor">
-                        {{ isMaster ? "楼主" : post.floor + "楼" }}
-                    </div>
-                    <div class="u-content">
-                        <Article v-if="isMaster" :content="post.content || ''" />
-                        <div v-else v-html="renderContent" />
-                    </div>
+                    <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
+                    <div class="m-reply-time">{{ showTime }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="m-reply-right">
+            <div class="m-reply-content">
+                <div class="u-reply-floor u-mobile-hidden">
+                    {{ isMaster ? "楼主" : post.floor + "楼" }}
+                </div>
+                <div class="u-reply-content">
+                    <Article v-if="isMaster" :content="post.content || ''" />
+                    <div v-else v-html="renderContent" />
                 </div>
                 <!-- 打赏 只有主楼有打赏-->
                 <Thx
@@ -27,46 +31,66 @@
                     :client="post.client"
                 />
                 <!-- 操作按钮 -->
-                <div class="u-toolbar-box">
-                    <div class="u-time">{{ post.created_at || post.updated_at }}</div>
-                    <div class="u-toolbar">
-                        <div></div>
-                        <div>
-                            <el-button type="text" v-if="allowForward" @click="onForward()">
-                                <i class="el-icon-copy-document"></i>
-                                转述
-                            </el-button>
-                            <DeleteButton :post="post" type="reply" :isMaster="isMaster" />
-                            <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
-                            <AddBlockButton :post="post" />
-                            <ComplaintButton :post="post" />
-                            <el-button
-                                type="primary"
-                                size="small"
-                                class="u-reply-btn"
-                                :style="styles"
-                                @click="onShowReply()"
-                            >
-                                <div class="u-btn">
-                                    <img src="@/assets/img/community/reply.svg" alt="" />
-                                    <span>{{ isMaster ? "跟帖" : "回复" }}</span>
-                                </div>
-                            </el-button>
-                            <el-button
-                                v-if="!isMaster"
-                                :disabled="isLike"
-                                type="primary"
-                                size="small"
-                                class="u-praise-btn"
-                                @click="addLike"
-                            >
-                                <div class="u-btn">
-                                    <img src="@/assets/img/community/praise.svg" alt="" />
-                                    <span>赞</span>
-                                    <span>{{ likeCountRender }}</span>
-                                </div>
-                            </el-button>
-                        </div>
+                <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div>
+                <div class="u-reply-toolbar">
+                    <div>
+                        <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
+                        <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
+                        <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
+                        <AddBlockButton class="u-mobile-hidden" :post="post" />
+                        <ComplaintButton class="u-mobile-hidden" :post="post" />
+                        <el-button
+                            type="primary"
+                            size="small"
+                            class="u-reply-btn"
+                            :style="styles"
+                            @click="onShowReply()"
+                        >
+                            <div class="u-btn">
+                                <img src="@/assets/img/community/reply.svg" alt="" />
+                                <span>{{ isMaster ? "跟帖" : "回复" }}</span>
+                            </div>
+                        </el-button>
+                        <el-button
+                            v-if="!isMaster"
+                            :disabled="isLike"
+                            type="primary"
+                            size="small"
+                            class="u-praise-btn"
+                            @click="addLike"
+                        >
+                            <div class="u-btn">
+                                <img src="@/assets/img/community/praise.svg" alt="" />
+                                <span>赞</span>
+                                <span>{{ likeCountRender }}</span>
+                            </div>
+                        </el-button>
+                    </div>
+                    <div>
+                        <el-dropdown class="u-more u-mobile-show" trigger="click" placement="bottom">
+                            <span class="el-dropdown-link">
+                                <i class="el-icon-more"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>
+                                    <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <DeleteButton
+                                        class="u-mobile-hidden"
+                                        :post="post"
+                                        type="reply"
+                                        :isMaster="isMaster"
+                                    />
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <AddBlockButton class="u-mobile-hidden" :post="post" />
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <ComplaintButton class="u-mobile-hidden" :post="post" />
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </div>
                 </div>
                 <!-- 回复的输入框 ，判断主楼不需要展示主楼是跟帖 -->
@@ -91,7 +115,7 @@
                 </div>
             </div>
             <!-- 评论列表 -->
-            <div v-if="!isMaster && commentList.length" class="m-reply-list">
+            <div v-if="!isMaster && commentList.length" class="m-comment-list">
                 <CommentItem v-for="item in commentList" :key="item.id" :post="item" />
             </div>
 
@@ -122,11 +146,13 @@ import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
 import AddBlockButton from "@/components/community/add_block_button.vue";
+import ForwardButton from "@/components/community/forward_button.vue";
 // import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
 import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
+import dayjs from "dayjs";
 
 export default {
     name: "ReplyItem",
@@ -134,6 +160,7 @@ export default {
     props: ["isMaster", "post"],
     components: {
         DeleteButton,
+        ForwardButton,
         ComplaintButton,
         AddBlockButton,
         CommentUser,
@@ -162,6 +189,10 @@ export default {
         };
     },
     computed: {
+        showTime: function () {
+            const time = this.post.created_at || this.post.updated_at;
+            return dayjs(time).format("YYYY-MM-DD HH:mm:ss");
+        },
         // 主楼的跟帖按钮占位宽度 * 2
         styles: function () {
             if (this.isMaster) {
@@ -173,9 +204,6 @@ export default {
         },
         id: function () {
             return this.$route.params.id;
-        },
-        allowForward() {
-            return !this.isMaster;
         },
         onlyAuthor: function () {
             const v = this.$route.query.onlyAuthor;
@@ -349,5 +377,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/assets/css/community/comment_item.less";
+@import "~@/assets/css/community/reply_item.less";
 </style>

@@ -1,17 +1,31 @@
 <template>
-    <div class="m-topic-box">
+    <div class="m-topic-box" :class="{ is_hight: data.is_hight }">
         <div class="m-topic-top">
             <div class="m-topic-top__time">
                 <i :class="getTimeAgo(data.updated_at).icon"></i>
                 <span>{{ getTimeAgo(data.updated_at).text }} </span>
             </div>
-            <div
-                @click="onCategoryChange(data.category)"
-                :class="`m-topic-category`"
-                :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
-            >
-                <img v-svg-inline class="u-icon" :src="require(`@/assets/img/community/category/${styles.icon}.svg`)" />
-                <div>{{ data.category }}</div>
+            <div class="m-topic-top_right">
+                <div class="u-item">
+                    <img svg-inline src="@/assets/img/community/talk.svg" alt="" />
+                    {{ data.reply_count || 0 }}
+                </div>
+                <div class="u-item">
+                    <img svg-inline src="@/assets/img/community/like.svg" alt="" />
+                    {{ data.agree_count || 0 }}
+                </div>
+                <div
+                    @click="onCategoryChange(data.category)"
+                    :class="`m-topic-category`"
+                    :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
+                >
+                    <img
+                        v-svg-inline
+                        class="u-icon"
+                        :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
+                    />
+                    <div>{{ data.category }}</div>
+                </div>
             </div>
         </div>
         <div class="u-box m-topic-box__content">
@@ -22,7 +36,7 @@
                     <span>{{ data.title }}</span>
                 </a>
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
-                    <img :src="getBanner(data.banner_img)" alt="" srcset="" />
+                    <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
                 </a>
 
                 <div v-if="data.tags && data.tags.length" class="m-topic-tag">

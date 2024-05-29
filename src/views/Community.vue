@@ -9,7 +9,7 @@
                 <CommunitySearchList
                     :list="searchList"
                     @search="onSearch"
-                    @close="onCloseSearch"
+                    @close="closeSearch"
                     :keyword="searchParams.q"
                 >
                     <!-- 分页 -->
@@ -71,7 +71,6 @@ import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
 import CommunitySearchList from "@/components/community/community_search_list.vue";
 import CommunityPagination from "@/components/community/community_pagination.vue";
-import throttle from "lodash/throttle";
 const filter_name = `community_discussion_topic,community_discussion_topic_reply`;
 export default {
     components: {
@@ -162,13 +161,14 @@ export default {
             const paginationRef = this.$refs.paginationRef;
             if (paginationRef && this.hasNextPage) {
                 const y = paginationRef.$el.offsetTop;
-                if (window.scrollY + window.innerHeight > y) {
+                // 判断高度是否达到触发 自动下拉加载的要求 && 不能处于加载状态
+                if (window.scrollY + window.innerHeight > y && this.loading === false) {
                     this.appendPage();
                 }
             }
         },
-        // 关闭搜索，重置数据
-        onCloseSearch() {
+        // 关闭搜索，重置数据 && 加载展示
+        closeSearch() {
             this.isSearch = false;
             this.page = 1;
             this.total = 0;
@@ -197,6 +197,7 @@ export default {
         },
         // 搜索触发
         onSearch(params) {
+            // 展示搜索界面
             this.isSearch = true;
             // 初始化分页数据 s
             this.page = 1;
@@ -215,10 +216,7 @@ export default {
         // 切换展示分类
         onCategoryChange: function (category) {
             this.category = category;
-            if (this.$refs.searchInput) {
-                this.$refs.searchInput.closeSearch();
-            }
-            this.loadData();
+            this.closeSearch();
         },
         // 翻页加载
         changePage: function () {
@@ -232,14 +230,14 @@ export default {
         replaceRoute: function (extend) {
             return this.$router.push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) });
         },
-        // 追加加载 节流
-        appendPage: throttle(function () {
+        // 追加加载
+        appendPage: function () {
             if (this.isSearch) {
                 this.loadSearchData(true);
             } else {
                 this.loadData(true);
             }
-        }, 500),
+        },
         // 构建最终请求参数
         buildQuery: function (appendMode) {
             if (appendMode) {

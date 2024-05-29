@@ -143,7 +143,7 @@ export default {
         }
     }
 }
-@media screen and (max-width: 720px) {
+@media screen and (max-width: @ipad) {
     .m-search-wrapper {
         padding: 12px 15px;
     }

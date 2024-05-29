@@ -1,48 +1,63 @@
 <template>
     <div class="m-comment-wrapper">
-        <div class="m-comment-wrapper__right">
-            <div class="m-comment-wrapper__right-box">
-                <div class="m-reply-user">
-                    <img class="u-avatar" :src="userInfo.avatar" />
+        <div class="m-comment-right">
+            <img class="u-avatar" :src="userInfo.avatar" />
+            <div class="m-comment-content">
+                <div class="u-content-top">
+                    <div class="u-name">
+                        <a :href="authorLink(userInfo.id)" alt="用户名">{{ userInfo.display_name }}</a>
+                        <span class="m-comment-time u-mobile-show">{{ post.updated_at }}</span>
+                    </div>
                     <div>
-                        <a class="u-name" :href="authorLink(userInfo.id)">{{ userInfo.display_name }}</a>
-                        <p class="u-reply-user">
-                            回复 {{ replyUserInfo.display_name }}：
-                            <!-- <a :href="authorLink(replyUserInfo.id)">{{ replyUserInfo.display_name }}</a> ： -->
-                        </p>
-                        <p class="u-content" v-html="renderContent"></p>
-                        <div class="u-toolbar">
-                            <div>
-                                <el-button type="text" size="small" @click="addLike" class="">
-                                    <div class="u-btn-content">
-                                        <i :class="`u-like-icon ${isLike && 'is-like'}`">{{ isLike ? "♥" : "♡" }}</i>
-                                        {{ isLike ? "已赞" : "赞" }}
-                                        <span class="u-count" v-if="likeCount"> ({{ likeCountRender }})</span>
-                                    </div>
-                                </el-button>
-                                <el-button type="text" size="small" @click="onShowReply">
-                                    <i class="el-icon-chat-round"></i>
-                                    <span>回复</span>
-                                </el-button>
-                            </div>
-                            <div>
-                                <DeleteButton :post="post" type="comment" />
-                                <!-- <AddBlackHoleButton :post="post" type="comment" /> -->
-                                <AddBlockButton :post="post" />
-                                <ComplaintButton :post="post" />
-                                <span class="u-time">{{ post.updated_at }}</span>
-                            </div>
-                        </div>
-                        <span class="u-time u-mobile-time">{{ post.updated_at }}</span>
-                        <ReplyForReply
-                            v-if="showReplyForReplyFrom"
-                            :username="userInfo.display_name"
-                            :user-href="authorLink(userInfo.id)"
-                            @hideForm="showReplyForReplyFrom = false"
-                            @doReply="doReply"
-                        />
+                        <el-dropdown class="u-more u-mobile-show" trigger="click" placement="bottom">
+                            <span class="el-dropdown-link">
+                                <i class="el-icon-more"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>
+                                    <DeleteButton :post="post" type="comment" />
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <AddBlockButton :post="post" />
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <ComplaintButton :post="post" />
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </div>
                 </div>
+                <p class="u-answer-user">回复 {{ replyUserInfo.display_name }}：</p>
+                <p class="u-content" v-html="renderContent"></p>
+                <div class="u-comment-toolbar">
+                    <div>
+                        <el-button type="text" size="small" @click="addLike" class="">
+                            <div class="u-btn-content">
+                                <i :class="`u-like-icon ${isLike && 'is-like'}`">{{ isLike ? "♥" : "♡" }}</i>
+                                {{ isLike ? "已赞" : "赞" }}
+                                <span class="u-count" v-if="likeCount"> ({{ likeCountRender }})</span>
+                            </div>
+                        </el-button>
+                        <el-button type="text" size="small" @click="onShowReply">
+                            <i class="el-icon-chat-round"></i>
+                            <span>回复</span>
+                        </el-button>
+                    </div>
+                    <div class="u-mobile-hidden">
+                        <DeleteButton :post="post" type="comment" />
+                        <!-- <AddBlackHoleButton :post="post" type="comment" /> -->
+                        <AddBlockButton :post="post" />
+                        <ComplaintButton :post="post" />
+                        <span class="m-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
+                    </div>
+                </div>
+                <ReplyForReply
+                    v-if="showReplyForReplyFrom"
+                    :username="userInfo.display_name"
+                    :user-href="authorLink(userInfo.id)"
+                    @hideForm="showReplyForReplyFrom = false"
+                    @doReply="doReply"
+                />
             </div>
         </div>
     </div>
@@ -165,19 +180,5 @@ export default {
 </script>
 
 <style lang="less">
-.u-btn-content {
-    .u-like-icon {
-        font-weight: 500;
-        font-size: 16px;
-        font-family: BlinkMacSystemFont, Helvetica;
-    }
-    .is-like {
-        color: red;
-    }
-    &:hover {
-        .u-like-icon {
-            color: red;
-        }
-    }
-}
+@import "~@/assets/css/community/comment_item.less";
 </style>

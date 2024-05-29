@@ -12,7 +12,7 @@
             ></el-input>
             <div class="c-comment-tools">
                 <div class="u-tools">
-                    <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i>
+                    <!-- <i class="el-icon-picture-outline u-upload-icon" @click="showUploader = !showUploader"></i> -->
                     <Emotion class="c-comment-emotion" @selected="handleEmotionSelected" type="pop" :max="6"></Emotion>
                     <quickReply @reply="onQuickReply"></quickReply>
                 </div>
@@ -22,13 +22,13 @@
                     >跟帖</el-button
                 >
             </div>
-            <Uploader
+            <!-- <Uploader
                 class="u-uploader"
                 ref="uploader"
                 @onFinish="attachmentUploadFinish"
                 @onError="attachmentUplodError"
                 v-if="showUploader"
-            />
+            /> -->
         </el-form-item>
     </el-form>
 </template>
@@ -41,7 +41,7 @@ import quickReply from "./quick-reply.vue";
 export default {
     name: "CommentInputForm",
     components: {
-        Uploader,
+        // Uploader,
         Emotion,
         quickReply,
     },
@@ -165,7 +165,7 @@ export default {
     .u-publish {
         margin-bottom: 4px;
         background: #4080ff;
-        border:1px solid #4080ff;
+        border: 1px solid #4080ff;
         &:hover {
             opacity: 0.9;
         }

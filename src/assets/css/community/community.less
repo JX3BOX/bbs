@@ -4,13 +4,13 @@
 
 // 帖子列表
 .m-topic-list {
+    // 帖子item 外包装
     .m-topic-box {
-        break-inside: avoid;
         margin: 0 24px 0 24px;
         margin-bottom: 24px;
         border-radius: 10px;
+        // 帖子item 左侧
         .u-content-aside {
-            min-width: 168px;
             width: 168px;
             padding-right: 16px;
             border-right: 1px solid rgba(229, 229, 229, 1);
@@ -31,20 +31,22 @@
                 background-repeat: no-repeat;
                 background-position: center;
                 cursor: pointer;
-                img {
+                .el-image {
                     width: 100%;
                     height: 100%;
+                }
+                img {
                     object-fit: cover;
                 }
             }
         }
+        // 帖子item 右侧
         .u-box-content {
             .flex;
             flex-direction: column;
             flex: 1;
             justify-content: space-between;
             overflow: hidden;
-
             &:hover {
                 .m-topic-title {
                     color: rgba(255, 64, 128, 1);
@@ -54,15 +56,72 @@
     }
 }
 
+// 顶部左侧时间与右侧分类展示
+.m-topic-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    .m-topic-top__time {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: rgba(122, 122, 122, 1);
+        .u-timeload-icon {
+            width: 12px;
+            height: 12px;
+        }
+    }
+    .m-topic-top_right {
+        display: flex;
+        gap: 24px;
+        .u-item {
+            .flex;
+            gap: 5px;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(122, 122, 122, 1);
+        }
+        .m-topic-category {
+            padding: 3px 12px;
+            font-size: 12px;
+            border-radius: 12px 12px 12px 0px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            align-items: center;
+            user-select: none;
+            cursor: pointer;
+            color: @color;
+            & > div {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}
+// 帖子item 外包装
 .m-topic-box {
     .m-topic-box__content {
+        .flex;
         background: white;
-        display: flex;
         padding: 20px;
         border-radius: 6px;
         border: 1px solid rgba(232, 232, 232, 1);
         &:hover {
             border-color: @color-link;
+        }
+    }
+    &.is_hight {
+        // list中的标题
+        .m-topic-title {
+            color: rgba(255, 64, 128, 1);
+        }
+        // 置顶的标题
+        &.m-topic-hot .m-topic-hot__right .u-title {
+            color: rgba(255, 64, 128, 1);
         }
     }
 }
@@ -154,42 +213,6 @@
     }
 }
 
-// 顶部左侧时间与右侧分类展示
-.m-topic-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
-    .m-topic-top__time {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        color: rgba(122, 122, 122, 1);
-        .u-timeload-icon {
-            width: 12px;
-            height: 12px;
-        }
-    }
-    .m-topic-category {
-        padding: 3px 12px;
-        font-size: 12px;
-        border-radius: 12px 12px 12px 0px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-weight: 700;
-        align-items: center;
-        user-select: none;
-        cursor: pointer;
-        color: @color;
-        & > div {
-            display: flex;
-            align-items: center;
-        }
-    }
-}
-
 // 左侧用户信息
 .m-topic-userInfo {
     & > a {
@@ -221,11 +244,6 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
-.m-community-header__popover[x-placement^="top"] {
-    .popper__arrow {
-        border-top-color: #eee;
-    }
-}
 // 分页
 .m-topic-pagination {
     margin: 0 24px;
@@ -293,11 +311,12 @@
         }
     }
 }
-
-@media screen and (max-width: @phone) {
+@media screen and (max-width: @ipad) {
     .m-community-content {
         padding: 15px;
     }
+}
+@media screen and (max-width: @phone) {
     .m-community-header {
         padding: 15px;
         margin-bottom: 0;
@@ -308,6 +327,4 @@
     .m-community-header__special-box {
         margin-left: 10px;
     }
-}
-@media screen and (max-width: @ip5) {
 }

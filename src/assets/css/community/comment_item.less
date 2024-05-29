@@ -1,64 +1,8 @@
+// 回复 外包装
 .m-comment-wrapper {
-    display: flex;
-    color: rgba(36, 41, 46, 1);
-    margin-bottom: 12px;
-    background: white;
-    padding: 16px 0;
-    border-radius: 0 0 10px 10px;
-    .m-comment-wrapper {
-        margin-left: 24px;
-    }
-    .u-floor {
-        .pr;
-        .bold;
-        color: @color-link;
-        line-height: 32px;
-        font-size: 16px;
-        margin-bottom: 12px;
-    }
-
-    .u-content {
-        font-size: 16px;
-        line-height: 28px;
-        margin-bottom: 24px;
-        img {
-            vertical-align: middle;
-            position: relative;
-        }
-    }
-    .u-time {
-        text-align: right;
-        color: rgba(148, 148, 148, 1);
-        font-size: 14px;
-        margin-bottom: 24px;
-        margin-left: 12px;
-    }
-    .u-toolbar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        .el-button {
-            height: 32px;
-        }
-        .u-btn-content {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-        .el-button--text {
-            padding: 0 11px;
-        }
-
-        .el-button + .el-button {
-            margin-left: 12px;
-        }
-        .u-toolbar__left {
-            display: flex;
-        }
-        .u-time {
-            margin-bottom: 0;
-        }
-    }
+    background: #fafafa;
+    border-left: 1px solid #e8e8e8;
+    margin-bottom: 4px;
     .u-reply-box {
         .u-reply-list {
             padding: 12px;
@@ -72,97 +16,7 @@
         }
     }
 }
-.m-comment-wrapper{
-    .el-button--text{
-        opacity: 0.7;
-    }
-    &:hover .el-button--text{
-        opacity: 1;
-    }
-}
-.m-comment-wrapper__left {
-    padding: 0 24px;
-    width: 220px;
-}
-.m-comment-wrapper__right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid rgba(232, 232, 232, 1);
-    padding: 0 24px;
-    .u-box {
-        padding-bottom: 8px;
-        margin-left: 25px;
-        border-bottom: 1px solid rgba(232, 232, 232, 1);
-    }
-    .u-toolbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-        .el-button--text {
-            margin-left: 0 !important;
-        }
-        .u-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-        .u-reply-btn {
-            background: rgba(64, 128, 255, 1);
-            border-color: rgba(64, 128, 255, 1);
-            &:hover {
-                opacity: 0.8;
-            }
-        }
-        .u-praise-btn {
-            background: rgba(255, 112, 146, 1);
-            border-color: rgba(255, 112, 146, 1);
-            &.is-disabled {
-                opacity: 0.5;
-            }
-            &:not(.is-disabled):hover {
-                opacity: 0.8;
-            }
-        }
-    }
-    .m-comment-collapse {
-        font-size: 14px;
-        color: rgba(166, 166, 166, 1);
-        padding-bottom: 8px;
-        border-bottom: 1px solid rgba(232, 232, 232, 1);
-        margin-bottom: 4px;
-        & > div {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-            cursor: pointer;
-        }
-    }
-}
-.m-comment-toggle {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    line-height: 20px;
-    color: rgba(166, 166, 166, 1);
-    cursor: pointer;
-    margin-bottom: 8px;
-}
-
-.m-comment-wrapper__right-box {
-    border-radius: 0 6px 6px 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.m-reply-user {
+.m-comment-right {
     display: flex;
     gap: 16px;
     padding: 10px;
@@ -171,138 +25,117 @@
         height: 48px;
         border-radius: 50%;
     }
-    .u-name {
-        color: rgba(64, 128, 255, 1);
-        font-weight: bold;
-        line-height: 20px;
-        margin: 0;
-        cursor: pointer;
-        &:hover {
-            color: @pink;
+}
+// 包含回复内容 、时间、操作按钮 的主要展示区域
+.m-comment-content {
+    flex: 1;
+    .u-content-top {
+        display: flex;
+        justify-content: space-between;
+        // 这条回复的作者名字
+        .u-name {
+            .flex;
+            .fz(14px, 20px);
+            color: #4080ff;
+            font-weight: 700;
+            margin: 0;
+            margin-bottom: 4px;
+            gap: 4px;
+            a:hover {
+                color: #f39;
+            }
+            .m-comment-time {
+                margin: 0;
+                font-size: 12px;
+                font-weight: normal;
+            }
+        }
+        // 会在移动端显示 更多操作
+        .u-more {
+            color: #0366d6;
         }
     }
-    .u-reply-user {
-        margin: 4px 0 0 0;
-        line-height: 28px;
-        font-size: 14px;
+
+    // 回复的用户
+    .u-answer-user {
+        .fz(14px, 28px);
+        margin: 0;
         color: #888;
     }
+    // 回复的内容
     .u-content {
+        margin-bottom: 4px;
+        padding-right: 0;
+        font-size: 14px;
         margin: 0 0 4px 0;
     }
-    > div {
-        flex: 1;
-    }
-    .u-toolbar {
-        margin-top: 5px;
-        > div {
-            .flex;
-            gap: 15px;
-        }
-    }
-    .u-count {
-        .fz(12px);
-        color: #999;
-    }
-}
-
-.m-reply-list {
-    margin-top: 8px;
-    .m-comment-wrapper {
-        padding: 0;
-        margin: 0;
-    }
-    .m-comment-wrapper__right {
-        border-left: 0;
-        padding: 0;
-    }
-    .m-comment-wrapper__right-box {
-        border-bottom: 0;
-        padding-top: 12px;
-        background: rgba(250, 250, 250, 1);
-        border-left: 1px solid rgba(232, 232, 232, 1);
-        margin-bottom: 6px;
-    }
-    .u-time {
-        margin-right: 12px;
-    }
-    .u-toolbar {
-        margin-bottom: 12px;
-        .el-button {
-            font-size: 14px;
-            height: auto;
-        }
-        .el-button--text {
-            padding: 0;
-        }
-    }
-    .u-mobile-time {
-        display: none;
-    }
-}
-.m-single-thx {
-    padding: 40px 0;
-}
-
-@media screen and (max-width: @ipad) {
-    .m-reply-list {
-        margin-left: 0;
-    }
-
-    .m-comment-wrapper {
-        display: block;
-        padding: 16px 12px;
-        .u-time {
-            margin-bottom: 12px;
-        }
-        .u-mobile-time {
-            display: block;
-            margin: 8px 0 12px 0;
-        }
-        .m-comment-wrapper__left {
-            padding: 0;
-        }
-        .m-comment-wrapper {
-            margin: 0;
-            .u-avatar {
-                display: none;
+    // 操作 工具栏
+    .u-comment-toolbar {
+        .flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 15px;
+        flex-wrap: wrap;
+        // like 按钮 爱心
+        .u-btn-content {
+            .u-like-icon {
+                font-weight: 500;
+                font-size: 16px;
+                font-family: BlinkMacSystemFont, Helvetica;
             }
-            .u-toolbar {
-                margin-bottom: 0;
-                .u-time {
-                    display: none;
-                    margin-bottom: 12px;
+            .is-like {
+                color: red;
+            }
+            &:hover {
+                .u-like-icon {
+                    color: red;
                 }
             }
         }
-        .u-floor {
-            margin-bottom: 0;
+        .m-comment-time {
+            margin: 0 12px;
         }
-        .u-content {
-            margin-bottom: 4px;
-            padding-right: 0;
-            font-size: 14px;
+        .el-button {
+            padding: 0;
+            height: 32px;
+        }
+        // 文本按钮
+        .el-button--text {
+            font-size: 12px;
+            opacity: 0.7;
+            &:not(.is-disabled):hover {
+                color: #0366d6;
+                opacity: 1;
+            }
+        }
+        // 按钮之间的间距
+        .el-button + .el-button {
+            margin-left: 12px;
         }
     }
-    .m-comment-wrapper__left {
-        padding: 0 12px;
-    }
-    .m-comment-wrapper__right {
-        border: 0;
-        padding: 0;
-    }
-    .m-comment-wrapper__right-box {
-        border: 0;
-        margin: 0;
-        padding: 0;
-    }
-    .m-reply-user {
-        padding-left: 12px;
-        .u-name {
-            font-size: 14px;
+}
+
+.m-comment-time {
+    font-size: 14px;
+    color: #949494;
+}
+
+.u-mobile-show {
+    display: none;
+}
+
+@media screen and (max-width: @phone) {
+    .m-comment-right {
+        .u-avatar {
+            display: none;
         }
-        .u-reply-user {
-            font-size: 14px;
+    }
+    .u-mobile-show {
+        display: block;
+    }
+    .m-comment-wrapper {
+        .u-mobile-hidden {
+            display: none;
         }
     }
 }

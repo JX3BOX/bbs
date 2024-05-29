@@ -29,10 +29,7 @@
         color: #888;
         font-weight: 300;
     }
-    .m-pagination-box {
-        display: flex;
-        justify-content: flex-end;
-    }
+
     .m-community-footer {
         background: white;
     }
@@ -44,6 +41,10 @@
 
 @media screen and (max-width: @ipad) {
     .m-community-single {
+        .m-pagination-box {
+            display: flex;
+            justify-content: flex-end;
+        }
         .m-single-header {
             margin: 0;
         }
@@ -53,7 +54,7 @@
         }
         .m-pagination-box {
             display: block;
-            padding: 0 12px;
+            padding: 0;
             overflow: scroll;
             padding-bottom: 15px;
         }
