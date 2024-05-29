@@ -268,12 +268,6 @@ export default {
         },
     },
     methods: {
-        onForward() {
-            this.onReplyTopic({
-                content: this.post.content,
-                attachmentList: this.post.attachmentList,
-            });
-        },
         onCollapseChange() {
             if (this.isCollapse) {
                 this.commentList = this.post.comments;

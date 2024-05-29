@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-upload
-            action="https://cms.jx3box.com/api/cms/upload"
+            :action="url"
             ref="upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
@@ -29,9 +29,13 @@
 </template>
 
 <script>
+import { __cms } from "@jx3box/jx3box-common/data/jx3box.json";
+const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
+const API = API_Root + "api/cms/upload";
 export default {
     data() {
         return {
+            url: API,
             dialogImageUrl: "",
             dialogVisible: false,
             fileList: [],
@@ -81,16 +85,20 @@ export default {
         },
         onSuccess(response) {
             this.successList = this.successList.concat(response.data);
-            if (this.successList.length == this.fileList.length) {
-                this.$emit("onFinish", this.successList || []);
-                this.fileList = [];
-                this.successList = [];
+            if (response.code === 0) {
+                if (this.successList.length == this.fileList.length) {
+                    this.$emit("onFinish", this.successList || []);
+                    this.fileList = [];
+                    this.successList = [];
+                }
+            } else {
+                this.onError(response.msg);
             }
         },
-        onError() {
+        onError(msg) {
             this.$notify({
                 title: "",
-                message: "图片上传失败!",
+                message: msg || "图片上传失败!",
                 type: "error",
                 duration: 3000,
                 position: "bottom-right",

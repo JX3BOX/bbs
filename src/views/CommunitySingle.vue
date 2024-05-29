@@ -256,11 +256,18 @@ export default {
         },
         /** 回帖 */
         onReplyTopic({ attachmentList, content }) {
+            console.log(attachmentList);
             if (!this.id) return this.$message.error("文章id不存在");
+            // 拼接图片列表到 content 中
+            if (attachmentList && attachmentList.length) {
+                const imageTags = attachmentList
+                    .map((image) => `<p><img class='attachment' src="${image}" /></p>`)
+                    .join("");
+                content += imageTags;
+            }
             replyTopic(this.id, {
                 client: location.href.includes("origin") ? "origin" : "std",
                 content: content,
-                extra_images: attachmentList,
             }).then((res) => {
                 this.onReplyTopicSuccess(res.data.data);
             });
@@ -273,7 +280,6 @@ export default {
         onReplyTopicSuccess(data) {
             if (this.replyList.length + 1 <= this.per) {
                 const userInfo = User.getInfo();
-                const len = this.replyList.length;
                 this.replyList.push({
                     ...data,
                     user_info: {

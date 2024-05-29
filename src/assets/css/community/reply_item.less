@@ -80,9 +80,19 @@
     .u-reply-content {
         .fz(16px, 28px);
         margin-bottom: 24px;
+        white-space: pre-line;
+        p {
+            margin: 0;
+        }
         img {
             vertical-align: middle;
             position: relative;
+            &.attachment {
+                height: auto;
+                padding: 5px;
+                border: 1px solid #eee;
+                margin: 5px 0;
+            }
         }
     }
 }
