@@ -47,11 +47,6 @@
             flex: 1;
             justify-content: space-between;
             overflow: hidden;
-            &:hover {
-                .m-topic-title {
-                    color: rgba(255, 64, 128, 1);
-                }
-            }
         }
     }
 }
@@ -112,6 +107,15 @@
         border: 1px solid rgba(232, 232, 232, 1);
         &:hover {
             border-color: @color-link;
+            .m-topic-title {
+                color: rgba(255, 64, 128, 1);
+            }
+            // 置顶贴的标题
+            .m-topic-hot__right {
+                .u-title {
+                    color: rgba(255, 64, 128, 1);
+                }
+            }
         }
     }
     &.is_hight {
