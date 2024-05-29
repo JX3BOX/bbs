@@ -64,7 +64,7 @@
             </span> -->
 
             <!-- 标签 -->
-            <span v-for="(item, index) in tags" :key="index" class="u-tag u-sub-block"> {{ item }} </span>
+            <span v-for="(item, index) in tags" :key="index" class="u-tag u-sub-block" :style="{backgroundColor: item.color}"> {{ item.label }} </span>
             <!-- 小册 -->
             <a v-if="collection" class="u-book u-sub-block" :href="collection.url" target="_blank">
                 <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
@@ -151,7 +151,7 @@ export default {
             return null;
         },
         tags: function () {
-            return this.post?.tags;
+            return this.post?.color_tag || [];
         },
         isStar: function () {
             return this.post?.is_star;
@@ -410,8 +410,8 @@ export default {
         margin-right: 6px;
         padding: 0 6px;
         border-radius: 4px;
-        background: rgba(227, 242, 255, 1);
-        color: rgba(64, 128, 255, 1);
+        background: @color;
+        color: #fff;
     }
     .u-podate {
         margin-left: 10px;
