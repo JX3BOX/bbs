@@ -35,7 +35,7 @@ export default {
             if (this.post.collection && this.post.collection.title) {
                 return {
                     name: this.post.collection.title,
-                    url: `/collection/${this.post.collection.id}`,
+                    url: `/collection/${this.post.collection_id}`,
                 };
             }
             return null;
