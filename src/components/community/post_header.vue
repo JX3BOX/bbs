@@ -64,7 +64,14 @@
             </span> -->
 
             <!-- 标签 -->
-            <span v-for="(item, index) in tags" :key="index" class="u-tag u-sub-block" :style="{backgroundColor: item.color}"> {{ item.label }} </span>
+            <span
+                v-for="(item, index) in tags"
+                :key="index"
+                class="u-tag u-sub-block"
+                :style="{ backgroundColor: item.color }"
+            >
+                {{ item.label }}
+            </span>
             <!-- 小册 -->
             <a v-if="collection" class="u-book u-sub-block" :href="collection.url" target="_blank">
                 <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
