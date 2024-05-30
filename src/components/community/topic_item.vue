@@ -101,9 +101,7 @@ export default {
                     color: this.data.hight_color,
                 };
             } else {
-                return {
-                    color: "#0366d6",
-                };
+                return {};
             }
         },
         styles: function () {
