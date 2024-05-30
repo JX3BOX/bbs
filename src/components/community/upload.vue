@@ -43,7 +43,7 @@ export default {
 
             acceptedExtensions: ["jpg", "jpeg", "png", "gif"],
             maxCount: 5,
-            maxSize: 2 * 1024 * 1024,
+            maxSize: 10 * 1024 * 1024,
         };
     },
     methods: {

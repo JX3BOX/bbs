@@ -1,5 +1,5 @@
 <template>
-    <div class="m-topic-box" :class="{ is_hight: data.is_hight }">
+    <div class="m-topic-box">
         <div class="m-topic-top">
             <div class="m-topic-top__time">
                 <i :class="getTimeAgo(data.updated_at).icon"></i>
@@ -33,14 +33,14 @@
                 <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank">
                     <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                     <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-                    <span>{{ data.title }}</span>
+                    <span :style="hightStyle">{{ data.title }}</span>
                 </a>
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
                     <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
                 </a>
 
                 <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
-                    <span v-for="(item, index) in data.color_tag" :key="index" :style="{backgroundColor: item.color}">
+                    <span v-for="(item, index) in data.color_tag" :key="index" :style="{ backgroundColor: item.color }">
                         {{ item.label }}
                     </span>
                 </div>
@@ -67,7 +67,7 @@
                     <span class="m-topic-title" target="_blank">
                         <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-                        <span>{{ data.title }}</span>
+                        <span :style="hightStyle">{{ data.title }}</span>
                     </span>
                     <div v-html="introduction"></div>
                 </a>
@@ -94,6 +94,18 @@ export default {
         return {};
     },
     computed: {
+        hightStyle: function () {
+            if (this.data.is_hight && this.data.hight_color) {
+                console.log(this.data.hight_color);
+                return {
+                    color: this.data.hight_color,
+                };
+            } else {
+                return {
+                    color: "#0366d6",
+                };
+            }
+        },
         styles: function () {
             return this.getCategoryStyle(this.data.category || "");
         },
