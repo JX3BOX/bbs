@@ -108,12 +108,14 @@
         &:hover {
             border-color: @color-link;
             .m-topic-title {
-                color: rgba(255, 64, 128, 1);
+                // 高亮保留 hover 效果需要增加 important
+                color: rgba(255, 64, 128, 1) !important;
             }
             // 置顶贴的标题
             .m-topic-hot__right {
                 .u-title {
-                    color: rgba(255, 64, 128, 1);
+                    // 高亮保留 hover 效果需要增加 important
+                    color: rgba(255, 64, 128, 1) !important;
                 }
             }
         }

@@ -1,7 +1,7 @@
 <template>
     <transition name="slide-fade">
         <div v-show="show" class="m-sticky-info">
-            <h2 class="u-title">{{ title }}</h2>
+            <h2 :style="hightStyle" class="u-title">{{ title }}</h2>
             <div class="u-infos">
                 <span v-if="isTop" class="u-status u-sub-block top">
                     <img svg-inline src="@/assets/img/community/is_top_inline.svg" alt="" />
@@ -11,7 +11,14 @@
                     <img svg-inline src="@/assets/img/community/is_star_inline.svg" alt="" />
                 </span>
 
-                <span v-for="(item, index) in tags" :key="index" class="u-tag u-meta u-sub-block" :style="{backgroundColor: item.color}"> {{ item.label }} </span>
+                <span
+                    v-for="(item, index) in tags"
+                    :key="index"
+                    class="u-tag u-meta u-sub-block"
+                    :style="{ backgroundColor: item.color }"
+                >
+                    {{ item.label }}
+                </span>
 
                 <a v-if="collection" class="u-book u-sub-block u-meta" :href="collection.url" target="_blank">
                     <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
@@ -31,6 +38,16 @@ export default {
         };
     },
     computed: {
+        hightStyle: function () {
+            console.log(this.post.hight_color);
+            if (this.post.is_hight && this.post.hight_color) {
+                return {
+                    color: this.post.hight_color,
+                };
+            } else {
+                return {};
+            }
+        },
         collection: function () {
             if (this.post.collection && this.post.collection.title) {
                 return {

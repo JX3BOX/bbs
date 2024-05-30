@@ -46,10 +46,10 @@
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
-                    <a :href="getPostUrl(data.id)" class="u-title" target="_blank">
+                    <a :style="hightStyle" :href="getPostUrl(data.id)" class="u-title" target="_blank">
                         <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-                        <span :style="hightStyle">
+                        <span>
                             {{ data.title }}
                         </span>
                     </a>

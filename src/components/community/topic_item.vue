@@ -30,10 +30,10 @@
         </div>
         <div class="u-box m-topic-box__content">
             <div class="u-content-aside">
-                <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank">
+                <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank" :style="hightStyle">
                     <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                     <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-                    <span :style="hightStyle">{{ data.title }}</span>
+                    <span>{{ data.title }}</span>
                 </a>
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
                     <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
@@ -64,10 +64,10 @@
 
             <a class="u-box-content" :href="getPostUrl(data.id)" target="_blank">
                 <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
-                    <span class="m-topic-title" target="_blank">
+                    <span class="m-topic-title" target="_blank" :style="hightStyle">
                         <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-                        <span :style="hightStyle">{{ data.title }}</span>
+                        <span>{{ data.title }}</span>
                     </span>
                     <div v-html="introduction"></div>
                 </a>

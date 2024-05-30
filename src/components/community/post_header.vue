@@ -26,7 +26,7 @@
                     ></i>
                     <i class="el-icon-delete" v-if="post.post_status == 'dustbin'" style="color: #c00"></i>
                 </i>
-                <span class="u-title-text">{{ title }}</span>
+                <span :style="hightStyle" class="u-title-text">{{ title }}</span>
                 <div class="u-title-toolbar">
                     <el-button size="small" @click="onEditClick" v-if="isPostOwner" type="warning" icon="el-icon-edit"
                         >编辑</el-button
@@ -140,6 +140,15 @@ export default {
         };
     },
     computed: {
+        hightStyle: function () {
+            if (this.post.is_hight && this.post.hight_color) {
+                return {
+                    color: this.post.hight_color,
+                };
+            } else {
+                return {};
+            }
+        },
         onlyAuthor: function () {
             const v = this.$route.query.onlyAuthor;
             return (v == true || v == "true") && true;
