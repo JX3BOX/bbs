@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="m-topic-hot m-topic-box" :class="{ is_hight: data.is_hight }">
+        <div class="m-topic-hot m-topic-box">
             <div class="m-topic-top">
                 <div class="m-topic-top__time">
                     <i :class="getTimeAgo(data.updated_at).icon"></i>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="m-topic-hot__right">
-                    <a :href="getPostUrl(data.id)" class="u-title" target="_blank">
+                    <a :style="hightStyle" :href="getPostUrl(data.id)" class="u-title" target="_blank">
                         <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                         <span>
@@ -100,6 +100,15 @@ export default {
         TopicItem,
     },
     computed: {
+        hightStyle: function () {
+            if (this.data.is_hight && this.data.hight_color) {
+                return {
+                    color: this.data.hight_color,
+                };
+            } else {
+                return {};
+            }
+        },
         introduction: function () {
             const data = this.data;
             if (data.introduction) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="m-topic-box" :class="{ is_hight: data.is_hight }">
+    <div class="m-topic-box">
         <div class="m-topic-top">
             <div class="m-topic-top__time">
                 <i :class="getTimeAgo(data.updated_at).icon"></i>
@@ -30,7 +30,7 @@
         </div>
         <div class="u-box m-topic-box__content">
             <div class="u-content-aside">
-                <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank">
+                <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank" :style="hightStyle">
                     <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                     <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                     <span>{{ data.title }}</span>
@@ -40,7 +40,7 @@
                 </a>
 
                 <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
-                    <span v-for="(item, index) in data.color_tag" :key="index" :style="{backgroundColor: item.color}">
+                    <span v-for="(item, index) in data.color_tag" :key="index" :style="{ backgroundColor: item.color }">
                         {{ item.label }}
                     </span>
                 </div>
@@ -64,7 +64,7 @@
 
             <a class="u-box-content" :href="getPostUrl(data.id)" target="_blank">
                 <a :href="getPostUrl(data.id)" class="m-topic-content" target="_blank">
-                    <span class="m-topic-title" target="_blank">
+                    <span class="m-topic-title" target="_blank" :style="hightStyle">
                         <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                         <span>{{ data.title }}</span>
@@ -94,6 +94,16 @@ export default {
         return {};
     },
     computed: {
+        hightStyle: function () {
+            if (this.data.is_hight && this.data.hight_color) {
+                console.log(this.data.hight_color);
+                return {
+                    color: this.data.hight_color,
+                };
+            } else {
+                return {};
+            }
+        },
         styles: function () {
             return this.getCategoryStyle(this.data.category || "");
         },
