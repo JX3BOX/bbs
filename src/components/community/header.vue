@@ -34,21 +34,24 @@
                     <img
                         v-svg-inline
                         class="u-icon"
+                        v-if="!item.mark"
                         :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                     />
-                    <img
+
+                    <CategoryLottieMark v-if="item.mark"></CategoryLottieMark>
+
+                    <!-- <img
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
                         v-svg-inline
                         class="u-mark"
                         :style="{ color: item.color }"
                         :src="require(`@/assets/img/community/category/${item.mark}`)"
                     />
-
                     <img
                         v-else-if="item.mark"
                         class="u-mark"
                         :src="require(`@/assets/img/community/category/${item.mark}`)"
-                    />
+                    /> -->
                 </a>
             </el-popover>
 
@@ -101,8 +104,12 @@
 </template>
 
 <script>
+import CategoryLottieMark from "./category_lottie_mark.vue";
 export default {
     name: "CommunityHeader",
+    components : {
+        CategoryLottieMark,
+    },
     props: ["categoryList"],
     inject: ["onCategoryChange"],
     data() {
