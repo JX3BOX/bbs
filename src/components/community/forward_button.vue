@@ -1,7 +1,7 @@
 <template>
     <el-button type="text" v-if="allowForward" @click="onForward()">
-        <i class="el-icon-copy-document"></i>
-        转述
+        <i class="el-icon-document-copy"></i>
+        复制党+1
     </el-button>
 </template>
 
