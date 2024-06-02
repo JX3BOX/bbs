@@ -71,6 +71,7 @@ import { getTopicBucket } from "@/service/community";
 import { formatCategoryList } from "@/utils/community";
 import CommunitySearchList from "@/components/community/community_search_list.vue";
 import CommunityPagination from "@/components/community/community_pagination.vue";
+import { getLikes } from "@/service/next";
 const filter_name = `community_discussion_topic,community_discussion_topic_reply`;
 export default {
     components: {
@@ -152,11 +153,32 @@ export default {
                     // 重新渲染瀑布流高度
                     this.$refs.waterfall.repaints();
                 }
+                this.getLikes();
             },
             deep: true,
         },
     },
     methods: {
+        async getLikes() {
+            const ids = this.list.map((item) => `community_topic-${item.id}`);
+            let id = ids.join(",");
+            await getLikes({
+                post_type: "community_topic",
+                post_action: "likes",
+                id,
+            }).then((res) => {
+                const keys = Object.keys(res.data.data);
+                if (keys.length) {
+                    keys.forEach((key) => {
+                        const id = key.split("-")[1];
+                        const index = this.list.findIndex((item) => item.id == id);
+                        if (index > -1) {
+                            this.$set(this.list[index], "agree_count", res.data.data[key].likes);
+                        }
+                    });
+                }
+            });
+        },
         handleScroll() {
             const paginationRef = this.$refs.paginationRef;
             if (paginationRef && this.hasNextPage) {

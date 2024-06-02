@@ -27,13 +27,22 @@ function getTopicReplyList(id, params) {
 function replyTopic(id, data) {
     return $next().post(`${API_PREFIX}/community/discussion/topic/item/${id}/reply`, data);
 }
-// 删除回贴
-function delReply(id) {
+// 删除我的回贴
+function deleteMyReply(id) {
     return $next().delete(`${API_PREFIX}/community/discussion/my/reply/item/${id}`);
 }
+//  删除我的帖子的回帖
+function delReplyToMyTopic(id, replyId) {
+    return $next().delete(`${API_PREFIX}/community/discussion/my/topic/item/${id}/reply/item/${replyId}`);
+}
 
-// 删除评论
-function delComment(id) {
+// 删除回复我的回复
+function delCommentToMyReply(id, commentId) {
+    return $next().delete(`${API_PREFIX}/community/discussion/my/reply/item/${id}/comment/item/${commentId}`);
+}
+
+// 删除我的评论
+function delMyComment(id) {
     return $next().delete(`${API_PREFIX}/community/discussion/my/comment/item/${id}`);
 }
 
@@ -84,10 +93,12 @@ export {
     getTopicDetails,
     getTopicReplyList,
     replyTopic,
+    delReplyToMyTopic,
+    delCommentToMyReply,
     replyReply,
     getCommentList,
-    delReply,
-    delComment,
+    deleteMyReply,
+    delMyComment,
     addBlock,
     feedback,
 };

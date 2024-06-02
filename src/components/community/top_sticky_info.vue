@@ -39,7 +39,6 @@ export default {
     },
     computed: {
         hightStyle: function () {
-            console.log(this.post.hight_color);
             if (this.post.is_hight && this.post.hight_color) {
                 return {
                     color: this.post.hight_color,

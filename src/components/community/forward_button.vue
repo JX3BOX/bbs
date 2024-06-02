@@ -1,7 +1,8 @@
 <template>
     <el-button type="text" v-if="allowForward" @click="onForward()">
         <i class="el-icon-document-copy"></i>
-        复制党+1
+        <span class="u-copy-text__pc"> 复制党+1 </span>
+        <span class="u-copy-text__phone">&nbsp; <strong>+1</strong> </span>
     </el-button>
 </template>
 
@@ -29,4 +30,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.u-copy-text__phone {
+    display: none;
+}
+@media screen and (max-width: @phone) {
+    .u-copy-text__pc {
+        display: none;
+    }
+    .u-copy-text__phone {
+        display: inline-block;
+    }
+}
+</style>
