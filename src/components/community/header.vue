@@ -34,11 +34,10 @@
                     <img
                         v-svg-inline
                         class="u-icon"
-                        v-if="!item.mark"
                         :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                     />
 
-                    <CategoryLottieMark v-if="item.mark"></CategoryLottieMark>
+                    <CategoryLottieMark class="u-mark" v-if="item.mark" :mark="item.mark"></CategoryLottieMark>
 
                     <!-- <img
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
