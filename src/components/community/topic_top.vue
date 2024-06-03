@@ -53,9 +53,9 @@
                             {{ data.title }}
                         </span>
                     </a>
-                    <div v-if="data.tags && data.tags.length" class="m-topic-tag">
-                        <span v-for="(item, index) in data.tags" :key="index">
-                            {{ item }}
+                    <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
+                        <span v-for="(item, index) in data.color_tag" :key="index" :style="{background: item.color}">
+                            {{ item.label }}
                         </span>
                     </div>
                     <div
