@@ -3,7 +3,20 @@
         <div class="m-community-single" v-loading="loading">
             <!-- 头部 -->
             <div class="m-community-header">
-                <PostHeader :post="post" :stat="stat"></PostHeader>
+                <PostHeader :post="post" :stat="stat">
+                    <template #append>
+                        <el-pagination
+                            layout="prev, pager, next"
+                            :hide-on-single-page="true"
+                            :page-size="per"
+                            :total="total"
+                            :current-page.sync="page"
+                            @current-change="changePage"
+                            size="small"
+                            class="m-pageheader-pagination"
+                        ></el-pagination>
+                    </template>
+                </PostHeader>
                 <el-divider content-position="left">JX3BOX</el-divider>
             </div>
 
@@ -15,7 +28,7 @@
 
                 <!-- 帖子回复 -->
                 <div class="m-reply-box">
-                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" />
+                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" :is-master="false" :is-author="isAuthor" />
                 </div>
             </div>
             <!-- 帖子回复e -->
@@ -103,6 +116,9 @@ export default {
         id: function () {
             return this.$route.params.id;
         },
+        isAuthor() {
+            return this.post?.user_id == User.getInfo().uid;
+        }
     },
     created() {
         this.getJumpFloor();

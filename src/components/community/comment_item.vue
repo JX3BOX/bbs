@@ -1,7 +1,7 @@
 <template>
     <div class="m-comment-wrapper">
         <div class="m-comment-right">
-            <img class="u-avatar" :src="userInfo.avatar" />
+            <img class="u-avatar" :src="showAvatar(userInfo.avatar)" />
             <div class="m-comment-content">
                 <div class="u-content-top">
                     <div class="u-name">
@@ -65,7 +65,7 @@
 
 <script>
 import ReplyForReply from "./ReplyForReply.vue";
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, showAvatar } from "@jx3box/jx3box-common/js/utils";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
 import { replyReply } from "@/service/community";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -175,6 +175,7 @@ export default {
             }
             this.isLike = true;
         },
+        showAvatar
     },
 };
 </script>

@@ -21,6 +21,8 @@ export default {
                 let routename = this.$route.name
                 if(this.redirect_types.includes(routename)){
                     routename = 'bbs'
+                } else if (routename.includes('community')) {
+                    routename = 'community'
                 }
                 return routename;
             }else{

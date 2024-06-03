@@ -102,6 +102,8 @@
                 <i class="u-icon-edit el-icon-edit-outline"></i>
                 <span>编辑</span>
             </a> -->
+
+            <slot name="append"></slot>
         </div>
 
         <div class="u-title-toolbar u-phone-show">
@@ -378,6 +380,7 @@ export default {
     .clearfix;
     .fz(12px, 22px);
     color: #666;
+    .pr;
 
     .u-client {
         // .fl;

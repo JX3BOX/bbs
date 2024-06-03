@@ -152,8 +152,8 @@ export default {
                 if (list.length && this.$refs.waterfall) {
                     // 重新渲染瀑布流高度
                     this.$refs.waterfall.repaints();
+                    this.getLikes();
                 }
-                this.getLikes();
             },
             deep: true,
         },

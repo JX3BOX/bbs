@@ -86,6 +86,24 @@ function globalSearch(params) {
     });
 }
 
+
+// ============== 管理接口 ==============
+/**
+ * 管理员删除评论
+ * @param {*} id
+ */
+function manageDelComment(id) {
+    return $next().delete(`${API_PREFIX}/community/discussion/manage/comment/item/${id}`);
+}
+
+/**
+ * 管理员删除回帖
+ * @param {*} id
+ */
+function manageDelReply(id) {
+    return $next().delete(`${API_PREFIX}/community/discussion/manage/reply/item/${id}`);
+}
+
 export {
     globalSearch,
     getTopicList,
@@ -101,4 +119,6 @@ export {
     delMyComment,
     addBlock,
     feedback,
+    manageDelComment,
+    manageDelReply
 };

@@ -36,6 +36,7 @@
                     <div>
                         <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
                         <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
+                        <!-- <el-button type="text" icon="el-icon-delete" v-if="canDelete" @click="onDelete">删除</el-button> -->
                         <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
                         <AddBlockButton class="u-mobile-hidden" :post="post" />
                         <ComplaintButton class="u-mobile-hidden" :post="post" />
@@ -157,7 +158,7 @@ import dayjs from "dayjs";
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList", "onReplyTopic"],
-    props: ["isMaster", "post"],
+    props: ["isMaster", "post", "isAuthor"],
     components: {
         DeleteButton,
         ForwardButton,
@@ -218,10 +219,6 @@ export default {
             } else {
                 return "";
             }
-        },
-        // 是否登录
-        isLogin: function () {
-            return User.isLogin();
         },
         userInfo: function () {
             if (this.post && this.post.user_info) {
