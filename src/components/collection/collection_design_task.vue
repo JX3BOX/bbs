@@ -109,6 +109,11 @@ export default {
             },
         };
     },
+    computed: {
+        client: function () {
+            return this.$store.state.client || "std";
+        },
+    },
     watch: {
         modelValue(val) {
             if (val) {
@@ -145,6 +150,9 @@ export default {
         onConfirm() {
             if (!this.post?.ID) return;
             const data = pick(this.post, ["client", "author"]);
+            if (!data.client) {
+                data.client = this.client;
+            }
             data.title = this.form.title;
             data.remark = this.form.remark;
             data.star = this.form.star;
