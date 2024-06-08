@@ -11,13 +11,14 @@
             :crumbEnable="true"
         >
             <template #op-prepend>
-                <el-button
+                <!-- <el-button
                     class="c-admin-button u-admin"
                     type="primary"
                     icon="el-icon-setting"
                     @click="onAdminClick"
                     v-if="isEditor"
-                >管理</el-button>
+                >管理</el-button> -->
+                <AdminDrop v-if="isEditor" :post="finalPost" :user-id="user_id" />
             </template>
         </Breadcrumb>
         <LeftSidebar :uid="user_id">
@@ -30,8 +31,6 @@
             </RightSidebar>
             <Footer></Footer>
         </Main>
-
-        <CollectionAdmin v-model="showDrawer" />
     </div>
 </template>
 
@@ -39,15 +38,24 @@
 import Nav from "@/components/single/single_nav.vue";
 import Side from "@/components/single/single_side.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
-import CollectionAdmin from "@/components/collection/collection_admin.vue";
 import User from "@jx3box/jx3box-common/js/user";
+import AdminDrop from "@/components/collection/collection_admin_drop.vue";
 
 export default {
     name: "CollectionLayout",
+    components: {
+        Nav,
+        Side,
+        AdminDrop,
+    },
     props: {
         hasRight: {
             type: Boolean,
             default: true,
+        },
+        post: {
+            type: Object,
+            default: () => {},
         },
     },
     data: function () {
@@ -64,16 +72,19 @@ export default {
         isEditor: function () {
             return User.isEditor();
         },
+        finalPost() {
+            return {
+                ...this.post,
+                post_title: this.post.title,
+                ID: this.post.id,
+                post_type: this.post?.posts?.[0]?.post_type || "",
+            };
+        },
     },
     methods: {
         onAdminClick() {
             this.showDrawer = true;
         },
-    },
-    components: {
-        Nav,
-        Side,
-        CollectionAdmin,
     },
 };
 </script>

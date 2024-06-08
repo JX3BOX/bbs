@@ -15,6 +15,8 @@
                     option
                 }}</el-radio-button>
             </el-radio-group>
+            <el-divider content-position="left">精选</el-divider>
+            <el-switch v-model="star" :active-value="1" :inactive-value="0"></el-switch>
 
             <el-divider content-position="left">元信息</el-divider>
 
@@ -88,6 +90,7 @@ export default {
             type_options: [],
             post_author: "",
             visible: 1,
+            star: 0,
             title: "",
 
             pushing: false,
@@ -141,6 +144,7 @@ export default {
                 this.data = res.data.data;
                 this.post_author = this.data.user_id;
                 this.visible = this.data.public;
+                this.star = this.data.star;
                 this.title = this.data.title;
                 this.image = this.data.image;
             });
@@ -155,6 +159,7 @@ export default {
                 public: this.visible,
                 user_id: ~~this.post_author,
                 title: this.title,
+                star: this.star,
             })
                 .then(() => {
                     this.$message({

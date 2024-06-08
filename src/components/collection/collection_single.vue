@@ -1,5 +1,5 @@
 <template>
-    <CollectionLayout :has-right="false">
+    <CollectionLayout :has-right="false" :post="collection || {}">
         <div class="m-collection-single">
             <el-alert
                 v-if="!collection"
@@ -106,7 +106,11 @@
                                 <a
                                     class="u-item-title"
                                     target="_blank"
-                                    :href="post.type === 'custom' ? post.url : getLink(post.post_type || post.type, post.id)"
+                                    :href="
+                                        post.type === 'custom'
+                                            ? post.url
+                                            : getLink(post.post_type || post.type, post.id)
+                                    "
                                     >{{ post.title }}</a
                                 >
                                 <time
@@ -155,7 +159,7 @@
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import CollectionPublish from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
 import { getCollection, removeCollection } from "@/service/helper";
-import {dateFormat} from "@/utils/dateFormat";
+import { dateFormat } from "@/utils/dateFormat";
 import dayjs from "dayjs";
 import Bus from "@/store/bus";
 import {
@@ -256,7 +260,7 @@ export default {
                 this.views = res.data.views || 0;
             });
         },
-        formatDate(date) { 
+        formatDate(date) {
             return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
         },
     },

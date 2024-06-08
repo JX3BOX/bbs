@@ -18,19 +18,24 @@ function removeCollection(collection_id) {
 function getCollection($collection_id) {
     return $cms()({
         method: "GET",
-        url: `/api/cms/post/collection/${$collection_id}`
+        url: `/api/cms/post/collection/${$collection_id}`,
     });
 }
 
-function updateCollection(id, data){
+function updateCollection(id, data) {
     return $cms().put(`/api/cms/post/collection/${id}`, data);
 }
 
-function getMenus(key){
+function getMenus(key) {
     return $helper()({
         method: "GET",
         url: `/api/menu_group/${key}`,
     });
 }
 
-export { getMenus, getCollections, removeCollection, getCollection, updateCollection };
+// 管理员发送私信
+function sendMessage(data) {
+    return $cms().post(`/api/cms/manage/message`, data);
+}
+
+export { getMenus, getCollections, removeCollection, getCollection, updateCollection, sendMessage };
