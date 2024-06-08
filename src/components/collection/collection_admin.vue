@@ -152,14 +152,14 @@ export default {
         submit() {
             this.pushing = true;
             updateCollection(this.id, {
-                mark: this.data.mark,
-                description: this.data.description,
-                posts: JSON.stringify(this.data.posts),
-                image: this.data.image,
                 public: this.visible,
-                user_id: ~~this.post_author,
                 title: this.title,
+                image: this.image,
+                description: this.data.description,
+                mark: this.data.mark,
                 star: this.star,
+                posts: JSON.stringify(this.data.posts),
+                user_id: ~~this.post_author,
             })
                 .then(() => {
                     this.$message({
