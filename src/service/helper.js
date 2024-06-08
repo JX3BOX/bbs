@@ -23,7 +23,7 @@ function getCollection($collection_id) {
 }
 
 function updateCollection(id, data) {
-    return $cms().put(`/api/cms/post/collection/${id}`, data);
+    return $cms().put(`/api/cms/manage/post/collection/${id}`, data);
 }
 
 function getMenus(key) {
