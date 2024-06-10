@@ -1,6 +1,11 @@
 <template>
     <div class="m-comment-wrapper">
-        <div class="m-comment-right">
+        <div
+            class="m-comment-right"
+            :style="{
+                backgroundImage: `url(${skin})`,
+            }"
+        >
             <img class="u-avatar" :src="showAvatar(userInfo.avatar)" />
             <div class="m-comment-content">
                 <div class="u-content-top">
@@ -110,6 +115,10 @@ export default {
         },
     },
     computed: {
+        // 评论皮肤
+        skin() {
+            return require("../../assets/img/community/card_bg_test.png");
+        },
         // 是否登录
         likeCountRender: function () {
             if (this.likeCount >= 100) {
@@ -175,7 +184,7 @@ export default {
             }
             this.isLike = true;
         },
-        showAvatar
+        showAvatar,
     },
 };
 </script>
