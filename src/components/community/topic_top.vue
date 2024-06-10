@@ -1,6 +1,12 @@
 <template>
     <div>
-        <div class="m-topic-hot m-topic-box">
+        <div
+            class="m-topic-hot m-topic-box"
+            :style="{
+                '--title-color': skin.titleColor,
+                '--title-hover-color': skin.titleHoverColor,
+            }"
+        >
             <div class="m-topic-top">
                 <div class="m-topic-top__time">
                     <i :class="getTimeAgo(data.updated_at).icon"></i>
@@ -29,12 +35,17 @@
                     </div>
                 </div>
             </div>
-            <div class="m-topic-box__content">
+            <div
+                class="m-topic-box__content"
+                :style="{
+                    backgroundImage: `url(${skin.background})`,
+                }"
+            >
                 <div class="m-topic-hot__left">
                     <a class="u-cover" :href="getPostUrl(data.id)">
                         <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
                     </a>
-                    <div class="m-topic-imgs">
+                    <div class="m-topic-imgs scrollbar">
                         <a
                             :href="getPostUrl(data.id)"
                             class="u-item"
@@ -54,7 +65,7 @@
                         </span>
                     </a>
                     <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
-                        <span v-for="(item, index) in data.color_tag" :key="index" :style="{background: item.color}">
+                        <span v-for="(item, index) in data.color_tag" :key="index" :style="{ background: item.color }">
                             {{ item.label }}
                         </span>
                     </div>
@@ -100,6 +111,18 @@ export default {
         TopicItem,
     },
     computed: {
+        // 卡片皮肤
+        skin() {
+            return {
+                background: require("../../assets/img/community/card_bg_test.png"),
+                titleColor: "#987531",
+                titleHoverColor: "red",
+
+                // 默认值 未设置返回默认值 实装要判断
+                // titleColor: "#0366d6",
+                // titleHoverColor: "rgba(255, 64, 128, 1)",
+            };
+        },
         hightStyle: function () {
             if (this.data.is_hight && this.data.hight_color) {
                 return {

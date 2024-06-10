@@ -97,11 +97,14 @@
         }
     }
 }
+
 // 帖子item 外包装
 .m-topic-box {
     .m-topic-box__content {
         .flex;
         background: white;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
         padding: 20px;
         border-radius: 6px;
         border: 1px solid rgba(232, 232, 232, 1);
@@ -110,12 +113,14 @@
             .m-topic-title {
                 // 高亮保留 hover 效果需要增加 important
                 color: rgba(255, 64, 128, 1) !important;
+                color: var(--title-hover-color) !important;
             }
             // 置顶贴的标题
             .m-topic-hot__right {
                 .u-title {
                     // 高亮保留 hover 效果需要增加 important
                     color: rgba(255, 64, 128, 1) !important;
+                    color: var(--title-hover-color) !important;
                 }
             }
         }
@@ -127,8 +132,8 @@
     cursor: pointer;
     font-size: 15px;
     line-height: 28px;
-    color: rgba(64, 128, 255, 1);
     color: @color-link;
+    color: var(--title-color);
     margin: 0;
     text-decoration: none;
     > svg {
@@ -249,6 +254,26 @@
     }
     .m-community-pages {
         overflow: auto;
+    }
+}
+.scrollbar {
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 12px;
+    }
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-track-piece {
+        background-color: #fafafa;
+        border-radius: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #eee;
+        border-radius: 6px;
+    }
+    &::-webkit-scrollbar-button,
+    &::-webkit-scrollbar-corner,
+    &::-webkit-resizer {
+        display: none;
     }
 }
 

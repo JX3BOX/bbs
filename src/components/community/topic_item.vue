@@ -1,5 +1,11 @@
 <template>
-    <div class="m-topic-box">
+    <div
+        class="m-topic-box"
+        :style="{
+            '--title-color': skin.titleColor,
+            '--title-hover-color': skin.titleHoverColor,
+        }"
+    >
         <div class="m-topic-top">
             <div class="m-topic-top__time">
                 <i :class="getTimeAgo(data.updated_at).icon"></i>
@@ -28,7 +34,12 @@
                 </div>
             </div>
         </div>
-        <div class="u-box m-topic-box__content">
+        <div
+            class="u-box m-topic-box__content"
+            :style="{
+                backgroundImage: `url(${skin.background})`,
+            }"
+        >
             <div class="u-content-aside">
                 <a class="m-topic-title" :href="getPostUrl(data.id)" target="_blank" :style="hightStyle">
                     <img svg-inline v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
@@ -71,7 +82,7 @@
                     </span>
                     <div v-html="introduction"></div>
                 </a>
-                <div v-if="data.extra_images && data.extra_images.length" class="m-topic-imgs">
+                <div v-if="data.extra_images && data.extra_images.length" class="m-topic-imgs scrollbar">
                     <a class="u-item" v-for="(item, index) in data.extra_images" :key="index">
                         <img :src="getSquareBanner(item)" />
                     </a>
@@ -94,6 +105,18 @@ export default {
         return {};
     },
     computed: {
+        // 卡片皮肤
+        skin() {
+            return {
+                background: require("../../assets/img/community/card_bg_test.png"),
+                titleColor: "#987531",
+                titleHoverColor: "red",
+
+                // 默认值 未设置返回默认值 实装要判断
+                // titleColor: "#0366d6",
+                // titleHoverColor: "rgba(255, 64, 128, 1)",
+            };
+        },
         hightStyle: function () {
             if (this.data.is_hight && this.data.hight_color) {
                 console.log(this.data.hight_color);
