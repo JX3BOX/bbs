@@ -1,12 +1,12 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import axios from "axios";
 
 function getMenu(key) {
     return $cms().get(`/api/cms/config/menu/${key}`);
 }
 
-function getAuthorInfo() {
-
-}
+function getAuthorInfo() {}
 
 // 获取自定义主题
 function getTopicBucket(params) {
@@ -17,8 +17,20 @@ const getConfigBanner = (params) => {
     return $cms().get(`api/cms/config/banner`, {
         params,
     });
+};
+
+//获取装扮
+function getDecoration(params) {
+    return $cms().get(`/api/cms/user/decoration`, {
+        params,
+    });
+}
+
+function getDecorationJson() {
+    let url = __imgPath + `decoration/index.json?${Date.now()}}`;
+    return axios.get(url);
 }
 
 const getUserList = (params) => $cms().get(`/api/cms/user/list`, { params });
 
-export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList };
+export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList, getDecoration, getDecorationJson };
