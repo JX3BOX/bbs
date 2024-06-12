@@ -152,17 +152,42 @@ export default {
                 if (list.length && this.$refs.waterfall) {
                     // 重新渲染瀑布流高度
                     this.$refs.waterfall.repaints();
+                }
+                if (list.length) {
                     this.getLikes();
                 }
             },
             deep: true,
         },
+        topTopicData: {
+            handler: function (topTopicData) {
+                if (topTopicData) {
+                    const id = `community_topic-${topTopicData.id}`;
+                    getLikes({
+                        post_type: "community_topic",
+                        post_action: "likes",
+                        id,
+                    }).then((res) => {
+                        this.$set(topTopicData, "agree_count", res.data.data[id].likes);
+                    });
+                }
+            },
+        },
     },
     methods: {
-        async getLikes() {
-            const ids = this.list.map((item) => `community_topic-${item.id}`);
+        getLikes() {
+            const list = this.list.filter((item) => item.agree_count == null);
+            const ids = list.map((item) => `community_topic-${item.id}`);
+            // 将agree_count重置为0 防止重复请求获取like
+            for (let index = 0; index < this.list.length; index++) {
+                const item = this.list[index];
+                if (item.agree_count == null) {
+                    this.$set(this.list[index], "agree_count", 0);
+                }
+            }
+            if (!ids.length) return;
             let id = ids.join(",");
-            await getLikes({
+            getLikes({
                 post_type: "community_topic",
                 post_action: "likes",
                 id,
@@ -282,9 +307,18 @@ export default {
             getTopicList(query)
                 .then((res) => {
                     let list = res.data.data.list;
+                    list = list.map((item) => {
+                        return {
+                            ...item,
+                            // 只有item.agree_cou = null 才会触发获取likes
+                            agree_count: item.agree_count || null,
+                        };
+                    });
+
                     if (appendMode) {
                         this.list = this.list.concat(list || []);
                     } else {
+                        // 第一页第一个帖子置顶
                         if (query.index === 1 && list && list.length) {
                             this.topTopicData = list.shift();
                         } else {

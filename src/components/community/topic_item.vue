@@ -80,7 +80,7 @@
                         <img svg-inline v-if="data.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
                         <span>{{ data.title }}</span>
                     </span>
-                    <div v-html="introduction"></div>
+                    <div class="u-introduction" v-html="introduction"></div>
                 </a>
                 <div v-if="data.extra_images && data.extra_images.length" class="m-topic-imgs scrollbar">
                     <a class="u-item" v-for="(item, index) in data.extra_images" :key="index">
