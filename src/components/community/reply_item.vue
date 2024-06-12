@@ -384,7 +384,7 @@ export default {
             return list;
         },
         onEdit() {
-            const path = editLink('community', this.post.id);
+            const path = editLink('community/reply', this.post.id);
             window.open(path, "_blank");
         }
     },
