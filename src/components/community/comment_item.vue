@@ -198,6 +198,15 @@ export default {
         },
         authorLink,
         async formatContent(val) {
+            const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])(?![^<>]*>)/gi;
+            val = val.replace(urlPattern, (match, url) => {
+                // 如果匹配的是 img 标签的 src 属性，不进行替换
+                if (/src="[^"]*"/i.test(match)) {
+                    return match;
+                }
+                console.log(match);
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
             const ins = new JX3_EMOTION(val);
             this.renderContent = await ins._renderHTML();
         },
