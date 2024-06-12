@@ -104,6 +104,7 @@ import TopicItem from "@/components/community/topic_item.vue";
 import { random } from "lodash";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
+import skinJson from "@/assets/data/community_skin.json";
 export default {
     props: ["data"],
     inject: ["getCategoryStyle", "onCategoryChange"],
@@ -113,14 +114,22 @@ export default {
     computed: {
         // 卡片皮肤
         skin() {
+            if (this.data.decoration_id && this.data.decoration.val) {
+                const val = this.data.decoration.val;
+                if (skinJson[val]) {
+                    return {
+                        background: __imgPath + `decoration/palu/${val}.png`,
+                        titleColor: skinJson[val].titleColor || "#0366d6",
+                        titleHoverColor: "rgba(255, 64, 128, 1)",
+                        id: this.data.id,
+                    };
+                }
+            }
+            // 默认值 未设置返回默认值 实装要判断
             return {
-                background: require("../../assets/img/community/card_bg_test.png"),
-                titleColor: "#987531",
-                titleHoverColor: "red",
-
-                // 默认值 未设置返回默认值 实装要判断
-                // titleColor: "#0366d6",
-                // titleHoverColor: "rgba(255, 64, 128, 1)",
+                titleColor: "#0366d6",
+                titleHoverColor: "rgba(255, 64, 128, 1)",
+                id: this.data.id,
             };
         },
         hightStyle: function () {
