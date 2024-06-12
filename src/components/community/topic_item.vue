@@ -84,7 +84,7 @@
                 </a>
                 <div v-if="data.extra_images && data.extra_images.length" class="m-topic-imgs scrollbar">
                     <a class="u-item" v-for="(item, index) in data.extra_images" :key="index">
-                        <img :src="getSquareBanner(item)" />
+                        <el-image :src="getSquareBanner(item)" fit="fill" />
                     </a>
                 </div>
             </a>
