@@ -16,6 +16,7 @@
                 :placement="(index + 1) / lineCount > 1 ? 'bottom' : 'top'"
                 trigger="hover"
                 :content="item.remark"
+                :disabled="!item.remark"
             >
                 <a
                     slot="reference"
@@ -106,7 +107,7 @@
 import CategoryLottieMark from "./category_lottie_mark.vue";
 export default {
     name: "CommunityHeader",
-    components : {
+    components: {
         CategoryLottieMark,
     },
     props: ["categoryList"],
@@ -160,15 +161,25 @@ export default {
         },
         initNavList() {
             const len = this.lineCount * 2 - 1;
-            const categoryList = [...this.categoryList];
+            const categoryList = this.categoryList.map((item) => {
+                if (item.value === "全部") {
+                    return {
+                        ...item,
+                        value: "",
+                    };
+                } else {
+                    return item;
+                }
+            });
+
             this.showNavList = categoryList.slice(0, len);
             this.moreNavList = categoryList.slice(len);
         },
         handleChange: function (item) {
             if (!item.href) {
-                let selectedCategory = "";
-                if (this.selectedCategory != item.value) {
-                    selectedCategory = item.value;
+                let selectedCategory = item.value;
+                if (this.selectedCategory === selectedCategory) {
+                    return;
                 }
                 this.selectedCategory = selectedCategory;
                 this.onCategoryChange(selectedCategory);

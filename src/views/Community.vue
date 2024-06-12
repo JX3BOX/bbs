@@ -168,7 +168,9 @@ export default {
                         post_action: "likes",
                         id,
                     }).then((res) => {
-                        this.$set(topTopicData, "agree_count", res.data.data[id].likes);
+                        if (res.data.data[id] && res.data.data[id].likes) {
+                            this.$set(topTopicData, "agree_count", res.data.data[id].likes);
+                        }
                     });
                 }
             },
@@ -306,7 +308,7 @@ export default {
             this.loading = true;
             getTopicList(query)
                 .then((res) => {
-                    let list = res.data.data.list;
+                    let list = res.data.data.list || [];
                     list = list.map((item) => {
                         return {
                             ...item,
@@ -367,7 +369,16 @@ export default {
         // 获取分类列表
         getCategoryList() {
             getTopicBucket({ type: "community" }).then((res) => {
-                this.categoryList = formatCategoryList(res.data.data);
+                // 分类前面加个全部
+                const list = [
+                    {
+                        name: "全部",
+                        val: "",
+                    },
+                    ...res.data.data,
+                ];
+                console.log(list);
+                this.categoryList = formatCategoryList(list);
             });
         },
         // 获取指定分类绑定样式
