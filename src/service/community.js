@@ -1,5 +1,7 @@
 import { $next, $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box";
+
 const API_PREFIX = `/api/next2`;
 const gs_url = process.env.NODE_ENV === "development" ? "" : "https://gs.jx3box.com";
 // 获取分类
@@ -86,7 +88,6 @@ function globalSearch(params) {
     });
 }
 
-
 // ============== 管理接口 ==============
 /**
  * 管理员删除评论
@@ -102,6 +103,11 @@ function manageDelComment(id) {
  */
 function manageDelReply(id) {
     return $next().delete(`${API_PREFIX}/community/discussion/manage/reply/item/${id}`);
+}
+
+function getSkinJson() {
+    let url = __imgPath + `decoration/community_skin.json?${Date.now()}}}`;
+    return axios.get(url);
 }
 
 export {
@@ -120,5 +126,6 @@ export {
     addBlock,
     feedback,
     manageDelComment,
-    manageDelReply
+    manageDelReply,
+    getSkinJson,
 };
