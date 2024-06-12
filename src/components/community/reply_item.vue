@@ -282,7 +282,10 @@ export default {
                 if (/src="[^"]*"/i.test(match)) {
                     return match;
                 }
-                console.log(match);
+                // 只允许站内链接 如果要去除限制 把这个判断去掉
+                if (match.indexOf("jx3box.com") == -1) {
+                    return match;
+                }
                 return `<a href="${url}" target="_blank">${url}</a>`;
             });
             const ins = new JX3_EMOTION(val);
