@@ -34,6 +34,7 @@
                 <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div>
                 <div class="u-reply-toolbar">
                     <div>
+                        <el-button @click="onEdit" type="text" icon="el-icon-edit-outline" v-if="!isMaster && (isSuper || isFollower)">编辑</el-button>
                         <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
                         <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
                         <!-- <el-button type="text" icon="el-icon-delete" v-if="canDelete" @click="onDelete">删除</el-button> -->
@@ -142,7 +143,7 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -237,6 +238,12 @@ export default {
                 return this.post.ext_user_info.id;
             }
             return "";
+        },
+        isSuper() {
+            return User.isSuperAdmin();
+        },
+        isFollower() {
+            return this.post?.user_id == User.getInfo()?.uid;
         },
     },
     watch: {
@@ -376,6 +383,10 @@ export default {
                 });
             return list;
         },
+        onEdit() {
+            const path = editLink('community', this.post.id);
+            window.open(path, "_blank");
+        }
     },
 };
 </script>

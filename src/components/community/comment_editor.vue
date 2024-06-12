@@ -85,8 +85,9 @@ export default {
         },
         // 文件上传完成后，进行数据提交
         attachmentUploadFinish(data) {
+            const content = this.newComment.content?.replace(/\n/g, "<br>");
             this.$emit("submit", {
-                content: this.newComment.content,
+                content: content,
                 is_secret: this.is_secret ? 1 : 0,
                 attachmentList: data,
             });
