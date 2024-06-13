@@ -5,7 +5,8 @@
             <span class="u-title u-sub-block">
                 <slot name="title_before"></slot>
                 <div class="m-topic-category-box" v-if="styles">
-                    <div
+                    <a
+                        :href="`/community?category=${post.category}`"
                         :class="`m-topic-category`"
                         :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                     >
@@ -15,7 +16,7 @@
                             :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
                         />
                         <div>{{ post.category }}</div>
-                    </div>
+                    </a>
                 </div>
 
                 <i class="u-private" v-if="post.post_status != 'publish' || !!~~post.visible">

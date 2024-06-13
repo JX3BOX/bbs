@@ -122,7 +122,6 @@ export default {
         // 卡片皮肤
         skin() {
             if (this.data.decoration_id && this.data.decoration.val) {
-                console.log(1);
                 const skinJson = this.skinJson;
                 const val = this.data.decoration.val;
                 if (skinJson[val]) {
