@@ -254,7 +254,7 @@ export default {
             font-size: 22px;
             cursor: pointer;
             line-height: 32px;
-            color: #4080ff;
+            color: var(--title-color);
             font-weight: bold;
             &:hover {
                 color: rgba(255, 64, 128, 1);
