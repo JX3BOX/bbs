@@ -105,6 +105,7 @@ import TopicItem from "@/components/community/topic_item.vue";
 import { random } from "lodash";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
+import { getSkinJson } from "@/service/community";
 const skinKey = "community_topic_skin";
 export default {
     props: ["data"],
@@ -121,6 +122,7 @@ export default {
         // 卡片皮肤
         skin() {
             if (this.data.decoration_id && this.data.decoration.val) {
+                console.log(1);
                 const skinJson = this.skinJson;
                 const val = this.data.decoration.val;
                 if (skinJson[val]) {
