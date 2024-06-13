@@ -28,11 +28,11 @@
                 <span>论坛</span>
                 <em>Community</em>
             </a>
-            <a href="/bbs" :class="{ 'is-active': routeActive('bbs') }">
+            <!-- <a href="/bbs" :class="{ 'is-active': routeActive('bbs') }">
                 <i class="el-icon-coffee-cup"></i>
                 <span>茶馆</span>
                 <em>Story</em>
-            </a>
+            </a> -->
             <a href="/joke" :class="{ 'is-active': routeActive('joke') }">
                 <i class="el-icon-cherry"></i>
                 <span>骚话</span>

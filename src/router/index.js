@@ -26,12 +26,12 @@ const CommunitySingle = () => import("../views/CommunitySingle.vue");
 Vue.use(VueRouter);
 
 const routes = [
-    { name: "index", path: "/", redirect: { name: "bbs" }, component: Forum },
-    { name: "bbs", path: "/bbs", component: Forum },
+    { name: "index", path: "/", redirect: { name: "community" }, component: Forum },
+    { name: "bbs", path: "/bbs", component: Forum, redirect: { name: "community" }, },
+    { name: "single", path: "/bbs/:id", component: Single },
     { name: "community", path: "/community", component: Community },
     { path: "/community/topic/:id", redirect: "/community/:id" },
     { name: "community-single", path: "/community/:id", component: CommunitySingle },
-    { name: "single", path: "/bbs/:id", component: Single },
     { name: "namespace", path: "/namespace", component: Namespace },
     {
         name: "namespace-single",
