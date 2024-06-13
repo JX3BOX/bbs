@@ -377,7 +377,6 @@ export default {
                     },
                     ...res.data.data,
                 ];
-                console.log(list);
                 this.categoryList = formatCategoryList(list);
             });
         },

@@ -55,7 +55,7 @@
                 </a>
             </el-popover>
 
-            <el-dropdown trigger="click" size="small" :disabled="moreNavList.length === 0">
+            <el-dropdown size="small" :disabled="moreNavList.length === 0">
                 <a href="javascript:;" :class="`u-item u-more ${moreNavList.length === 0 && 'is-disabled'}`">
                     <span>更多</span>
                     <i class="el-icon-arrow-down"></i>
@@ -77,11 +77,11 @@
                             @click="handleChange(item)"
                         >
                             <span> {{ item.name }}</span>
-                            <img
+                            <!-- <img
                                 v-svg-inline
                                 class="u-icon"
                                 :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
-                            />
+                            /> -->
                         </a>
                     </el-dropdown-item>
                 </el-dropdown-menu>
