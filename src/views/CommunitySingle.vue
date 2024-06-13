@@ -52,6 +52,9 @@
                 </div>
             </div>
         </div>
+
+        <Homework v-model="showHomeWork" title="答谢" :postType="postType" :postId="postId" :client="postClient" :userId="postUserId" :article-id="id" category="community"></Homework>
+        <boxCoinRecords v-model="showBoxCoin" :postType="postType" :postId="postId" :client="postClient"></boxCoinRecords>
     </CommunitySingleLayout>
 </template>
 
@@ -65,6 +68,9 @@ import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/commun
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
+import Homework from '@jx3box/jx3box-common-ui/src/interact/Homework.vue';
+import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-records.vue";
+import bus from "@/utils/bus";
 
 const appKey = "community";
 
@@ -74,6 +80,8 @@ export default {
         CommunitySingleLayout,
         PostHeader,
         ReplyItem,
+        Homework,
+        boxCoinRecords
     },
     provide() {
         return {
@@ -98,6 +106,15 @@ export default {
             loading: false,
             onlyAuthor: false,
             number_queries: ["per", "page"],
+
+            // 打赏相关 start
+            showHomeWork: false,
+            postType: "community",
+            postId: 0,
+            postUserId: 0,
+            postClient: "std",
+            showBoxCoin: false,
+            // 打赏相关 end
         };
     },
     computed: {
@@ -127,6 +144,20 @@ export default {
         if (!this.id) return this.$message.error("文章id不存在");
         this.getDetails();
         this.getReplyList();
+
+        // 打赏
+        bus.on('onThx', (data) => {
+            this.postType = data.postType;
+            this.postId = data.postId;
+            this.postUserId = data.postUserId;
+            this.showHomeWork = true;
+        });
+
+        bus.on("boxcoin-click", data => {
+            this.postType = data.postType;
+            this.postId = data.postId;
+            this.showBoxCoin = true
+        })
     },
     watch: {
         // 加载路由参数
@@ -147,7 +178,6 @@ export default {
             },
         },
     },
-
     methods: {
         /**
          * 获取url楼诚参数
