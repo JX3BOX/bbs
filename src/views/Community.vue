@@ -368,7 +368,7 @@ export default {
         },
         // 获取分类列表
         getCategoryList() {
-            getTopicBucket({ type: "community", mark_enable: 1 }).then((res) => {
+            getTopicBucket({ type: "community" }).then((res) => {
                 // 分类前面加个全部
                 const list = [
                     {
