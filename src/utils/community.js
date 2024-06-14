@@ -47,6 +47,7 @@ export function formatCategoryList(categories) {
             color: modifyAlpha(color, 1),
             mark: item.mark,
             remark: item.remark,
+            mark_enable: item.mark_enable,
         };
         return data;
     });

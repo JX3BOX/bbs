@@ -38,7 +38,7 @@
                         :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                     />
 
-                    <CategoryLottieMark class="u-mark" v-if="item.mark" :mark="item.mark"></CategoryLottieMark>
+                    <CategoryLottieMark class="u-mark" v-if="item.mark && item.mark_enable" :mark="item.mark"></CategoryLottieMark>
 
                     <!-- <img
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
