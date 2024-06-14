@@ -6,7 +6,14 @@
 </template>
 
 <script>
-import { delMyComment, delCommentToMyReply, delReplyToMyTopic, deleteMyReply, manageDelComment, manageDelReply } from "@/service/community";
+import {
+    delMyComment,
+    delCommentToMyReply,
+    delReplyToMyTopic,
+    deleteMyReply,
+    manageDelComment,
+    manageDelReply,
+} from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "DeleteButton",
@@ -29,18 +36,18 @@ export default {
         },
         // 回复我的回帖 （我是层主）
         isCommentToMyReply: function () {
-            return this.type === "comment" && this.replyData.user_id == User.getInfo().uid
+            return this.type === "comment" && this.replyData.user_id == User.getInfo().uid;
         },
         isSuperAdmin() {
-            return User.isSuperAdmin();
+            return User.isSuperAdmin() || User.hasPermission("manage_del_post");
         },
         isFollower() {
             return this.post?.user_id == User.getInfo()?.uid;
         },
         canDelete() {
             // 不是 1 楼 且 是超级管理 || 层主
-            return !this.isMaster && (this.isSuperAdmin || this.isFollower)
-        }
+            return !this.isMaster && (this.isSuperAdmin || this.isFollower);
+        },
     },
     methods: {
         onDeleteClick() {
@@ -117,7 +124,7 @@ export default {
                 });
             });
         },
-        manageDeleteComment: function() {
+        manageDeleteComment: function () {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -129,7 +136,7 @@ export default {
                 });
             });
         },
-        manageDeleteReply: function() {
+        manageDeleteReply: function () {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
