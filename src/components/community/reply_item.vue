@@ -13,11 +13,34 @@
             <div class="m-reply-content">
                 <div class="u-reply-floor u-mobile-hidden">
                     {{ isMaster ? "楼主" : post.floor + "楼" }}
+                    <span class="u-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
+                    <div class="u-reply-op">
+                        <el-button
+                            v-if="!isMaster && (isSuper || isFollower)"
+                            class="u-mobile-hidden"
+                            @click="onEdit"
+                            type="text"
+                            icon="el-icon-edit-outline"
+                            size="mini"
+                            >编辑</el-button
+                        >
+                    </div>
                 </div>
-                <span class="u-boxcoin" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
-                    <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" />
-                    收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
-                    ><i class="el-icon-coin"></i>
+                <span class="u-boxcoin" v-if="!isMaster">
+                    <el-button
+                        v-if="isLogin && !isMaster && !isFollower"
+                        class="u-mobile-hidden"
+                        type="text"
+                        icon="el-icon-present"
+                        @click="onThx"
+                        size="mini"
+                        >答谢</el-button
+                    >
+                    <span class="u-boxcoin-total" v-if="boxCoinTotal"  @click.stop="onBoxcoinClick">
+                        <!-- <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" /> -->
+                        收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
+                        ><i class="el-icon-coin"></i>
+                    </span>
                 </span>
                 <div class="u-reply-content">
                     <Article v-if="isMaster" :content="post.content || ''" />
@@ -36,47 +59,13 @@
                     :client="post.client"
                 />
                 <!-- 操作按钮 -->
-                <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div>
+                <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->
                 <div class="u-reply-toolbar">
                     <div>
                         <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
-                        <el-dropdown class="u-more" placement="bottom" trigger="click" v-if="!isMaster && isLogin">
-                            <el-button type="text" icon="el-icon-more">更多</el-button>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-if="!isMaster && (isSuper || isFollower)">
-                                    <el-button
-                                        class="u-mobile-hidden"
-                                        @click="onEdit"
-                                        type="text"
-                                        icon="el-icon-edit-outline"
-                                        >编辑</el-button
-                                    >
-                                </el-dropdown-item>
-                                <el-dropdown-item v-if="isLogin">
-                                    <el-button class="u-mobile-hidden" type="text" icon="el-icon-present" @click="onThx"
-                                        >答谢</el-button
-                                    >
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <DeleteButton
-                                        class="u-mobile-hidden"
-                                        :post="post"
-                                        type="reply"
-                                        :isMaster="isMaster"
-                                    />
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <AddBlockButton class="u-mobile-hidden" :post="post" />
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <ComplaintButton class="u-mobile-hidden" :post="post" />
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                        <template v-else-if="isLogin">
-                            <AddBlockButton class="u-mobile-hidden" :post="post" />
-                            <ComplaintButton class="u-mobile-hidden" :post="post" />
-                        </template>
+                        <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
+                        <AddBlockButton class="u-mobile-hidden" :post="post" />
+                        <ComplaintButton class="u-mobile-hidden" :post="post" />
                         <el-button
                             type="primary"
                             size="small"
@@ -112,6 +101,20 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>
                                     <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="!isMaster && (isSuper || isFollower)">
+                                    <el-button
+                                        class="u-mobile-hidden"
+                                        @click="onEdit"
+                                        type="text"
+                                        icon="el-icon-edit-outline"
+                                        >编辑</el-button
+                                    >
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="isLogin && !isMaster">
+                                    <el-button class="u-mobile-hidden" type="text" icon="el-icon-present" @click="onThx"
+                                        >答谢</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <DeleteButton

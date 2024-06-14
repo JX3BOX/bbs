@@ -71,16 +71,26 @@
     .u-reply-floor {
         .pr;
         .bold;
+        .flex;
+        align-items: center;
         color: @color-link;
         line-height: 32px;
-        font-size: 16px;
+        font-size: 13px;
         margin-bottom: 12px;
+    }
+    .u-comment-time{
+        color:#999;
+        font-weight: normal;
+        margin-left:5px;
+    }
+    .u-reply-op{
+        margin-left:5px;
     }
     .u-boxcoin {
         .pa;
         right: 0;
         top: 0;
-        .fz(14px);
+        .fz(12px);
         .flex;
         align-items: center;
         gap: 5px;
@@ -100,6 +110,7 @@
     .u-boxcoin-num {
         color: #f0b400;
         .bold;
+        padding:0 2px;
     }
     // 回帖内容
     .u-reply-content {
@@ -120,6 +131,9 @@
             }
         }
     }
+}
+@media screen and (max-width:@phone){
+    .m-reply-content .u-boxcoin{.none;}
 }
 
 // 回帖时间
