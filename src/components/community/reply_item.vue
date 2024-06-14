@@ -13,12 +13,12 @@
             <div class="m-reply-content">
                 <div class="u-reply-floor u-mobile-hidden">
                     {{ isMaster ? "楼主" : post.floor + "楼" }}
-
-                    <span class="u-boxcoin" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
-                        <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="">
-                        收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span><i class="el-icon-coin"></i>
-                    </span>
                 </div>
+                <span class="u-boxcoin" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
+                    <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" />
+                    收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
+                    ><i class="el-icon-coin"></i>
+                </span>
                 <div class="u-reply-content">
                     <Article v-if="isMaster" :content="post.content || ''" />
                     <div v-else v-html="renderContent" />
@@ -44,13 +44,26 @@
                             <el-button type="text" icon="el-icon-more">更多</el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item v-if="!isMaster && (isSuper || isFollower)">
-                                    <el-button class="u-mobile-hidden" @click="onEdit" type="text" icon="el-icon-edit-outline" >编辑</el-button>
+                                    <el-button
+                                        class="u-mobile-hidden"
+                                        @click="onEdit"
+                                        type="text"
+                                        icon="el-icon-edit-outline"
+                                        >编辑</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item v-if="isLogin">
-                                    <el-button class="u-mobile-hidden" type="text" icon="el-icon-present" @click="onThx">答谢</el-button>
+                                    <el-button class="u-mobile-hidden" type="text" icon="el-icon-present" @click="onThx"
+                                        >答谢</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
+                                    <DeleteButton
+                                        class="u-mobile-hidden"
+                                        :post="post"
+                                        type="reply"
+                                        :isMaster="isMaster"
+                                    />
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <AddBlockButton class="u-mobile-hidden" :post="post" />
@@ -179,7 +192,7 @@ import { getLikes } from "@/service/next";
 import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
 import dayjs from "dayjs";
 import bus from "@/utils/bus";
-import {getHistorySummary} from "@/service/pay"
+import { getHistorySummary } from "@/service/pay";
 
 export default {
     name: "ReplyItem",
@@ -214,12 +227,11 @@ export default {
             renderContent: "",
             commentList: [],
 
-
             // summary
             summary: {
                 fromManager: 0,
-                fromUser: 0
-            }
+                fromUser: 0,
+            },
         };
     },
     computed: {
@@ -282,7 +294,7 @@ export default {
         },
         boxCoinTotal() {
             return this.summary.fromManager + this.summary.fromUser;
-        }
+        },
     },
     watch: {
         "post.content": {
@@ -425,29 +437,29 @@ export default {
             return list;
         },
         onEdit() {
-            const path = editLink('community/reply', this.post.id);
+            const path = editLink("community/reply", this.post.id);
             window.open(path, "_blank");
         },
         onThx() {
-            bus.emit('onThx', {
+            bus.emit("onThx", {
                 postType: "community_topic_reply",
                 postId: this.post.id,
                 postUserId: this.userId,
-                client: "std"
+                client: "std",
             });
         },
         loadHomeworkBoxcoin() {
-            getHistorySummary('community_topic_reply', this.post.id).then(res => {
+            getHistorySummary("community_topic_reply", this.post.id).then((res) => {
                 this.summary = res.data.data;
-            })
+            });
         },
-        onBoxcoinClick(){
-            bus.emit('boxcoin-click', {
+        onBoxcoinClick() {
+            bus.emit("boxcoin-click", {
                 postType: "community_topic_reply",
                 postId: this.post.id,
                 postUserId: this.userId,
             });
-        }
+        },
     },
 };
 </script>
