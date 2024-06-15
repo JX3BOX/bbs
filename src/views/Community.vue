@@ -26,7 +26,7 @@
             <!-- 正常展示的内容 -->
             <div v-else>
                 <!-- 置顶文章 -->
-                <TopicTop v-if="topTopicData" :data="topTopicData" />
+                <TopicTop :key="topTopicData.id" v-if="topTopicData" :data="topTopicData" />
                 <!-- 瀑布流 -->
                 <div class="m-topic-list" v-if="list.length">
                     <Waterfall
