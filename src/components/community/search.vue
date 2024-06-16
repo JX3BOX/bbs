@@ -18,6 +18,9 @@
                 />
             </div>
         </div>
+        <div class="m-community-search__right">
+            <slot name="right"></slot>
+        </div>
     </div>
 </template>
 
@@ -62,6 +65,7 @@ export default {
     backdrop-filter: blur(10px);
     top: 100px;
     padding: 20px 32px;
+    // .pr;
 }
 .u-sticky {
     position: sticky;
@@ -142,6 +146,12 @@ export default {
             padding: 0 24px;
         }
     }
+}
+
+.m-community-search__right {
+    .pa;
+    right: 32px;
+    top: 20px;
 }
 @media screen and (max-width: @ipad) {
     .m-search-wrapper {
