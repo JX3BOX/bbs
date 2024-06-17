@@ -151,6 +151,8 @@ export default {
         const view = localStorage.getItem("community_view");
         if (view) {
             this.view = +view;
+        } else {
+            this.view = 1;
         }
     },
     beforeDestroy() {
