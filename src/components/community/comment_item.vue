@@ -75,7 +75,7 @@ import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getDecoration } from "@/service/cms";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-const DECORATION_KEY = "decoration_me";
+const DECORATION_KEY = "decoration_comment_";
 
 export default {
     name: "CommentItem",
@@ -173,6 +173,7 @@ export default {
                 //筛选个人装扮
                 let decoration = decorationList.find((item) => item.type == "comment");
                 if (decoration) {
+                    this.setDecoration(decoration);
                     sessionStorage.setItem(DECORATION_KEY + this.uid, JSON.stringify(decoration));
                     return;
                 }
