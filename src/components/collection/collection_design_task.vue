@@ -62,7 +62,7 @@ import { pick } from "lodash";
 import dayjs from "dayjs";
 import User from "@jx3box/jx3box-common/js/user";
 export default {
-    name: "DesignTask",
+    name: "CollectionDesignTask",
     props: {
         modelValue: {
             type: Boolean,
@@ -149,24 +149,30 @@ export default {
         },
         onConfirm() {
             if (!this.post?.ID) return;
-            const data = pick(this.post, ["client", "author"]);
-            if (!data.client) {
-                data.client = this.client;
-            }
-            data.title = this.form.title;
-            data.remark = this.form.remark;
-            data.star = this.form.star;
-            data.subtype = this.form.type;
-            data.version = this.form.version;
+            this.$refs.form.validate((valid, fields) => {
+                if (valid) {
+                    const data = pick(this.post, ["client", "author"]);
+                    if (!data.client) {
+                        data.client = this.client;
+                    }
+                    data.title = this.form.title;
+                    data.remark = this.form.remark;
+                    data.star = this.form.star;
+                    data.subtype = this.form.type;
+                    data.version = this.form.version;
 
-            data.source_type = this.post?.post_type;
-            data.source_id = String(this.post?.ID);
-            data.link = `/${this.post?.post_type || "collection"}/${this.post?.ID}`;
-            data.flow = 0;
-
-            createDesignTask(data).then(() => {
-                this.$message.success("提交成功");
-                this.close();
+                    // data.source_type = this.post?.post_type;
+                    data.source_type = "collection";
+                    data.source_id = String(this.post?.ID);
+                    data.link = `/collection/${this.post?.ID}`;
+                    data.flow = 0;
+                    createDesignTask(data).then(() => {
+                        this.$message.success("提交成功");
+                        this.close();
+                    });
+                } else {
+                    console.log("error submit!!!", fields);
+                }
             });
         },
         onCancel() {

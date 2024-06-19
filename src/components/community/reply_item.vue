@@ -50,13 +50,14 @@
                 <Thx
                     v-if="isMaster"
                     class="m-single-thx"
-                    :postId="id"
+                    :postId="~~id"
                     postType="community_topic"
                     :postTitle="post.title"
                     :userId="post.user_id"
                     :adminBoxcoinEnable="true"
                     :userBoxcoinEnable="true"
                     :client="post.client"
+                    category="community"
                 />
                 <!-- 操作按钮 -->
                 <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->

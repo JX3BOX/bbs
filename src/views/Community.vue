@@ -1,7 +1,14 @@
 <template>
     <CommunityLayout>
         <CommunityHeader :categoryList="categoryList" />
-        <CommunitySearch @search="onSearch" ref="searchInput" />
+        <CommunitySearch @search="onSearch" ref="searchInput">
+            <template #right>
+                <el-radio-group v-model="view" size="mini" @input="onViewChange">
+                    <el-radio-button :label="1"><i class="el-icon-s-grid"></i></el-radio-button>
+                    <el-radio-button :label="2"><i class="el-icon-tickets"></i></el-radio-button>
+                </el-radio-group>
+            </template>
+        </CommunitySearch>
         <div class="m-community-content" v-loading="loading">
             <!-- 搜索时展示的内容 -->
             <div v-if="isSearch">
@@ -25,24 +32,35 @@
             </div>
             <!-- 正常展示的内容 -->
             <div v-else>
-                <!-- 置顶文章 -->
-                <TopicTop v-if="topTopicData" :data="topTopicData" />
-                <!-- 瀑布流 -->
-                <div class="m-topic-list" v-if="list.length">
-                    <Waterfall
-                        :col="col"
-                        :autoResize="true"
-                        :moveTransitionDuration="0"
-                        :fillBox="true"
-                        :list="list"
-                        :gutter="10"
-                        ref="waterfall"
-                    >
-                        <div slot-scope="item" :class="{ fadeIn: item.state == 'show' }">
-                            <TopicItem :key="item.data.id" :data="item.data" />
-                        </div>
-                    </Waterfall>
-                </div>
+                <template v-if="view == 1">
+                    <!-- 置顶文章 -->
+                    <TopicTop :key="topTopicData.id" v-if="topTopicData" :data="topTopicData" />
+                    <!-- 瀑布流 -->
+                    <div class="m-topic-list" v-if="list.length">
+                        <Waterfall
+                            :col="col"
+                            :autoResize="true"
+                            :moveTransitionDuration="0"
+                            :fillBox="true"
+                            :list="list"
+                            :gutter="10"
+                            ref="waterfall"
+                        >
+                            <div slot-scope="item" :class="{ fadeIn: item.state == 'show' }">
+                                <TopicItem :key="item.data.id" :data="item.data" />
+                            </div>
+                        </Waterfall>
+                    </div>
+                </template>
+                <template v-else>
+                    <!-- 列表 -->
+                    <div class="m-archive-list m-topic-list">
+                        <ul class="u-list">
+                            <ListItem :key="topTopicData.id" v-if="topTopicData" :item="topTopicData" />
+                            <ListItem v-for="item in list" :key="item.id" :item="item" />
+                        </ul>
+                    </div>
+                </template>
                 <!-- 分页 -->
                 <CommunityPagination
                     ref="paginationRef"
@@ -65,6 +83,7 @@ import CommunityHeader from "@/components/community/header.vue";
 import CommunitySearch from "@/components/community/search.vue";
 import Waterfall from "vue-waterfall-rapid";
 import TopicItem from "@/components/community/topic_item.vue";
+import ListItem from "@/components/community/list_item.vue";
 import { getTopicList, globalSearch } from "@/service/community";
 import TopicTop from "@/components/community/topic_top.vue";
 import { getTopicBucket } from "@/service/community";
@@ -83,6 +102,7 @@ export default {
         Waterfall,
         TopicItem,
         TopicTop,
+        ListItem,
     },
     data() {
         return {
@@ -103,6 +123,9 @@ export default {
             isSearch: false,
             topTopicData: null,
             categoryList: [],
+
+            // 视图 1:瀑布流 2:列表
+            view: "",
         };
     },
     computed: {
@@ -124,6 +147,13 @@ export default {
         this.handleResize();
         this.loadData();
         this.getCategoryList();
+
+        const view = localStorage.getItem("community_view");
+        if (view) {
+            this.view = +view;
+        } else {
+            this.view = 1;
+        }
     },
     beforeDestroy() {
         window.removeEventListener("resize", this.handleResize);
@@ -393,10 +423,18 @@ export default {
                 };
             }
         },
+        // 视图切换
+        onViewChange(view) {
+            this.view = view;
+            localStorage.setItem("community_view", view);
+        },
     },
 };
 </script>
 
 <style lang="less">
 @import "~@/assets/css/community/community.less";
+
+@import "~@/assets/css/app.less";
+@import "~@/assets/css/bbs/list.less";
 </style>

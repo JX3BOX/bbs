@@ -133,7 +133,6 @@ export default {
         },
         hightStyle: function () {
             if (this.data.is_hight && this.data.hight_color) {
-                console.log(this.data.hight_color);
                 return {
                     color: this.data.hight_color,
                 };

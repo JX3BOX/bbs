@@ -90,6 +90,7 @@
                         <ul class="u-list">
                             <li class="u-item" v-for="(post, key) in collection.posts" :key="key">
                                 <span class="u-item-order">{{ key + 1 }}.</span>
+                                <img class="u-item-icon" :src="iconUrl(post.icon)" v-if="post.icon" />
                                 <span class="u-item-link" v-if="post.type === 'custom'">
                                     <i class="el-icon-link"></i>站外链接
                                 </span>
@@ -111,7 +112,7 @@
                                             ? post.url
                                             : getLink(post.post_type || post.type, post.id)
                                     "
-                                    >{{ post.title }}</a
+                                    >{{ post.custom_title || post.title }}</a
                                 >
                                 <time
                                     class="u-updated"
@@ -173,6 +174,7 @@ import {
 } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 import CollectionLayout from "@/layouts/CollectionLayout.vue";
 export default {
@@ -262,6 +264,10 @@ export default {
         },
         formatDate(date) {
             return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+        },
+        iconUrl: function (icon) {
+            const key = icon.replace("_", '/')
+            return `${__imgPath}image/${key}.png`;
         },
     },
     filters: {
