@@ -24,20 +24,17 @@
             </template>
         </Breadcrumb>
 
-        <div>
-            <Main :withoutRight="false">
-                <div class="m-community-single__main">
-                    <div class="m-community-single__left">
-                        <slot></slot>
-                        <Footer></Footer>
-                    </div>
-
-                    <!-- <div class="m-community-single__right">
-                        <PostTopic v-if="post.id" type="community" :id="~~post.id" />
-                    </div> -->
+        <Main :withoutRight="false">
+            <div class="m-community-single__main">
+                <div class="m-community-single__left">
+                    <slot></slot>
+                    <RightSidebar :show-toggle="true">
+                        <Side :id="id" class="m-extend" />
+                    </RightSidebar>
+                    <Footer></Footer>
                 </div>
-            </Main>
-        </div>
+            </div>
+        </Main>
     </div>
 </template>
 
@@ -47,6 +44,7 @@ import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import User from "@jx3box/jx3box-common/js/user";
+import Side from "@/components/bbs/single_side.vue";
 export default {
     name: "CommunitySingleLayout",
     props: ["post"],
@@ -71,8 +69,8 @@ export default {
                 post_title: this.post.title,
                 ID: this.post.id,
                 post_type: "community",
-            }
-        }
+            };
+        },
     },
     mounted() {},
     methods: { getAppIcon },
@@ -82,6 +80,7 @@ export default {
         TopStickyInfo,
         // PostTopic,
         // Info,
+        Side,
     },
 };
 </script>

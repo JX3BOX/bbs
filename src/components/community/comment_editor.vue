@@ -9,6 +9,7 @@
                 v-model="newComment.content"
                 placeholder="参与讨论..."
                 :id="inputId"
+                ref="textarea"
             ></el-input>
             <div class="c-comment-tools">
                 <div class="u-tools">
@@ -110,7 +111,8 @@ export default {
          * @parma {string} emotionVal emotion key
          */
         async insertVariable(emotionVal) {
-            const myField = document.querySelector(`#${this.inputId}`);
+            // const myField = document.querySelector(`#${this.inputId}`);
+            const myField = this.$refs.textarea.$el.querySelector("textarea");
             const value = emotionVal.key;
             if (myField.selectionStart || myField.selectionStart === 0) {
                 let startPos = myField.selectionStart;

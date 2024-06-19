@@ -72,7 +72,7 @@
                             size="small"
                             class="u-reply-btn"
                             :style="styles"
-                            @click="onShowReply()"
+                            @click="onShowReply"
                         >
                             <div class="u-btn">
                                 <img src="@/assets/img/community/reply.svg" alt="" />
@@ -357,7 +357,8 @@ export default {
         },
         onShowReply() {
             if (this.isMaster) {
-                window.scrollTo(0, document.body.scrollHeight);
+                // window.scrollTo(0, document.body.scrollHeight);
+                this.$emit('onReplyTopic')
             } else {
                 this.showReplyForReplyFrom = !this.showReplyForReplyFrom;
             }

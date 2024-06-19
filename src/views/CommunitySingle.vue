@@ -23,7 +23,7 @@
             <div class="m-list-box">
                 <!--  楼主 -->
                 <div class="m-master-box">
-                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" />
+                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" @onReplyTopic="handleReplyTopic" />
                 </div>
 
                 <!-- 帖子回复 -->
@@ -53,8 +53,13 @@
             </div>
         </div>
 
-        <Homework v-model="showHomeWork" title="答谢" :postType="postType" :postId="postId" :client="postClient" :userId="postUserId" :article-id="id" category="community"></Homework>
+        <Homework v-model="showHomeWork" title="答谢" :postType="postType" :postId="postId" :client="postClient" :userId="postUserId" :article-id="~~id" category="community"></Homework>
         <boxCoinRecords v-model="showBoxCoin" :postType="postType" :postId="postId" :client="postClient"></boxCoinRecords>
+
+        <el-dialog :visible.sync="showComment" title="快捷回复" :width="isPhone ? '95%' : ''">
+            <CommentEditor @submit="onReplyTopic"></CommentEditor>
+        </el-dialog>
+
     </CommunitySingleLayout>
 </template>
 
@@ -110,11 +115,13 @@ export default {
             // 打赏相关 start
             showHomeWork: false,
             postType: "community",
-            postId: 0,
+            postId: "",
             postUserId: 0,
             postClient: "std",
             showBoxCoin: false,
             // 打赏相关 end
+
+            showComment: false,
         };
     },
     computed: {
@@ -135,6 +142,9 @@ export default {
         },
         isAuthor() {
             return this.post?.user_id == User.getInfo().uid;
+        },
+        isPhone() {
+            return window.innerWidth < 768;
         }
     },
     created() {
@@ -316,6 +326,7 @@ export default {
                 content: content,
             }).then((res) => {
                 this.onReplyTopicSuccess(res.data.data);
+                this.showComment = false;
             });
         },
         /**
@@ -360,6 +371,10 @@ export default {
                 })
                 .catch((err) => {});
         },
+        handleReplyTopic() {
+            // 展示快捷回复弹窗
+            this.showComment = true;
+        }
     },
 };
 </script>
