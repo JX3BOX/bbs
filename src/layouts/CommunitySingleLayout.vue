@@ -34,6 +34,11 @@
                     <Footer></Footer>
                 </div>
             </div>
+            <!-- <slot></slot>
+            <RightSidebar :show-toggle="true">
+                <Side :id="id" class="m-extend" />
+            </RightSidebar>
+            <Footer></Footer> -->
         </Main>
     </div>
 </template>
@@ -93,7 +98,7 @@ export default {
     .c-main {
         flex: 1;
         margin-left: 0;
-        margin-right: 0;
+        // margin-right: 0;
         .m-community-single {
             flex: 1;
         }
