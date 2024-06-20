@@ -28,7 +28,13 @@
 
                 <!-- 帖子回复 -->
                 <div class="m-reply-box">
-                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" :is-master="false" :is-author="isAuthor" />
+                    <ReplyItem
+                        v-for="(item, i) in replyList"
+                        :key="i"
+                        :post="item"
+                        :is-master="false"
+                        :is-author="isAuthor"
+                    />
                 </div>
             </div>
             <!-- 帖子回复e -->
@@ -53,19 +59,34 @@
             </div>
         </div>
 
-        <Homework v-model="showHomeWork" title="答谢" :postType="postType" :postId="postId" :client="postClient" :userId="postUserId" :article-id="~~id" category="community"></Homework>
-        <boxCoinRecords v-model="showBoxCoin" :postType="postType" :postId="postId" :client="postClient"></boxCoinRecords>
+        <Homework
+            v-model="showHomeWork"
+            title="答谢"
+            :postType="postType"
+            :postId="postId"
+            :client="postClient"
+            :userId="postUserId"
+            :article-id="~~id"
+            category="community"
+        ></Homework>
+        <boxCoinRecords
+            v-model="showBoxCoin"
+            :postType="postType"
+            :postId="postId"
+            :client="postClient"
+        ></boxCoinRecords>
 
         <el-dialog :visible.sync="showComment" title="快捷回复" :width="isPhone ? '95%' : ''">
             <CommentEditor @submit="onReplyTopic"></CommentEditor>
         </el-dialog>
 
+        <go-to-top-or-bottom />
     </CommunitySingleLayout>
 </template>
 
 <script>
 import ReplyItem from "@/components/community/reply_item.vue";
-
+import GoToTopOrBottom from "@/components/community/goToTopOrBottom.vue";
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
@@ -73,7 +94,7 @@ import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/commun
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
-import Homework from '@jx3box/jx3box-common-ui/src/interact/Homework.vue';
+import Homework from "@jx3box/jx3box-common-ui/src/interact/Homework.vue";
 import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-records.vue";
 import bus from "@/utils/bus";
 
@@ -86,7 +107,8 @@ export default {
         PostHeader,
         ReplyItem,
         Homework,
-        boxCoinRecords
+        boxCoinRecords,
+        GoToTopOrBottom,
     },
     provide() {
         return {
@@ -145,7 +167,7 @@ export default {
         },
         isPhone() {
             return window.innerWidth < 768;
-        }
+        },
     },
     created() {
         this.getJumpFloor();
@@ -156,18 +178,18 @@ export default {
         this.getReplyList();
 
         // 打赏
-        bus.on('onThx', (data) => {
+        bus.on("onThx", (data) => {
             this.postType = data.postType;
             this.postId = data.postId;
             this.postUserId = data.postUserId;
             this.showHomeWork = true;
         });
 
-        bus.on("boxcoin-click", data => {
+        bus.on("boxcoin-click", (data) => {
             this.postType = data.postType;
             this.postId = data.postId;
-            this.showBoxCoin = true
-        })
+            this.showBoxCoin = true;
+        });
     },
     watch: {
         // 加载路由参数
@@ -374,7 +396,7 @@ export default {
         handleReplyTopic() {
             // 展示快捷回复弹窗
             this.showComment = true;
-        }
+        },
     },
 };
 </script>
