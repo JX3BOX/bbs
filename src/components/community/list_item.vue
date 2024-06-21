@@ -228,7 +228,9 @@ export default {
 
 <style lang="less">
 .u-community-item {
-    background-position: center;
+    background-position: right bottom;
+    background-size: cover;
+    padding-top: 20px;
     .u-post {
         .flex;
         .pr;
