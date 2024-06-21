@@ -254,8 +254,12 @@ export default {
     padding-top: 20px;
     border-radius: 4px;
     padding-left: 10px;
-    border: none !important;
+    border: 1px solid #fff !important;
     background-color: #fff;
+
+    &:hover{
+        border:1px solid @color-link !important;
+    }
 
     .u-post {
         .flex;
