@@ -37,7 +37,7 @@
         <div class="u-content u-desc">
             <!-- {{ item.post_excerpt || item.title || "这个作者很懒,什么都没有留下" }} -->
             <div class="u-metalist u-collection">
-                <strong>小册</strong>
+                <!-- <strong>小册</strong>
                 <em>
                     <template v-if="~~item.collection_id">
                         <a :href="`/collection/${item.collection_id}`" target="_blank"
@@ -45,6 +45,10 @@
                         >
                     </template>
                     <template v-else>-</template>
+                </em> -->
+                <strong>描述</strong>
+                <em>
+                    <span v-html="item.introduction"></span>
                 </em>
             </div>
             <div class="u-metalist u-topics">
