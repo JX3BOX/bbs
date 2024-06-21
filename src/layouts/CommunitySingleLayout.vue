@@ -92,6 +92,7 @@ export default {
 
 <style lang="less">
 .p-community-single {
+    scroll-behavior: smooth;
     .m-community-single__main {
         display: flex;
     }

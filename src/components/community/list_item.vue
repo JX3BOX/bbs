@@ -1,5 +1,7 @@
 <template>
-    <li class="u-item u-community-item">
+    <li class="u-item u-community-item" :style="{
+                backgroundImage: `url(${skin.background})`,
+            }">
         <!-- Banner -->
         <a class="u-banner" :href="postLink(item.id)" :target="target">
             <img :src="getBanner(item.banner_img, item.post_subtype)" :key="item.ID"/>
@@ -46,13 +48,18 @@
                     </template>
                     <template v-else>-</template>
                 </em> -->
-                <strong>描述</strong>
+                <strong>摘要</strong>
                 <em>
                     <span v-html="item.introduction"></span>
                 </em>
             </div>
             <div class="u-metalist u-topics">
                 <strong>标签</strong>
+                <template v-if="~~item.collection_id">
+                    <a :href="`/collection/${item.collection_id}`" target="_blank"
+                        >《{{ item.collection && item.collection.title }}》</a
+                    >
+                </template>
                 <span v-if="item.color_tag && item.color_tag.length" class="m-topic-tag">
                     <span v-for="(_item, index) in item.color_tag" :key="index" :style="{ backgroundColor: _item.color }">
                         {{ _item.label }}
@@ -85,7 +92,10 @@ import { random} from "lodash"
 import User from "@jx3box/jx3box-common/js/user";
 import dayjs from "dayjs";
 import bus from "@/utils/bus";
+import { getSkinJson } from "@/service/community";
 const appKey = "community";
+const skinKey = "community_topic_skin";
+
 export default {
     name: "ListItem",
     props: ['item','order'],
@@ -96,6 +106,8 @@ export default {
 
             start: 1,
             end: 39,
+
+            skinJson: {},
         };
     },
     computed: {
@@ -123,6 +135,27 @@ export default {
             } else {
                 return {};
             }
+        },
+        // 卡片皮肤
+        skin() {
+            if (this.item.decoration_id && this.item.decoration.val) {
+                const skinJson = this.skinJson;
+                const val = this.item.decoration.val;
+                if (skinJson[val]) {
+                    return {
+                        background: __imgPath + `decoration/palu/${val}.png`,
+                        titleColor: skinJson[val].titleColor,
+                        titleHoverColor: skinJson[val].titleHoverColor,
+                        borderHoverColor: skinJson[val].borderHoverColor,
+                    };
+                }
+            }
+            // 默认值 未设置返回默认值 实装要判断
+            return {
+                titleColor: "#0366d6",
+                titleHoverColor: "rgba(255, 64, 128, 1)",
+                borderHoverColor: "#0366d6",
+            };
         },
     },
     watch: {},
@@ -156,6 +189,17 @@ export default {
         postLink: function(val) {
             return location.origin + `/${appKey}/` + val;
         },
+        getSkinJson() {
+            const skinJson = sessionStorage.getItem(skinKey);
+            if (skinJson) {
+                this.skinJson = JSON.parse(skinJson);
+            } else {
+                getSkinJson().then((res) => {
+                    this.skinJson = res.data;
+                    sessionStorage.setItem(skinKey, JSON.stringify(res.data));
+                });
+            }
+        },
     },
     filters: {
         authorLink,
@@ -176,12 +220,15 @@ export default {
         }
     },
     created: function() {},
-    mounted: function() {},
+    mounted: function() {
+        this.getSkinJson();
+    },
 };
 </script>
 
 <style lang="less">
 .u-community-item {
+    background-position: center;
     .u-post {
         .flex;
         .pr;

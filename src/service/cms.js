@@ -26,11 +26,6 @@ function getDecoration(params) {
     });
 }
 
-function getDecorationJson() {
-    let url = __imgPath + `decoration/index.json?${Date.now()}}`;
-    return axios.get(url);
-}
-
 const getUserList = (params) => $cms().get(`/api/cms/user/list`, { params });
 
-export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList, getDecoration, getDecorationJson };
+export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList, getDecoration };
