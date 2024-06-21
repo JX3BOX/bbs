@@ -151,7 +151,7 @@ export default {
 .m-community-search__right {
     .pa;
     right: 32px;
-    top: 20px;
+    top: 30px;
 }
 @media screen and (max-width: @ipad) {
     .m-search-wrapper {
@@ -159,6 +159,9 @@ export default {
     }
     .m-community-search.is-focus {
         width: 100%;
+    }
+    .m-community-search__right{
+        top:20px;
     }
 }
 </style>

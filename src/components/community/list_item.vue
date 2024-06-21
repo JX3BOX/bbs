@@ -1,22 +1,33 @@
 <template>
-    <li class="u-item u-community-item" :style="{
-                backgroundImage: `url(${skin.background})`,
-            }">
+    <li
+        class="u-item u-community-item"
+        :class="{ hasMoka: skin.background }"
+        :style="{
+            backgroundImage: `url(${skin.background})`,
+        }"
+    >
         <!-- Banner -->
         <a class="u-banner" :href="postLink(item.id)" :target="target">
-            <img :src="getBanner(item.banner_img, item.post_subtype)" :key="item.ID"/>
+            <img :src="getBanner(item.banner_img, item.post_subtype)" :key="item.ID" />
         </a>
         <!-- 标题 -->
         <h2 class="u-post" :class="{ isSticky: item.sticky }">
-            <!-- 图标 -->
-            <img svg-inline class="u-post-icon" v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
-            <img svg-inline class="u-post-icon" v-if="item.is_star" src="@/assets/img/community/is_star.svg" alt="" srcset="" />
-
             <!-- 资料片 -->
             <!-- <span class="u-label u-zlp" v-if="item.post_subtype && showSubtype(item.post_subtype)">{{ showSubtype(item.post_subtype) }}</span> -->
 
+            <img svg-inline class="u-post-icon" v-if="isTop" src="@/assets/img/community/is_top.svg" alt="" srcset="" />
+            <img
+                svg-inline
+                class="u-post-icon"
+                v-if="item.is_star"
+                src="@/assets/img/community/is_star.svg"
+                alt=""
+                srcset=""
+            />
+
             <!-- 标题文字 -->
             <a class="u-title" :style="hightStyle" :href="postLink(item.id)" :target="target">
+                <!-- 图标 -->
                 {{ item.title || "无标题" }}
             </a>
 
@@ -61,7 +72,11 @@
                     >
                 </template>
                 <span v-if="item.color_tag && item.color_tag.length" class="m-topic-tag">
-                    <span v-for="(_item, index) in item.color_tag" :key="index" :style="{ backgroundColor: _item.color }">
+                    <span
+                        v-for="(_item, index) in item.color_tag"
+                        :key="index"
+                        :style="{ backgroundColor: _item.color }"
+                    >
                         {{ _item.label }}
                     </span>
                 </span>
@@ -71,8 +86,14 @@
 
         <!-- 作者 -->
         <div class="u-misc">
-            <img class="u-author-avatar" :src="item.ext_user_info | showAvatar" :alt="item.ext_user_info | showNickname" />
-            <a class="u-author-name" :href="item.user_id | authorLink" target="_blank">{{ item.ext_user_info | showNickname }}</a>
+            <img
+                class="u-author-avatar"
+                :src="item.ext_user_info | showAvatar"
+                :alt="item.ext_user_info | showNickname"
+            />
+            <a class="u-author-name" :href="item.user_id | authorLink" target="_blank">{{
+                item.ext_user_info | showNickname
+            }}</a>
             <span class="u-date">
                 Updated on
                 <time v-if="order == 'update'">{{ item.post_modified | dateFormat }}</time>
@@ -86,9 +107,9 @@
 import { showAvatar, authorLink, showBanner, buildTarget, postLink } from "@jx3box/jx3box-common/js/utils";
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
-import {showDate} from '@jx3box/jx3box-common/js/moment.js'
+import { showDate } from "@jx3box/jx3box-common/js/moment.js";
 import _bbsSubtypes from "@/assets/data/bbs_subtypes.json";
-import { random} from "lodash"
+import { random } from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import dayjs from "dayjs";
 import bus from "@/utils/bus";
@@ -98,11 +119,11 @@ const skinKey = "community_topic_skin";
 
 export default {
     name: "ListItem",
-    props: ['item','order'],
+    props: ["item", "order"],
     components: {},
-    data: function() {
+    data: function () {
         return {
-            target : buildTarget(),
+            target: buildTarget(),
 
             start: 1,
             end: 39,
@@ -115,10 +136,10 @@ export default {
             return this.item?.client;
         },
         hasPermission() {
-            return User.hasPermission('push_banner');
+            return User.hasPermission("push_banner");
         },
-        pushDate({item}) {
-            const date = item?.log?.push_at
+        pushDate({ item }) {
+            const date = item?.log?.push_at;
             return showDate(new Date(date));
         },
         showPushDate() {
@@ -160,33 +181,33 @@ export default {
     },
     watch: {},
     methods: {
-        getBanner: function(val, subtype) {
+        getBanner: function (val, subtype) {
             if (val) {
                 return showBanner(val);
             } else {
                 // 从1-39中随机选一个
-                const randomNum = random(this.start, this.end)
+                const randomNum = random(this.start, this.end);
                 // return __imgPath + `image/banner/${appKey}${subtype}` + ".png";
-                return __cdn + `design/random_cover/${randomNum}.jpg`
+                return __cdn + `design/random_cover/${randomNum}.jpg`;
             }
         },
         reporterLink: function (val) {
-            const prefix = this.client === 'std' ? 'www' : 'origin'
-            return`${prefix}:/${appKey}/` + val;
+            const prefix = this.client === "std" ? "www" : "origin";
+            return `${prefix}:/${appKey}/` + val;
         },
-        showSubtype: function (val){
-            return _bbsSubtypes[val]?.label || ""
+        showSubtype: function (val) {
+            return _bbsSubtypes[val]?.label || "";
         },
         showDate,
         // 是否为30天内
         isRecent: function () {
-            const date = this.item?.log?.push_at
+            const date = this.item?.log?.push_at;
             return dayjs().diff(dayjs(date), "day") < 30;
         },
         onPush() {
             bus.emit("design-task", this.item);
         },
-        postLink: function(val) {
+        postLink: function (val) {
             return location.origin + `/${appKey}/` + val;
         },
         getSkinJson() {
@@ -203,24 +224,24 @@ export default {
     },
     filters: {
         authorLink,
-        showHighlight: function(val) {
+        showHighlight: function (val) {
             return val ? `color:${val};font-weight:600;` : "";
         },
-        showMark: function(val) {
+        showMark: function (val) {
             return mark_map[val] || val;
         },
-        showAvatar: function(userinfo) {
+        showAvatar: function (userinfo) {
             return showAvatar(userinfo?.avatar);
         },
-        showNickname : function (userinfo){
-            return userinfo?.display_name || '匿名'
+        showNickname: function (userinfo) {
+            return userinfo?.display_name || "匿名";
         },
-        dateFormat : function (gmt){
-            return showDate(new Date(gmt))
-        }
+        dateFormat: function (gmt) {
+            return showDate(new Date(gmt));
+        },
     },
-    created: function() {},
-    mounted: function() {
+    created: function () {},
+    mounted: function () {
         this.getSkinJson();
     },
 };
@@ -231,6 +252,11 @@ export default {
     background-position: right bottom;
     background-size: cover;
     padding-top: 20px;
+    border-radius: 4px;
+    padding-left: 10px;
+    border: none !important;
+    background-color: #fff;
+
     .u-post {
         .flex;
         .pr;
@@ -240,10 +266,23 @@ export default {
         width: 18px;
         height: 18px;
         margin-right: 5px;
+        flex-shrink: 0;
     }
     .u-topics {
         .flex !important;
         align-items: center;
+    }
+}
+@media screen and (max-width:@phone){
+    .m-topic-list .u-community-item{
+        .u-post{
+            .flex;
+            align-items: flex-start;
+        }
+        .u-title{
+            .pr;
+            top:-3px;
+        }
     }
 }
 </style>
