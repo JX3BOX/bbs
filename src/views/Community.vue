@@ -74,6 +74,7 @@
                 />
             </div>
         </div>
+        <el-backtop></el-backtop>
     </CommunityLayout>
 </template>
 
