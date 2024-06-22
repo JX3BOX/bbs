@@ -3,16 +3,14 @@
         <div class="m-reply-left">
             <CommentUser :uid="userInfo.id" />
             <div class="u-top-right u-mobile-show">
-                <div>
-                    <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
-                    <div class="m-reply-time">{{ showTime }}</div>
-                </div>
+                <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
+                <div class="m-reply-time">{{ showTime }}</div>
             </div>
         </div>
         <div class="m-reply-right">
             <div class="m-reply-content">
                 <div class="u-reply-floor u-mobile-hidden">
-                    {{ isMaster ? "楼主" : post.floor + "楼" }}
+                    <a :href="`#floor-${post.floor}`" @click="onFloorClick">{{ isMaster ? "楼主" : post.floor + "楼" }}</a>
                     <span class="u-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
                     <div class="u-reply-op">
                         <el-button
@@ -465,6 +463,15 @@ export default {
                 postUserId: this.userId,
             });
         },
+        onFloorClick() {
+            // 复制楼层
+            const floor = this.post.floor;
+
+            const link = window.location.href.split("#")[0] + `#floor-${floor}`;
+            navigator.clipboard.writeText(link).then(() => {
+                this.$message.success("楼层已复制到剪贴板");
+            });
+        }
     },
 };
 </script>
