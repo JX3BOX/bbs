@@ -10,8 +10,8 @@
         >
             <div class="m-topic-top">
                 <div class="m-topic-top__time">
-                    <i :class="getTimeAgo(data.updated_at).icon"></i>
-                    <span>{{ getTimeAgo(data.updated_at).text }} </span>
+                    <i :class="getTimeAgo(data.created_at).icon"></i>
+                    <span>{{ getTimeAgo(data.created_at).text }} </span>
                 </div>
                 <div class="m-topic-top_right">
                     <div class="u-item">
