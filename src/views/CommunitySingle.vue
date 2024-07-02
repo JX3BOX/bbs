@@ -40,7 +40,20 @@
             <!-- 帖子回复e -->
 
             <!-- 分页 -->
+
             <div class="m-community-footer">
+                <el-button
+                    class="u-more-buttom"
+                    :style="{ fontSize: hasNextPage ? '14px' : '12px' }"
+                    :type="hasNextPage ? 'primary' : 'text'"
+                    @click="nextPage"
+                    :loading="loading"
+                    :disabled="!hasNextPage"
+                    :icon="hasNextPage ? 'el-icon-arrow-down' : ''"
+                >
+                    {{ hasNextPage ? "下一页" : "没有更多了" }}
+                </el-button>
+
                 <div class="m-pagination-box">
                     <el-pagination
                         background
@@ -168,6 +181,10 @@ export default {
         isPhone() {
             return window.innerWidth < 768;
         },
+        // 是否显示加载更多
+        hasNextPage: function () {
+            return this.pageTotal >= 1 && this.per * this.page < this.total;
+        },
     },
     created() {
         this.getJumpFloor();
@@ -236,6 +253,10 @@ export default {
                 }
             });
         },
+        // 翻页按钮
+        nextPage: function () {
+            this.getReplyList(true);
+        },
         onSearch() {
             this.page = 1;
             this.$nextTick(() => {
@@ -252,7 +273,7 @@ export default {
             this.getReplyList();
         },
 
-        buildQuery: function (appendMode) {
+        buildQuery: function () {
             let _query = {
                 index: this.page,
                 pageSize: this.per,
@@ -262,7 +283,6 @@ export default {
                 _query.user_id = this.post.user_id;
             }
             this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
-
             return _query;
         },
         getTopicData: function () {
@@ -279,8 +299,11 @@ export default {
                 postStat(appKey, this.id);
             });
         },
-        getReplyList: function () {
+        getReplyList: function (appendMode) {
             this.loading = true;
+            if (appendMode) {
+                this.page += 1;
+            }
             const params = this.buildQuery();
             return getTopicReplyList(this.id, params)
                 .then(async (res) => {
@@ -291,12 +314,7 @@ export default {
                     } else {
                         // 把点赞数量请求过来填充进去
                         list = await this.getLikes(list);
-                        // 补充楼层字段
-                        this.replyList = list.map((item, i) => {
-                            return {
-                                ...item,
-                            };
-                        });
+                        this.replyList = list;
                         // 如果有楼层参数 跳转到指定楼层
                         if (this.floor) {
                             this.jumpFloor();
