@@ -4,8 +4,8 @@
         <CommunitySearch @search="onSearch" ref="searchInput">
             <template #right>
                 <el-radio-group v-model="view" size="mini" @input="onViewChange">
-                    <el-radio-button :label="1"><i class="el-icon-s-grid"></i></el-radio-button>
-                    <el-radio-button :label="2"><i class="el-icon-tickets"></i></el-radio-button>
+                    <el-radio-button :label="1"><i class="el-icon-s-grid"></i> 卡片</el-radio-button>
+                    <el-radio-button :label="2"><i class="el-icon-tickets"></i> 列表</el-radio-button>
                 </el-radio-group>
             </template>
         </CommunitySearch>
@@ -126,7 +126,7 @@ export default {
             categoryList: [],
 
             // 视图 1:瀑布流 2:列表
-            view: "",
+            view: 2,
         };
     },
     computed: {
