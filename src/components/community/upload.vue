@@ -40,7 +40,6 @@ export default {
             dialogVisible: false,
             fileList: [],
             successList: [],
-
             acceptedExtensions: ["jpg", "jpeg", "png", "gif"],
             maxCount: 5,
             maxSize: 10 * 1024 * 1024,
@@ -105,6 +104,10 @@ export default {
             });
             this.$emit("onError");
             this.fileList = [];
+        },
+        addFile(file) {
+            this.$refs.upload.handleStart(file);
+            return false;
         },
     },
 };

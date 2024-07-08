@@ -10,6 +10,7 @@
                 placeholder="参与讨论..."
                 :id="inputId"
                 ref="textarea"
+                @paste.native="handlePaste"
             ></el-input>
             <div class="c-comment-tools">
                 <div class="u-tools">
@@ -28,7 +29,7 @@
                 ref="uploader"
                 @onFinish="attachmentUploadFinish"
                 @onError="attachmentUplodError"
-                v-if="showUploader"
+                v-show="showUploader"
             />
         </el-form-item>
     </el-form>
@@ -47,7 +48,6 @@ export default {
         quickReply,
     },
     props: {
-        // 用于判定该评论组件是否在底部
         isBottom: {
             type: Boolean,
             default: false,
@@ -56,7 +56,7 @@ export default {
     mounted() {
         if (this.isBottom) this.inputId = "textarea-bottom";
     },
-    data: function () {
+    data() {
         return {
             maxLength: 500,
             showUploader: false,
@@ -84,7 +84,6 @@ export default {
                 is_template: 1,
             });
         },
-        // 文件上传完成后，进行数据提交
         attachmentUploadFinish(data) {
             const content = this.newComment.content?.replace(/\n/g, "<br>");
             this.$emit("submit", {
@@ -96,22 +95,15 @@ export default {
                 content: "",
             };
             this.showUploader = false;
-
             this.disableSubmitBtn = false;
         },
         attachmentUplodError() {
             this.disableSubmitBtn = false;
         },
-        // 处理表情
         handleEmotionSelected(key) {
             this.insertVariable(key);
         },
-        /**
-         * add emotion to textarea
-         * @parma {string} emotionVal emotion key
-         */
         async insertVariable(emotionVal) {
-            // const myField = document.querySelector(`#${this.inputId}`);
             const myField = this.$refs.textarea.$el.querySelector("textarea");
             const value = emotionVal.key;
             if (myField.selectionStart || myField.selectionStart === 0) {
@@ -129,6 +121,22 @@ export default {
                 myField.setSelectionRange(endPos + value.length, endPos + value.length);
             } else {
                 this.newComment.content = value;
+            }
+        },
+        handlePaste(event) {
+            const clipboardItems = event.clipboardData.items;
+            for (let i = 0; i < clipboardItems.length; i++) {
+                const item = clipboardItems[i];
+                if (item.type.indexOf("image") !== -1) {
+                    // 阻止默认粘贴图片的名字
+                    event.preventDefault();
+                    const blob = item.getAsFile();
+                    const file = new File([blob], new Date().getTime() + "-" + blob.name, { type: blob.type });
+                    this.$refs.uploader.addFile(file);
+                    if (!this.showUploader) {
+                        this.showUploader = true;
+                    }
+                }
             }
         },
     },
