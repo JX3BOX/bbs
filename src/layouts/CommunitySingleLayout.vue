@@ -29,16 +29,11 @@
                 <div class="m-community-single__left">
                     <slot></slot>
                     <RightSidebar :show-toggle="true">
-                        <Side :id="id" class="m-extend" />
+                        <Side :id="id" type="community" class="m-extend" />
                     </RightSidebar>
                     <Footer></Footer>
                 </div>
             </div>
-            <!-- <slot></slot>
-            <RightSidebar :show-toggle="true">
-                <Side :id="id" class="m-extend" />
-            </RightSidebar>
-            <Footer></Footer> -->
         </Main>
     </div>
 </template>
