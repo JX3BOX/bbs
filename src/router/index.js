@@ -30,6 +30,7 @@ const routes = [
     { name: "bbs", path: "/bbs", component: Forum, redirect: { name: "community" }, },
     { name: "single", path: "/bbs/:id", component: Single },
     { name: "community", path: "/community", component: Community },
+    { path: "/community_topic/:id", redirect: "/community/:id"},
     { path: "/community/topic/:id", redirect: "/community/:id" },
     { name: "community-single", path: "/community/:id", component: CommunitySingle },
     { name: "namespace", path: "/namespace", component: Namespace },
