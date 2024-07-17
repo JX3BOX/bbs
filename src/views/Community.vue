@@ -3,7 +3,7 @@
         <CommunityHeader :categoryList="categoryList" />
         <CommunitySearch @search="onSearch" ref="searchInput">
             <template #right>
-                <el-radio-group v-model="view" size="mini" @input="onViewChange">
+                <el-radio-group class="m-list-view" v-model="view" size="mini" @input="onViewChange">
                     <el-radio-button :label="1"><i class="el-icon-s-grid"></i> 卡片</el-radio-button>
                     <el-radio-button :label="2"><i class="el-icon-tickets"></i> 列表</el-radio-button>
                 </el-radio-group>
@@ -438,4 +438,10 @@ export default {
 
 @import "~@/assets/css/app.less";
 @import "~@/assets/css/bbs/list.less";
+
+@media screen and (max-width: @phone) {
+    .m-list-view {
+        .none;
+    }
+}
 </style>
