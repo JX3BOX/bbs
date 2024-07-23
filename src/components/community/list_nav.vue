@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getMenus } from "@/service/helper.js";
+import { getMenu } from "@jx3box/jx3box-common/js/api_misc.js";
 import { feedback } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getAppType, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import { getConfigBanner } from "@/service/cms";
@@ -146,9 +146,9 @@ export default {
             });
         },
         loadTags() {
-            getMenus("bbs_links").then((res) => {
-                // console.log(res.data.data.menu_group.menus);
-                this.tags = res.data.data?.menu_group?.menus || [];
+            getMenu("bbs_links").then((res) => {
+                // console.log(res);
+                this.tags = res || [];
             });
         },
         loadMenu() {
