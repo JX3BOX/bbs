@@ -43,7 +43,7 @@
                             :moveTransitionDuration="0"
                             :fillBox="true"
                             :list="list"
-                            :gutter="10"
+                            :gutter="20"
                             ref="waterfall"
                         >
                             <div slot-scope="item" :class="{ fadeIn: item.state == 'show' }">
