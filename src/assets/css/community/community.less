@@ -45,7 +45,7 @@
                 background-position: center;
                 cursor: pointer;
                 box-shadow: 4px 4px 0 #eee;
-                margin-bottom:15px;
+                margin-bottom: 15px;
                 .el-image {
                     width: 100%;
                     height: 100%;
@@ -74,14 +74,14 @@
     }
     .m-topic-box .withSkin {
         background: rgba(255, 255, 255, 0.6);
-        .u-box-content{
+        .u-box-content {
             padding: 10px 15px;
         }
-        .u-content-aside{
-            .u-cover{
-                box-shadow:4px 4px 0 rgba(255,255,255,0.6);
+        .u-content-aside {
+            .u-cover {
+                box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.6);
             }
-            border-color:rgba(255,255,255,0.6);
+            border-color: rgba(255, 255, 255, 0.6);
         }
     }
 }
@@ -91,8 +91,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 4px;
     .m-topic-top__time {
+        margin-bottom: 4px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -104,6 +104,8 @@
         }
     }
     .m-topic-top_right {
+        padding: 4px 4px 4px 90px;
+        position: relative;
         display: flex;
         gap: 24px;
         .u-item {
@@ -114,8 +116,8 @@
             color: rgba(122, 122, 122, 1);
         }
         .m-topic-category {
-            padding: 3px 12px;
-            font-size: 12px;
+            .fz(12px, 12px);
+            padding: 2px 12px;
             border-radius: 12px 12px 12px 0px;
             display: flex;
             align-items: center;
@@ -130,6 +132,18 @@
                 align-items: center;
             }
         }
+        .u-mocha {
+            width: 260px;
+            height: 100%;
+            position: absolute;
+            right: 0;
+            bottom: -1px;
+            z-index: -1;
+
+            // path:nth-of-type(2) {
+            // fill: var(--border-hover-color);
+            // }
+        }
     }
 }
 
@@ -143,7 +157,9 @@
         background-position: right top;
         padding: 20px;
         border-radius: 6px;
+        border-top-right-radius: 0;
         border: 1px solid rgba(232, 232, 232, 1);
+
         &:hover {
             border-color: var(--border-hover-color);
             // .m-topic-title {
@@ -215,7 +231,7 @@
 
 // 小册
 .m-topic-collection {
-    margin-bottom:5px;
+    margin-bottom: 5px;
     & > a {
         max-width: 100%;
         text-overflow: ellipsis;

@@ -33,11 +33,12 @@
                     />
                     <div>{{ data.category }}</div>
                 </div>
+                <img v-svg-inline class="u-mocha" src="@/assets/img/community/mocha.svg" alt="" />
             </div>
         </div>
         <div
             class="u-box m-topic-box__content"
-            :class="{'withSkin': skin.background}"
+            :class="{ withSkin: skin.background }"
             :style="{
                 backgroundImage: `url(${skin.background})`,
             }"
