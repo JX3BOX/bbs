@@ -103,7 +103,7 @@ import GoToTopOrBottom from "@/components/community/goToTopOrBottom.vue";
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
-import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
+import { getTopicDetails, getTopicDetailsFromAdmin, getTopicReplyList, replyTopic } from "@/service/community";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
@@ -146,6 +146,7 @@ export default {
             loading: false,
             onlyAuthor: false,
             number_queries: ["per", "page"],
+            mode: null,
 
             // 打赏相关 start
             showHomeWork: false,
@@ -214,6 +215,8 @@ export default {
             deep: true,
             immediate: true,
             handler: function (query) {
+                console.log(query);
+
                 if (Object.keys(query).length) {
                     for (let key in query) {
                         // for:element分页组件兼容性问题
@@ -289,7 +292,11 @@ export default {
             return this.post;
         },
         getDetails: function () {
-            getTopicDetails(this.id).then((res) => {
+            let fun = getTopicDetails;
+            if (this.mode == "admin") {
+                fun = getTopicDetailsFromAdmin;
+            }
+            fun(this.id).then((res) => {
                 this.post = res.data.data;
 
                 getStat(appKey, this.id).then((res) => {
@@ -300,6 +307,7 @@ export default {
             });
         },
         getReplyList: function (appendMode) {
+            if (this.mode == "admin") return;
             this.loading = true;
             if (appendMode) {
                 this.page += 1;

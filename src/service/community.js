@@ -18,6 +18,12 @@ const getTopicList = (params) => {
 function getTopicDetails(id) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}`);
 }
+
+// 管理员-获取帖子详情 查看审核的帖子
+function getTopicDetailsFromAdmin(id) {
+    return $next().get(`${API_PREFIX}/community/discussion/manage/topic/item/${id}`);
+}
+
 // 获取帖子回复列表
 function getTopicReplyList(id, params) {
     return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}/reply/list`, {
@@ -128,4 +134,5 @@ export {
     manageDelComment,
     manageDelReply,
     getSkinJson,
+    getTopicDetailsFromAdmin,
 };
