@@ -33,7 +33,7 @@
                     />
                     <div>{{ data.category }}</div>
                 </div>
-                <img v-svg-inline class="u-mocha" src="@/assets/img/community/mocha.svg" alt="" />
+                <img svg-inline class="u-mocha" src="@/assets/img/community/mocha.svg" alt="" />
             </div>
         </div>
         <div
@@ -50,7 +50,7 @@
                     <span>{{ data.title }}</span>
                 </a>
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
-                    <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
+                    <el-image :src="getBanner(data)" alt="banner" srcset="" />
                 </a>
 
                 <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
@@ -180,10 +180,16 @@ export default {
         },
         getTimeAgo,
         authorLink,
-        getBanner: function (val) {
-            if (val) {
+        getBanner: function (data) {
+            if (data.banner_img) {
                 if (val.indexOf("jx3box.com") >= 0) {
                     return getThumbnail(val, [168 * 2, 88 * 2]);
+                } else {
+                    return val;
+                }
+            } else if (data.extra_images && data.extra_images.length) {
+                if (val.indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(data.extra_images[0], [168 * 2, 88 * 2]);
                 } else {
                     return val;
                 }
