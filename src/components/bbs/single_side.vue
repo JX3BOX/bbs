@@ -1,7 +1,7 @@
 <template>
     <div class="m-single-side">
         <!-- <PostCollection v-if="showSideCollection" :store="collection_data"/> -->
-        <PostTopic v-if="id" type="bbs" :id="~~id" />
+        <PostTopic v-if="id" :type="type" :id="~~id" />
         <PostDirectory id="directory"/>
     </div>
 </template>
@@ -12,7 +12,16 @@ import PostDirectory from '@jx3box/jx3box-common-ui/src/single/PostDirectory.vue
 import PostTopic from "@jx3box/jx3box-common-ui/src/single/PostTopic.vue";
 export default {
     name: "single_side",
-    props: ['id'],
+    props: {
+        id: {
+            type: String,
+            default: ""
+        },
+        type: {
+            type: String,
+            default: "bbs"
+        }
+    },
     data: function() {
         return {
 

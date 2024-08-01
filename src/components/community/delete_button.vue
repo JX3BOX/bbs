@@ -45,18 +45,22 @@ export default {
             return this.post?.user_id == User.getInfo()?.uid;
         },
         canDelete() {
-            // 不是 1 楼 且 是超级管理 || 层主
-            return !this.isMaster && (this.isSuperAdmin || this.isFollower);
+            // 不是 1 楼 且 是超级管理 || 层主 || 楼主
+            return !this.isMaster && (this.isSuperAdmin || this.isFollower || this.isTopicAuthor);
+        },
+        // 是否为楼主
+        isTopicAuthor() {
+            return this.topicData.user_id == User.getInfo().uid;
         },
     },
     methods: {
         onDeleteClick() {
             // 删除自己的评论与回帖
-            if (this.isAuthor || this.isSuperAdmin) {
+            if (this.isAuthor || this.isSuperAdmin || this.isTopicAuthor) {
                 if (this.type === "comment") {
-                    this.isSuperAdmin ? this.manageDeleteComment() : this.delMyComment();
+                    this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteComment() : this.delMyComment();
                 } else if (this.type === "reply") {
-                    this.isSuperAdmin ? this.manageDeleteReply() : this.deleteMyReply();
+                    this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteReply() : this.deleteMyReply();
                 } else {
                     this.$message.success("未知的组件类型：" + this.type);
                 }

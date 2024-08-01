@@ -37,6 +37,7 @@
         </div>
         <div
             class="u-box m-topic-box__content"
+            :class="{'withSkin': skin.background}"
             :style="{
                 backgroundImage: `url(${skin.background})`,
             }"

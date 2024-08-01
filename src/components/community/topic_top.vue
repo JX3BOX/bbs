@@ -255,9 +255,9 @@ export default {
             line-height: 32px;
             color: var(--title-color);
             font-weight: bold;
-            &:hover {
-                color: rgba(255, 64, 128, 1);
-            }
+            // &:hover {
+            //     color: rgba(255, 64, 128, 1);
+            // }
             > svg {
                 position: relative;
                 top: -1px;
