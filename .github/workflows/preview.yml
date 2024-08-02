@@ -22,25 +22,14 @@ jobs:
                   npm run preview
 
             ## TODO:下方修改1处
-            # - name: GrayEnv
-            #   uses: appleboy/scp-action@v0.1.4
-            #   with:
-            #       host: ${{ secrets.HOST_NANJING2 }}
-            #       username: ${{ secrets.DEPLOY_USER }}
-            #       key: ${{ secrets.DEPLOY_KEY }}
-            #       source: bbs/*
-            #       target: /www/wwwroot/jx3box/test
-            #       timeout: 600s
-            #       command_timeout: 600s
-            #       debug: true
-
-            - name: Deploy to GrayEnv
-              uses: appleboy/rsync-action@master
+            - name: GrayEnv
+              uses: appleboy/scp-action@v0.1.4
               with:
                   host: ${{ secrets.HOST_NANJING2 }}
                   username: ${{ secrets.DEPLOY_USER }}
                   key: ${{ secrets.DEPLOY_KEY }}
-                  source: "bbs/"
-                  target: "/www/wwwroot/jx3box/test"
-                  port: 22
-                  options: "-av --progress"
+                  source: bbs/*
+                  target: /www/wwwroot/jx3box/test
+                  timeout: 600s
+                  command_timeout: 600s
+                  debug: true
