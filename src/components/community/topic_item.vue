@@ -182,16 +182,16 @@ export default {
         authorLink,
         getBanner: function (data) {
             if (data.banner_img) {
-                if (val.indexOf("jx3box.com") >= 0) {
-                    return getThumbnail(val, [168 * 2, 88 * 2]);
+                if (data.banner_img.indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(data.banner_img, [168 * 2, 88 * 2]);
                 } else {
-                    return val;
+                    return data.banner_img;
                 }
             } else if (data.extra_images && data.extra_images.length) {
-                if (val.indexOf("jx3box.com") >= 0) {
+                if (data.extra_images.indexOf("jx3box.com") >= 0) {
                     return getThumbnail(data.extra_images[0], [168 * 2, 88 * 2]);
                 } else {
-                    return val;
+                    return data.extra_images[0];
                 }
             } else {
                 // 从1-39中随机选一个
