@@ -30,5 +30,7 @@ jobs:
                   key: ${{ secrets.DEPLOY_KEY }}
                   source: bbs/*
                   target: /www/wwwroot/jx3box/test
+                  timeout: 600s
+                  command_timeout: 600s
                   debug: true
 
