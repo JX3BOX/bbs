@@ -110,6 +110,7 @@ import User from "@jx3box/jx3box-common/js/user";
 import Homework from "@jx3box/jx3box-common-ui/src/interact/Homework.vue";
 import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-records.vue";
 import bus from "@/utils/bus";
+import { atAuthors } from "@/service/pay";
 
 const appKey = "community";
 
@@ -215,8 +216,6 @@ export default {
             deep: true,
             immediate: true,
             handler: function (query) {
-                console.log(query);
-
                 if (Object.keys(query).length) {
                     for (let key in query) {
                         // for:element分页组件兼容性问题
@@ -359,7 +358,7 @@ export default {
             return list;
         },
         /** 回帖 */
-        onReplyTopic({ attachmentList, content }) {
+        onReplyTopic({ attachmentList, content, atUsers }) {
             console.log(attachmentList);
             if (!this.id) return this.$message.error("文章id不存在");
             // 拼接图片列表到 content 中
@@ -375,6 +374,18 @@ export default {
             }).then((res) => {
                 this.onReplyTopicSuccess(res.data.data);
                 this.showComment = false;
+                this.noticeMentionsUser(atUsers);
+            });
+        },
+        // 通知at用户
+        noticeMentionsUser(atUsers) {
+            const ids = atUsers.map((item) => item.ID);
+            const userInfo = User.getInfo();
+            atAuthors({
+                sendUserId: userInfo.uid,
+                accessUserId: ids.join(","),
+                postId: this.id,
+                postType: "community",
             });
         },
         /**
