@@ -172,7 +172,7 @@ export default {
             mentions.forEach((mention) => {
                 content = content.replace(
                     new RegExp("@" + mention.display_name + " ", "g"),
-                    `<a class='u-at' href="/author/${mention.ID}"  target="_blank">@${mention.display_name} </a>`
+                    `<a class="e-jx3-author w-jx3-element" href="/author/${mention.ID}"  target="_blank" rel="noopener" data-type="author"  data-mode="" data-id="${mention.ID}">@${mention.display_name} </a>`
                 );
             });
 
