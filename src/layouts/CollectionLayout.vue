@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="m-collection-layout">
         <Header></Header>
         <Breadcrumb
             name="剑三小册"
@@ -94,4 +94,10 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/list.less";
+
+.m-collection-layout {
+    .c-sidebar-left {
+        padding: 15px;
+    }
+}
 </style>
