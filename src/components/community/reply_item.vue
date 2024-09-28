@@ -14,7 +14,7 @@
                     <span class="u-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
                     <div class="u-reply-op">
                         <el-button
-                            v-if="!isMaster && (isSuper || isFollower)"
+                            v-if="(isSuper || isFollower)"
                             class="u-mobile-hidden"
                             @click="onEdit"
                             type="text"
@@ -440,8 +440,13 @@ export default {
             return list;
         },
         onEdit() {
-            const path = editLink("community/reply", this.post.id);
-            window.open(path, "_blank");
+            if (this.isMaster) {
+                const path = editLink("community", this.post.id);
+                window.open(path, "_blank");
+            } else {
+                const path = editLink("community/reply", this.post.id);
+                window.open(path, "_blank");
+            }
         },
         onThx() {
             bus.emit("onThx", {
