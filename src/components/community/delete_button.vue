@@ -20,22 +20,22 @@ export default {
     inject: ["getTopicData", "getReplyList", "getReplyData", "getCommentList", "onSearch"],
     props: ["isMaster", "post", "type"],
     computed: {
-        topicData: function () {
+        topicData: function() {
             return this.getTopicData();
         },
-        replyData: function () {
+        replyData: function() {
             return this.getReplyData();
         },
         // 作者
-        isAuthor: function () {
+        isAuthor: function() {
             return this.post.user_id == User.getInfo().uid;
         },
         // 是我的帖子的回帖 （我是楼主）
-        isReplyToMyTopic: function () {
+        isReplyToMyTopic: function() {
             return this.type === "reply" && this.topicData.user_id == User.getInfo().uid;
         },
         // 回复我的回帖 （我是层主）
-        isCommentToMyReply: function () {
+        isCommentToMyReply: function() {
             return this.type === "comment" && this.replyData.user_id == User.getInfo().uid;
         },
         isSuperAdmin() {
@@ -58,7 +58,13 @@ export default {
             // 删除自己的评论与回帖
             if (this.isAuthor || this.isSuperAdmin || this.isTopicAuthor) {
                 if (this.type === "comment") {
-                    this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteComment() : this.delMyComment();
+                    if (this.isAuthor) {
+                        this.delMyComment();
+                    }
+
+                    if (this.isSuperAdmin || this.isTopicAuthor) {
+                        this.manageDeleteComment();
+                    }
                 } else if (this.type === "reply") {
                     this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteReply() : this.deleteMyReply();
                 } else {
@@ -77,7 +83,7 @@ export default {
                 }
             }
         },
-        deleteMyReply: function () {
+        deleteMyReply: function() {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -90,7 +96,7 @@ export default {
                 });
             });
         },
-        delMyComment: function () {
+        delMyComment: function() {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -102,7 +108,7 @@ export default {
                 });
             });
         },
-        delReplyToMyTopic: function () {
+        delReplyToMyTopic: function() {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -115,7 +121,7 @@ export default {
                 });
             });
         },
-        delCommentToMyReply: function () {
+        delCommentToMyReply: function() {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -128,7 +134,7 @@ export default {
                 });
             });
         },
-        manageDeleteComment: function () {
+        manageDeleteComment: function() {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -140,7 +146,7 @@ export default {
                 });
             });
         },
-        manageDeleteReply: function () {
+        manageDeleteReply: function() {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
