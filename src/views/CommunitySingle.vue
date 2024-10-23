@@ -65,8 +65,8 @@
                         @current-change="changePage"
                     ></el-pagination>
                 </div>
-                <el-divider content-position="left">回帖</el-divider>
                 <div class="u-editor">
+                    <el-divider content-position="left">回帖</el-divider>
                     <CommentEditor @submit="onReplyTopic" />
                 </div>
             </div>
