@@ -173,7 +173,7 @@ import {
     resolveImagePath,
 } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 import CollectionLayout from "@/layouts/CollectionLayout.vue";
@@ -251,6 +251,14 @@ export default {
                 .then((res) => {
                     this.collection = res?.data?.data || {};
                     this.$store.state.user_id = this.collection.user_id;
+
+                    User.isLogin() &&
+                        postHistory({
+                            source_type: "collection",
+                            source_id: ~~id,
+                            link: location.href,
+                            title: this.title,
+                        });
                 })
                 .finally(() => {
                     this.loading = false;
