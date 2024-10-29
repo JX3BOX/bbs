@@ -56,6 +56,7 @@
                     :userBoxcoinEnable="true"
                     :client="post.client"
                     category="community"
+                    showRss
                 />
                 <!-- 操作按钮 -->
                 <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->

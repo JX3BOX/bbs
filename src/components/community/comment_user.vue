@@ -3,7 +3,8 @@
         <AuthorInfo :uid="uid" @ready="installModules" />
         <template v-if="data">
             <div class="u-interact">
-                <AuthorFollow style="margin-right: 8px" :uid="uid" />
+                <!-- <AuthorFollow style="margin-right: 8px" :uid="uid" /> -->
+                <AuthorRss style="margin-right: 8px" :uid="uid" />
                 <!-- <AuthorGift :uid="uid" /> -->
                 <el-button icon="el-icon-message" class="u-btn" size="mini" @click="onMessage">私信</el-button>
             </div>
@@ -28,6 +29,7 @@ import AuthorFollow from "@jx3box/jx3box-common-ui/src/author/AuthorFollow.vue";
 import AuthorMedals from "@jx3box/jx3box-common-ui/src/author/AuthorMedals.vue";
 // import AuthorTeams from "@jx3box/jx3box-common-ui/src/author/AuthorTeams.vue";
 // import AuthorPosts from "@jx3box/jx3box-common-ui/src/author/AuthorPosts.vue";
+import AuthorRss from "@jx3box/jx3box-common-ui/src/author/AuthorRss.vue";
 export default {
     props: ["uid"],
     data: function () {
@@ -46,13 +48,14 @@ export default {
     components: {
         AuthorInfo,
         // AuthorLink,
-        AuthorFollow,
+        // AuthorFollow,
         // AuthorMsg,
         // AuthorGift,
         AuthorMedals,
         // AuthorTeams,
         // AuthorPosts,
         // AuthorFans,
+        AuthorRss,
     },
 };
 </script>
