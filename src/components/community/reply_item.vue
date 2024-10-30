@@ -1,7 +1,7 @@
 <template>
     <div class="m-reply-wrapper" :id="`floor-${post.floor}`">
         <div class="m-reply-left">
-            <CommentUser :uid="userInfo.id" />
+            <CommentUser :uid="userInfo.id" :isMaster="isMaster" />
             <div class="u-top-right u-mobile-show">
                 <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
                 <div class="m-reply-time">{{ showTime }}</div>
