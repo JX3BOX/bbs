@@ -65,8 +65,8 @@
                         @current-change="changePage"
                     ></el-pagination>
                 </div>
-                <el-divider content-position="left">回帖</el-divider>
                 <div class="u-editor">
+                    <el-divider content-position="left">回帖</el-divider>
                     <CommentEditor @submit="onReplyTopic" />
                 </div>
             </div>
@@ -104,7 +104,7 @@ import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
 import { getTopicDetails, getTopicDetailsFromAdmin, getTopicReplyList, replyTopic } from "@/service/community";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
 import Homework from "@jx3box/jx3box-common-ui/src/interact/Homework.vue";
@@ -303,6 +303,13 @@ export default {
                     this.$set(this.post, "likes", this.stat.likes || 0);
                 });
                 postStat(appKey, this.id);
+
+                User.isLogin() && postHistory({
+                    source_type: "community",
+                    source_id: ~~this.id,
+                    link: location.href,
+                    title: this.post.title,
+                });
             });
         },
         getReplyList: function (appendMode) {

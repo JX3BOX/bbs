@@ -147,13 +147,16 @@ export default {
         },
         introduction: function () {
             const data = this.data;
-            if (data.introduction) {
-                if (data.introduction.length >= 200) {
-                    return data.introduction + "...";
-                } else if (data.introduction.length <= 0) {
+            let introduction = data.introduction;
+            // 去掉信封样式的css代码
+            introduction = introduction.replace(/\.letter--[\s\S]*$/, "");
+            if (introduction) {
+                if (introduction.length >= 200) {
+                    return introduction + "...";
+                } else if (introduction.length <= 0) {
                     return "......";
                 } else {
-                    return data.introduction;
+                    return introduction;
                 }
             } else {
                 return "";

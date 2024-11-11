@@ -292,6 +292,7 @@ export default {
 .m-single-title {
     .fz(32px);
     padding: 1px 0;
+    max-width: calc(100vw - 350px);
 
     .u-title {
         color: @color;
@@ -322,6 +323,14 @@ export default {
         .y(-2px);
         margin-right: 5px;
         color: #111;
+    }
+}
+
+.expanding-right {
+    .m-single-title {
+        // .u-title {
+            max-width: calc(100vw - 80px);
+        // }
     }
 }
 
@@ -363,12 +372,19 @@ export default {
 @media screen and (max-width: @phone) {
     .m-single-title {
         .fz(1rem, 1.8);
+        max-width: unset;
         .u-title {
             word-break: break-all;
             white-space: normal;
             font-weight: normal;
         }
     }
+
+    .expanding-right {
+    .m-single-title {
+            max-width: unset;
+    }
+}
 }
 @media print {
     .m-single-title {
