@@ -43,7 +43,7 @@
 
             <!-- 列表内容 -->
             <div class="m-namespace-list" v-if="list">
-                <div class="u-namespace" v-for="(item, index) in list" :key="index">
+                <div class="u-namespace" v-for="(item) in list" :key="item.ID">
                     <namespace-item :data="item" />
                 </div>
 

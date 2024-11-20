@@ -12,7 +12,7 @@
             <span class="u-author">
                 <i class="el-icon-user"></i
                 ><a :href="namespace.uid | authorLink" target="_blank" @click.stop>
-                    {{ namespace.user.display_name || "匿名" }}</a
+                    {{ namespace.creator && namespace.creator.display_name || "匿名" }}</a
                 >
             </span>
             <time class="u-time"
