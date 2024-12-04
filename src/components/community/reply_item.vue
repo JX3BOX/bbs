@@ -43,6 +43,13 @@
                 <div class="u-reply-content">
                     <Article v-if="isMaster" :content="post.content || ''" />
                     <div v-else v-html="renderContent" />
+
+                    <div v-if="extraImages && extraImages.length && isMaster && isFromPhone" class="m-image-box">
+                        <a class="u-item" v-for="(item, index) in extraImages" :key="index">
+                            <el-image :src="getSquareBanner(item)" fit="fill" :preview-src-list="[item]" />
+                        </a>
+                    </div>
+
                 </div>
                 <!-- 打赏 只有主楼有打赏-->
                 <Thx
@@ -182,7 +189,7 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, editLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -196,7 +203,6 @@ import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
 import dayjs from "dayjs";
 import bus from "@/utils/bus";
 import { getHistorySummary } from "@/service/pay";
-
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList", "onReplyTopic"],
@@ -298,6 +304,12 @@ export default {
         boxCoinTotal() {
             return this.summary.fromManager + this.summary.fromUser;
         },
+        isFromPhone() {
+            return this.post?.is_from_phone
+        },
+        extraImages() {
+            return this.post?.extra_images
+        }
     },
     watch: {
         "post.content": {
@@ -336,6 +348,12 @@ export default {
                 this.getList();
             }
             this.isCollapse = !this.isCollapse;
+        },
+        getSquareBanner: function (val) {
+            if (val.indexOf("jx3box.com") >= 0) {
+                return getThumbnail(val, 48 * 2);
+            }
+            return val;
         },
         authorLink,
         async formatContent(val) {
