@@ -10,11 +10,13 @@
         <div class="m-reply-right">
             <div class="m-reply-content">
                 <div class="u-reply-floor u-mobile-hidden">
-                    <a :href="`#floor-${post.floor}`" @click="onFloorClick">{{ isMaster ? "楼主" : post.floor + "楼" }}</a>
+                    <a :href="`#floor-${post.floor}`" @click="onFloorClick">{{
+                        isMaster ? "楼主" : post.floor + "楼"
+                    }}</a>
                     <span class="u-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
                     <div class="u-reply-op">
                         <el-button
-                            v-if="(isSuper || isFollower)"
+                            v-if="isSuper || isFollower"
                             class="u-mobile-hidden"
                             @click="onEdit"
                             type="text"
@@ -26,7 +28,7 @@
                 </div>
                 <span class="u-boxcoin" v-if="!isMaster">
                     <el-button
-                        v-if="isLogin && !isMaster && !isFollower"
+                        v-if="isLogin && !isMaster"
                         class="u-mobile-hidden"
                         type="text"
                         icon="el-icon-present"
@@ -34,7 +36,7 @@
                         size="mini"
                         >答谢</el-button
                     >
-                    <span class="u-boxcoin-total" v-if="boxCoinTotal"  @click.stop="onBoxcoinClick">
+                    <span class="u-boxcoin-total" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
                         <!-- <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" /> -->
                         收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
                         ><i class="el-icon-coin"></i>
@@ -49,7 +51,6 @@
                             <el-image :src="getSquareBanner(item)" fit="fill" :preview-src-list="[item]" />
                         </a>
                     </div>
-
                 </div>
                 <!-- 打赏 只有主楼有打赏-->
                 <Thx
@@ -73,13 +74,7 @@
                         <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
                         <AddBlockButton class="u-mobile-hidden" :post="post" />
                         <ComplaintButton class="u-mobile-hidden" :post="post" />
-                        <el-button
-                            type="primary"
-                            size="small"
-                            class="u-reply-btn"
-                            :style="styles"
-                            @click="onShowReply"
-                        >
+                        <el-button type="primary" size="small" class="u-reply-btn" :style="styles" @click="onShowReply">
                             <div class="u-btn">
                                 <img src="@/assets/img/community/reply.svg" alt="" />
                                 <span>{{ isMaster ? "跟帖" : "回复" }}</span>
@@ -305,11 +300,11 @@ export default {
             return this.summary.fromManager + this.summary.fromUser;
         },
         isFromPhone() {
-            return this.post?.is_from_phone
+            return this.post?.is_from_phone;
         },
         extraImages() {
-            return this.post?.extra_images
-        }
+            return this.post?.extra_images;
+        },
     },
     watch: {
         "post.content": {
@@ -375,7 +370,7 @@ export default {
         onShowReply() {
             if (this.isMaster) {
                 // window.scrollTo(0, document.body.scrollHeight);
-                this.$emit('onReplyTopic')
+                this.$emit("onReplyTopic");
             } else {
                 this.showReplyForReplyFrom = !this.showReplyForReplyFrom;
             }
@@ -495,7 +490,7 @@ export default {
             navigator.clipboard.writeText(link).then(() => {
                 this.$message.success("楼层已复制到剪贴板");
             });
-        }
+        },
     },
 };
 </script>
