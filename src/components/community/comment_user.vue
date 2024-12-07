@@ -35,8 +35,20 @@ export default {
             data: "",
         };
     },
+    watch: {
+        uid() {
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key && key.startsWith("honor_img")) {
+                    sessionStorage.removeItem(key);
+                    i--;
+                }
+            }
+        },
+    },
     methods: {
         installModules: function (data) {
+            console.log(data);
             this.data = data;
         },
         onMessage: function () {
