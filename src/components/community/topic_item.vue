@@ -4,12 +4,13 @@
         :style="{
             '--title-color': skin.titleColor,
             '--title-hover-color': skin.titleHoverColor,
+            '--border-hover-color': skin.borderHoverColor,
         }"
     >
         <div class="m-topic-top">
             <div class="m-topic-top__time">
-                <i :class="getTimeAgo(data.updated_at).icon"></i>
-                <span>{{ getTimeAgo(data.updated_at).text }} </span>
+                <i :class="getTimeAgo(data.created_at).icon"></i>
+                <span>{{ getTimeAgo(data.created_at).text }} </span>
             </div>
             <div class="m-topic-top_right">
                 <div class="u-item">
@@ -32,10 +33,12 @@
                     />
                     <div>{{ data.category }}</div>
                 </div>
+                <img svg-inline class="u-mocha" src="@/assets/img/community/mocha.svg" alt="" />
             </div>
         </div>
         <div
             class="u-box m-topic-box__content"
+            :class="{ withSkin: skin.background }"
             :style="{
                 backgroundImage: `url(${skin.background})`,
             }"
@@ -47,7 +50,7 @@
                     <span>{{ data.title }}</span>
                 </a>
                 <a class="u-cover" :href="getPostUrl(data.id)" target="_blank">
-                    <el-image :src="getBanner(data.banner_img)" alt="banner" srcset="" />
+                    <el-image :src="getBanner(data)" alt="banner" srcset="" />
                 </a>
 
                 <div v-if="data.color_tag && data.color_tag.length" class="m-topic-tag">
@@ -97,25 +100,29 @@ import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/u
 import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
-import skinJson from "@/assets/data/community_skin.json";
+import { getSkinJson } from "@/service/community";
+const skinKey = "community_topic_skin";
 
 export default {
     props: ["data"],
     inject: ["getCategoryStyle", "onCategoryChange"],
     data() {
-        return {};
+        return {
+            skinJson: {},
+        };
     },
     computed: {
         // 卡片皮肤
         skin() {
             if (this.data.decoration_id && this.data.decoration.val) {
+                const skinJson = this.skinJson;
                 const val = this.data.decoration.val;
                 if (skinJson[val]) {
                     return {
                         background: __imgPath + `decoration/palu/${val}.png`,
-                        titleColor: skinJson[val].titleColor || "#0366d6",
-                        titleHoverColor: "rgba(255, 64, 128, 1)",
-                        id: this.data.id,
+                        titleColor: skinJson[val].titleColor,
+                        titleHoverColor: skinJson[val].titleHoverColor,
+                        borderHoverColor: skinJson[val].borderHoverColor,
                     };
                 }
             }
@@ -123,12 +130,11 @@ export default {
             return {
                 titleColor: "#0366d6",
                 titleHoverColor: "rgba(255, 64, 128, 1)",
-                id: this.data.id,
+                borderHoverColor: "#0366d6",
             };
         },
         hightStyle: function () {
             if (this.data.is_hight && this.data.hight_color) {
-                console.log(this.data.hight_color);
                 return {
                     color: this.data.hight_color,
                 };
@@ -141,13 +147,16 @@ export default {
         },
         introduction: function () {
             const data = this.data;
-            if (data.introduction) {
-                if (data.introduction.length >= 200) {
-                    return data.introduction + "...";
-                } else if (data.introduction.length <= 0) {
+            let introduction = data.introduction;
+            // 去掉信封样式的css代码
+            introduction = introduction.replace(/\.letter--[\s\S]*$/, "");
+            if (introduction) {
+                if (introduction.length >= 200) {
+                    return introduction + "...";
+                } else if (introduction.length <= 0) {
                     return "......";
                 } else {
-                    return data.introduction;
+                    return introduction;
                 }
             } else {
                 return "";
@@ -157,15 +166,35 @@ export default {
             return this.data.is_top || this.data.is_category_top;
         },
     },
+    mounted() {
+        this.getSkinJson();
+    },
     methods: {
+        getSkinJson() {
+            const skinJson = sessionStorage.getItem(skinKey);
+            if (skinJson) {
+                this.skinJson = JSON.parse(skinJson);
+            } else {
+                getSkinJson().then((res) => {
+                    this.skinJson = res.data;
+                    sessionStorage.setItem(skinKey, JSON.stringify(res.data));
+                });
+            }
+        },
         getTimeAgo,
         authorLink,
-        getBanner: function (val) {
-            if (val) {
-                if (val.indexOf("jx3box.com") >= 0) {
-                    return getThumbnail(val, [168 * 2, 88 * 2]);
+        getBanner: function (data) {
+            if (data.banner_img) {
+                if (data.banner_img.indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(data.banner_img, [168 * 2, 88 * 2]);
                 } else {
-                    return val;
+                    return data.banner_img;
+                }
+            } else if (data.extra_images && data.extra_images.length) {
+                if (data.extra_images[0].indexOf("jx3box.com") >= 0) {
+                    return getThumbnail(data.extra_images[0], [168 * 2, 88 * 2]);
+                } else {
+                    return data.extra_images[0];
                 }
             } else {
                 // 从1-39中随机选一个

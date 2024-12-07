@@ -5,7 +5,8 @@
             <span class="u-title u-sub-block">
                 <slot name="title_before"></slot>
                 <div class="m-topic-category-box" v-if="styles">
-                    <div
+                    <a
+                        :href="`/community?category=${post.category}`"
                         :class="`m-topic-category`"
                         :style="`background-color: ${styles.hoverColor};color:${styles.color};`"
                     >
@@ -15,7 +16,7 @@
                             :src="require(`@/assets/img/community/category/${styles.icon}.svg`)"
                         />
                         <div>{{ post.category }}</div>
-                    </div>
+                    </a>
                 </div>
 
                 <i class="u-private" v-if="post.post_status != 'publish' || !!~~post.visible">
@@ -48,7 +49,7 @@
         <div class="m-single-info">
             <slot></slot>
             <span v-if="isTop" class="u-status u-sub-block top">
-                <img svg-inline src="@/assets/img/community/is_top_inline.svg" alt="" />
+                <img svg-inline src="@/assets/img/community/is_top.svg" alt="" />
                 置顶
             </span>
 
@@ -291,6 +292,7 @@ export default {
 .m-single-title {
     .fz(32px);
     padding: 1px 0;
+    max-width: calc(100vw - 350px);
 
     .u-title {
         color: @color;
@@ -321,6 +323,14 @@ export default {
         .y(-2px);
         margin-right: 5px;
         color: #111;
+    }
+}
+
+.expanding-right {
+    .m-single-title {
+        // .u-title {
+            max-width: calc(100vw - 80px);
+        // }
     }
 }
 
@@ -362,12 +372,19 @@ export default {
 @media screen and (max-width: @phone) {
     .m-single-title {
         .fz(1rem, 1.8);
+        max-width: unset;
         .u-title {
             word-break: break-all;
             white-space: normal;
             font-weight: normal;
         }
     }
+
+    .expanding-right {
+    .m-single-title {
+            max-width: unset;
+    }
+}
 }
 @media print {
     .m-single-title {

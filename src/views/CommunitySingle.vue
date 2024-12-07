@@ -23,18 +23,37 @@
             <div class="m-list-box">
                 <!--  楼主 -->
                 <div class="m-master-box">
-                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" />
+                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" @onReplyTopic="handleReplyTopic" />
                 </div>
 
                 <!-- 帖子回复 -->
                 <div class="m-reply-box">
-                    <ReplyItem v-for="(item, i) in replyList" :key="i" :post="item" :is-master="false" :is-author="isAuthor" />
+                    <ReplyItem
+                        v-for="(item, i) in replyList"
+                        :key="i"
+                        :post="item"
+                        :is-master="false"
+                        :is-author="isAuthor"
+                    />
                 </div>
             </div>
             <!-- 帖子回复e -->
 
             <!-- 分页 -->
+
             <div class="m-community-footer">
+                <el-button
+                    class="u-more-buttom"
+                    :style="{ fontSize: hasNextPage ? '14px' : '12px' }"
+                    :type="hasNextPage ? 'primary' : 'text'"
+                    @click="nextPage"
+                    :loading="loading"
+                    :disabled="!hasNextPage"
+                    :icon="hasNextPage ? 'el-icon-arrow-down' : ''"
+                >
+                    {{ hasNextPage ? "下一页" : "没有更多了" }}
+                </el-button>
+
                 <div class="m-pagination-box">
                     <el-pagination
                         background
@@ -46,25 +65,52 @@
                         @current-change="changePage"
                     ></el-pagination>
                 </div>
-                <el-divider content-position="left">回帖</el-divider>
                 <div class="u-editor">
+                    <el-divider content-position="left">回帖</el-divider>
                     <CommentEditor @submit="onReplyTopic" />
                 </div>
             </div>
         </div>
+
+        <Homework
+            v-model="showHomeWork"
+            title="答谢"
+            :postType="postType"
+            :postId="postId"
+            :client="postClient"
+            :userId="postUserId"
+            :article-id="~~id"
+            category="community"
+        ></Homework>
+        <boxCoinRecords
+            v-model="showBoxCoin"
+            :postType="postType"
+            :postId="postId"
+            :client="postClient"
+        ></boxCoinRecords>
+
+        <el-dialog :visible.sync="showComment" title="快捷回复" :width="isPhone ? '95%' : ''">
+            <CommentEditor @submit="onReplyTopic"></CommentEditor>
+        </el-dialog>
+
+        <go-to-top-or-bottom />
     </CommunitySingleLayout>
 </template>
 
 <script>
 import ReplyItem from "@/components/community/reply_item.vue";
-
+import GoToTopOrBottom from "@/components/community/goToTopOrBottom.vue";
 import CommunitySingleLayout from "@/layouts/CommunitySingleLayout.vue";
 import PostHeader from "@/components/community/post_header.vue";
 import CommentEditor from "@/components/community/comment_editor.vue";
-import { getTopicDetails, getTopicReplyList, replyTopic } from "@/service/community";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { getTopicDetails, getTopicDetailsFromAdmin, getTopicReplyList, replyTopic } from "@/service/community";
+import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat";
 import { getLikes } from "@/service/next";
 import User from "@jx3box/jx3box-common/js/user";
+import Homework from "@jx3box/jx3box-common-ui/src/interact/Homework.vue";
+import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-records.vue";
+import bus from "@/utils/bus";
+import { atAuthors } from "@/service/pay";
 
 const appKey = "community";
 
@@ -74,6 +120,9 @@ export default {
         CommunitySingleLayout,
         PostHeader,
         ReplyItem,
+        Homework,
+        boxCoinRecords,
+        GoToTopOrBottom,
     },
     provide() {
         return {
@@ -98,6 +147,18 @@ export default {
             loading: false,
             onlyAuthor: false,
             number_queries: ["per", "page"],
+            mode: null,
+
+            // 打赏相关 start
+            showHomeWork: false,
+            postType: "community",
+            postId: "",
+            postUserId: 0,
+            postClient: "std",
+            showBoxCoin: false,
+            // 打赏相关 end
+
+            showComment: false,
         };
     },
     computed: {
@@ -118,7 +179,14 @@ export default {
         },
         isAuthor() {
             return this.post?.user_id == User.getInfo().uid;
-        }
+        },
+        isPhone() {
+            return window.innerWidth < 768;
+        },
+        // 是否显示加载更多
+        hasNextPage: function () {
+            return this.pageTotal >= 1 && this.per * this.page < this.total;
+        },
     },
     created() {
         this.getJumpFloor();
@@ -127,6 +195,20 @@ export default {
         if (!this.id) return this.$message.error("文章id不存在");
         this.getDetails();
         this.getReplyList();
+
+        // 打赏
+        bus.on("onThx", (data) => {
+            this.postType = data.postType;
+            this.postId = data.postId;
+            this.postUserId = data.postUserId;
+            this.showHomeWork = true;
+        });
+
+        bus.on("boxcoin-click", (data) => {
+            this.postType = data.postType;
+            this.postId = data.postId;
+            this.showBoxCoin = true;
+        });
     },
     watch: {
         // 加载路由参数
@@ -147,7 +229,6 @@ export default {
             },
         },
     },
-
     methods: {
         /**
          * 获取url楼诚参数
@@ -174,6 +255,10 @@ export default {
                 }
             });
         },
+        // 翻页按钮
+        nextPage: function () {
+            this.getReplyList(true);
+        },
         onSearch() {
             this.page = 1;
             this.$nextTick(() => {
@@ -190,7 +275,7 @@ export default {
             this.getReplyList();
         },
 
-        buildQuery: function (appendMode) {
+        buildQuery: function () {
             let _query = {
                 index: this.page,
                 pageSize: this.per,
@@ -200,14 +285,17 @@ export default {
                 _query.user_id = this.post.user_id;
             }
             this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
-
             return _query;
         },
         getTopicData: function () {
             return this.post;
         },
         getDetails: function () {
-            getTopicDetails(this.id).then((res) => {
+            let fun = getTopicDetails;
+            if (this.mode == "admin") {
+                fun = getTopicDetailsFromAdmin;
+            }
+            fun(this.id).then((res) => {
                 this.post = res.data.data;
 
                 getStat(appKey, this.id).then((res) => {
@@ -215,10 +303,21 @@ export default {
                     this.$set(this.post, "likes", this.stat.likes || 0);
                 });
                 postStat(appKey, this.id);
+
+                User.isLogin() && postHistory({
+                    source_type: "community",
+                    source_id: ~~this.id,
+                    link: location.href,
+                    title: this.post.title,
+                });
             });
         },
-        getReplyList: function () {
+        getReplyList: function (appendMode) {
+            if (this.mode == "admin") return;
             this.loading = true;
+            if (appendMode) {
+                this.page += 1;
+            }
             const params = this.buildQuery();
             return getTopicReplyList(this.id, params)
                 .then(async (res) => {
@@ -229,12 +328,7 @@ export default {
                     } else {
                         // 把点赞数量请求过来填充进去
                         list = await this.getLikes(list);
-                        // 补充楼层字段
-                        this.replyList = list.map((item, i) => {
-                            return {
-                                ...item,
-                            };
-                        });
+                        this.replyList = list;
                         // 如果有楼层参数 跳转到指定楼层
                         if (this.floor) {
                             this.jumpFloor();
@@ -271,7 +365,7 @@ export default {
             return list;
         },
         /** 回帖 */
-        onReplyTopic({ attachmentList, content }) {
+        onReplyTopic({ attachmentList, content, atUsers }) {
             console.log(attachmentList);
             if (!this.id) return this.$message.error("文章id不存在");
             // 拼接图片列表到 content 中
@@ -286,6 +380,19 @@ export default {
                 content: content,
             }).then((res) => {
                 this.onReplyTopicSuccess(res.data.data);
+                this.showComment = false;
+                this.noticeMentionsUser(atUsers);
+            });
+        },
+        // 通知at用户
+        noticeMentionsUser(atUsers) {
+            const ids = atUsers.map((item) => item.ID);
+            const userInfo = User.getInfo();
+            atAuthors({
+                sendUserId: userInfo.uid,
+                accessUserId: ids.join(","),
+                postId: this.id,
+                postType: "community",
             });
         },
         /**
@@ -329,6 +436,10 @@ export default {
                     window.scrollTo(0, 0);
                 })
                 .catch((err) => {});
+        },
+        handleReplyTopic() {
+            // 展示快捷回复弹窗
+            this.showComment = true;
         },
     },
 };

@@ -16,6 +16,7 @@
                 :placement="(index + 1) / lineCount > 1 ? 'bottom' : 'top'"
                 trigger="hover"
                 :content="item.remark"
+                :disabled="!item.remark"
             >
                 <a
                     slot="reference"
@@ -37,7 +38,7 @@
                         :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
                     />
 
-                    <CategoryLottieMark class="u-mark" v-if="item.mark" :mark="item.mark"></CategoryLottieMark>
+                    <CategoryLottieMark class="u-mark" v-if="item.mark && item.mark_enable" :mark="item.mark"></CategoryLottieMark>
 
                     <!-- <img
                         v-if="item.mark && item.mark.indexOf('.svg') >= 0"
@@ -54,7 +55,7 @@
                 </a>
             </el-popover>
 
-            <el-dropdown trigger="click" size="small" :disabled="moreNavList.length === 0">
+            <el-dropdown size="small" :disabled="moreNavList.length === 0">
                 <a href="javascript:;" :class="`u-item u-more ${moreNavList.length === 0 && 'is-disabled'}`">
                     <span>更多</span>
                     <i class="el-icon-arrow-down"></i>
@@ -76,11 +77,11 @@
                             @click="handleChange(item)"
                         >
                             <span> {{ item.name }}</span>
-                            <img
+                            <!-- <img
                                 v-svg-inline
                                 class="u-icon"
                                 :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
-                            />
+                            /> -->
                         </a>
                     </el-dropdown-item>
                 </el-dropdown-menu>
@@ -106,7 +107,7 @@
 import CategoryLottieMark from "./category_lottie_mark.vue";
 export default {
     name: "CommunityHeader",
-    components : {
+    components: {
         CategoryLottieMark,
     },
     props: ["categoryList"],
@@ -160,15 +161,25 @@ export default {
         },
         initNavList() {
             const len = this.lineCount * 2 - 1;
-            const categoryList = [...this.categoryList];
+            const categoryList = this.categoryList.map((item) => {
+                if (item.value === "全部") {
+                    return {
+                        ...item,
+                        value: "",
+                    };
+                } else {
+                    return item;
+                }
+            });
+
             this.showNavList = categoryList.slice(0, len);
             this.moreNavList = categoryList.slice(len);
         },
         handleChange: function (item) {
             if (!item.href) {
-                let selectedCategory = "";
-                if (this.selectedCategory != item.value) {
-                    selectedCategory = item.value;
+                let selectedCategory = item.value;
+                if (this.selectedCategory === selectedCategory) {
+                    return;
                 }
                 this.selectedCategory = selectedCategory;
                 this.onCategoryChange(selectedCategory);

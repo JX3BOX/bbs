@@ -35,6 +35,12 @@ module.exports = {
     //❤️ Proxy ~
     devServer: {
         proxy: {
+            "/api/horn": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
             "/api/inspire": {
                 target: "https://pay.jx3box.com",
                 onProxyReq: function (request) {

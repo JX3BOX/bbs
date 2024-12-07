@@ -26,16 +26,9 @@ function updateCollection(id, data) {
     return $cms().put(`/api/cms/manage/post/collection/${id}`, data);
 }
 
-function getMenus(key) {
-    return $helper()({
-        method: "GET",
-        url: `/api/menu_group/${key}`,
-    });
-}
-
 // 管理员发送私信
 function sendMessage(data) {
     return $cms().post(`/api/cms/manage/message`, data);
 }
 
-export { getMenus, getCollections, removeCollection, getCollection, updateCollection, sendMessage };
+export { getCollections, removeCollection, getCollection, updateCollection, sendMessage };

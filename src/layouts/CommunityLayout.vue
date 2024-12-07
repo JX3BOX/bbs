@@ -59,6 +59,9 @@ export default {
 
 <style lang="less">
 .m-community-layout {
+    .c-header {
+        z-index: 9999;
+    }
     background: #fafbfc;
     .m-main {
         padding: 0;

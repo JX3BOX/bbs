@@ -1,52 +1,80 @@
 <template>
     <div class="m-reply-wrapper" :id="`floor-${post.floor}`">
         <div class="m-reply-left">
-            <CommentUser :uid="userInfo.id" />
+            <CommentUser :uid="userInfo.id" :isMaster="isMaster" />
             <div class="u-top-right u-mobile-show">
-                <div>
-                    <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
-                    <div class="m-reply-time">{{ showTime }}</div>
-                </div>
+                <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
+                <div class="m-reply-time">{{ showTime }}</div>
             </div>
         </div>
         <div class="m-reply-right">
             <div class="m-reply-content">
                 <div class="u-reply-floor u-mobile-hidden">
-                    {{ isMaster ? "楼主" : post.floor + "楼" }}
+                    <a :href="`#floor-${post.floor}`" @click="onFloorClick">{{
+                        isMaster ? "楼主" : post.floor + "楼"
+                    }}</a>
+                    <span class="u-comment-time u-mobile-hidden">{{ post.updated_at }}</span>
+                    <div class="u-reply-op">
+                        <el-button
+                            v-if="isSuper || isFollower"
+                            class="u-mobile-hidden"
+                            @click="onEdit"
+                            type="text"
+                            icon="el-icon-edit-outline"
+                            size="mini"
+                            >编辑</el-button
+                        >
+                    </div>
                 </div>
+                <span class="u-boxcoin" v-if="!isMaster">
+                    <el-button
+                        v-if="isLogin && !isMaster"
+                        class="u-mobile-hidden"
+                        type="text"
+                        icon="el-icon-present"
+                        @click="onThx"
+                        size="mini"
+                        >答谢</el-button
+                    >
+                    <span class="u-boxcoin-total" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
+                        <!-- <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" /> -->
+                        收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
+                        ><i class="el-icon-coin"></i>
+                    </span>
+                </span>
                 <div class="u-reply-content">
                     <Article v-if="isMaster" :content="post.content || ''" />
                     <div v-else v-html="renderContent" />
+
+                    <div v-if="extraImages && extraImages.length && isMaster && isFromPhone" class="m-image-box">
+                        <a class="u-item" v-for="(item, index) in extraImages" :key="index">
+                            <el-image :src="getSquareBanner(item)" fit="fill" :preview-src-list="[item]" />
+                        </a>
+                    </div>
                 </div>
                 <!-- 打赏 只有主楼有打赏-->
                 <Thx
                     v-if="isMaster"
                     class="m-single-thx"
-                    :postId="id"
+                    :postId="~~id"
                     postType="community_topic"
                     :postTitle="post.title"
                     :userId="post.user_id"
                     :adminBoxcoinEnable="true"
                     :userBoxcoinEnable="true"
                     :client="post.client"
+                    category="community"
+                    showRss
                 />
                 <!-- 操作按钮 -->
-                <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div>
+                <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->
                 <div class="u-reply-toolbar">
                     <div>
                         <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
                         <DeleteButton class="u-mobile-hidden" :post="post" type="reply" :isMaster="isMaster" />
-                        <!-- <el-button type="text" icon="el-icon-delete" v-if="canDelete" @click="onDelete">删除</el-button> -->
-                        <!-- <AddBlackHoleButton :post="post" :isMaster="isMaster" type="reply" /> -->
                         <AddBlockButton class="u-mobile-hidden" :post="post" />
                         <ComplaintButton class="u-mobile-hidden" :post="post" />
-                        <el-button
-                            type="primary"
-                            size="small"
-                            class="u-reply-btn"
-                            :style="styles"
-                            @click="onShowReply()"
-                        >
+                        <el-button type="primary" size="small" class="u-reply-btn" :style="styles" @click="onShowReply">
                             <div class="u-btn">
                                 <img src="@/assets/img/community/reply.svg" alt="" />
                                 <span>{{ isMaster ? "跟帖" : "回复" }}</span>
@@ -75,6 +103,20 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>
                                     <ForwardButton class="u-mobile-hidden" :post="post" :isMaster="isMaster" />
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="!isMaster && (isSuper || isFollower)">
+                                    <el-button
+                                        class="u-mobile-hidden"
+                                        @click="onEdit"
+                                        type="text"
+                                        icon="el-icon-edit-outline"
+                                        >编辑</el-button
+                                    >
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="isLogin && !isMaster">
+                                    <el-button class="u-mobile-hidden" type="text" icon="el-icon-present" @click="onThx"
+                                        >答谢</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <DeleteButton
@@ -142,7 +184,7 @@ import ReplyForReply from "./ReplyForReply.vue";
 import CommentItem from "@/components/community/comment_item.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import JX3_EMOTION from "@jx3box/jx3box-emotion";
-import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, editLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { replyReply, getCommentList } from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { postStat } from "@jx3box/jx3box-common/js/stat";
@@ -154,7 +196,8 @@ import DeleteButton from "./delete_button.vue";
 import { getLikes } from "@/service/next";
 import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
 import dayjs from "dayjs";
-
+import bus from "@/utils/bus";
+import { getHistorySummary } from "@/service/pay";
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList", "onReplyTopic"],
@@ -187,6 +230,12 @@ export default {
             showReplyForReplyFrom: false,
             renderContent: "",
             commentList: [],
+
+            // summary
+            summary: {
+                fromManager: 0,
+                fromUser: 0,
+            },
         };
     },
     computed: {
@@ -238,6 +287,24 @@ export default {
             }
             return "";
         },
+        isSuper() {
+            return User.isSuperAdmin();
+        },
+        isFollower() {
+            return this.post?.user_id == User.getInfo()?.uid;
+        },
+        isLogin() {
+            return User.isLogin();
+        },
+        boxCoinTotal() {
+            return this.summary.fromManager + this.summary.fromUser;
+        },
+        isFromPhone() {
+            return this.post?.is_from_phone;
+        },
+        extraImages() {
+            return this.post?.extra_images;
+        },
     },
     watch: {
         "post.content": {
@@ -253,6 +320,9 @@ export default {
                 this.commentList = [];
                 if (this.post.comments) {
                     this.commentList = await this.getLikes(this.post.comments);
+                }
+                if (this.post) {
+                    this.loadHomeworkBoxcoin();
                 }
             },
             immediate: true,
@@ -274,6 +344,12 @@ export default {
             }
             this.isCollapse = !this.isCollapse;
         },
+        getSquareBanner: function (val) {
+            if (val.indexOf("jx3box.com") >= 0) {
+                return getThumbnail(val, 48 * 2);
+            }
+            return val;
+        },
         authorLink,
         async formatContent(val) {
             const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])(?![^<>]*>)/gi;
@@ -293,7 +369,8 @@ export default {
         },
         onShowReply() {
             if (this.isMaster) {
-                window.scrollTo(0, document.body.scrollHeight);
+                // window.scrollTo(0, document.body.scrollHeight);
+                this.$emit("onReplyTopic");
             } else {
                 this.showReplyForReplyFrom = !this.showReplyForReplyFrom;
             }
@@ -375,6 +452,44 @@ export default {
                     list = commentList;
                 });
             return list;
+        },
+        onEdit() {
+            if (this.isMaster) {
+                const path = editLink("community", this.post.id);
+                window.open(path, "_blank");
+            } else {
+                const path = editLink("community/reply", this.post.id);
+                window.open(path, "_blank");
+            }
+        },
+        onThx() {
+            bus.emit("onThx", {
+                postType: "community_topic_reply",
+                postId: this.post.id,
+                postUserId: this.userId,
+                client: "std",
+            });
+        },
+        loadHomeworkBoxcoin() {
+            getHistorySummary("community_topic_reply", this.post.id).then((res) => {
+                this.summary = res.data.data;
+            });
+        },
+        onBoxcoinClick() {
+            bus.emit("boxcoin-click", {
+                postType: "community_topic_reply",
+                postId: this.post.id,
+                postUserId: this.userId,
+            });
+        },
+        onFloorClick() {
+            // 复制楼层
+            const floor = this.post.floor;
+
+            const link = window.location.href.split("#")[0] + `#floor-${floor}`;
+            navigator.clipboard.writeText(link).then(() => {
+                this.$message.success("楼层已复制到剪贴板");
+            });
         },
     },
 };

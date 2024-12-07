@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="m-collection-layout">
         <Header></Header>
         <Breadcrumb
             name="剑三小册"
@@ -18,7 +18,7 @@
                     @click="onAdminClick"
                     v-if="isEditor"
                 >管理</el-button> -->
-                <AdminDrop v-if="isEditor" :post="finalPost" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :post="finalPost" :user-id="user_id" />
             </template>
         </Breadcrumb>
         <LeftSidebar :uid="user_id">
@@ -77,8 +77,11 @@ export default {
                 ...this.post,
                 post_title: this.post.title,
                 ID: this.post.id,
-                post_type: this.post?.posts?.[0]?.post_type || "",
+                post_type: "collection"
             };
+        },
+        isTeammate() {
+            return User.isTeammate();
         },
     },
     methods: {
@@ -91,4 +94,10 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/list.less";
+
+.m-collection-layout {
+    .c-sidebar-left {
+        padding: 15px;
+    }
+}
 </style>

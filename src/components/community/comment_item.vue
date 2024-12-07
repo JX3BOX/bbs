@@ -1,11 +1,6 @@
 <template>
     <div class="m-comment-wrapper">
-        <div
-            class="m-comment-right"
-            :style="{
-                backgroundImage: `url(${skin})`,
-            }"
-        >
+        <div class="m-comment-right" :style="decorationStyles">
             <img class="u-avatar" :src="showAvatar(userInfo.avatar)" />
             <div class="m-comment-content">
                 <div class="u-content-top">
@@ -78,10 +73,9 @@ import AddBlockButton from "@/components/community/add_block_button.vue";
 // import AddBlackHoleButton from "@/components/community/add_black_hole_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
-import { getDecoration, getDecorationJson } from "@/service/cms";
+import { getDecoration } from "@/service/cms";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-const DECORATION_JSON = "decoration_json";
-const DECORATION_KEY = "decoration_me";
+const DECORATION_KEY = "decoration_comment_";
 
 export default {
     name: "CommentItem",
@@ -96,7 +90,7 @@ export default {
     },
     data() {
         return {
-            skin: "",
+            decoration: "",
             isLike: false,
             likeCount: 0,
             renderContent: "",
@@ -147,21 +141,28 @@ export default {
         id: function () {
             return this.post.id;
         },
+        decorationStyles() {
+            return this.decoration
+                ? {
+                      backgroundImage: `url(${this.decoration})`,
+                      borderRadius: "8px",
+                  }
+                : null;
+        },
     },
     mounted() {
         this.getDecoration();
     },
     methods: {
         setDecoration(decoration) {
-            this.skin = __imgPath + `decoration/images/${decoration.name}/comment.png`;
+            this.decoration = __imgPath + `decoration/images/${decoration.val}/comment.png`;
+            console.log(this.decoration);
         },
         getDecoration() {
             let decoration_local = sessionStorage.getItem(DECORATION_KEY + this.uid);
             if (decoration_local) {
                 //解析本地缓存
                 let decoration_parse = JSON.parse(decoration_local);
-                if (!decoration_parse.status) return;
-
                 if (decoration_parse) {
                     this.setDecoration(decoration_parse);
                     return;
@@ -171,28 +172,10 @@ export default {
                 let decorationList = res.data.data;
                 //筛选个人装扮
                 let decoration = decorationList.find((item) => item.type == "comment");
-                if (!decoration) {
-                    //空 则为无主题，不再加载接口，Me界面设No
-                    sessionStorage.setItem(DECORATION_KEY + this.uid, JSON.stringify({ status: false }));
+                if (decoration) {
+                    this.setDecoration(decoration);
+                    sessionStorage.setItem(DECORATION_KEY + this.uid, JSON.stringify(decoration));
                     return;
-                }
-                let decorationJson = sessionStorage.getItem(DECORATION_JSON);
-                if (!decorationJson) {
-                    //加载远程json，用于颜色配置及主题存在部位判断
-                    getDecorationJson().then((json) => {
-                        let decoration_json = json.data;
-                        let theme = JSON.parse(JSON.stringify(decoration_json[decoration.val]));
-                        theme.status = true;
-                        sessionStorage.setItem(DECORATION_KEY + this.uid, JSON.stringify(theme));
-                        this.setDecoration(theme);
-                        //缓存远程JSON文件
-                        sessionStorage.setItem(DECORATION_JSON, JSON.stringify(decoration_json));
-                    });
-                } else {
-                    let theme = JSON.parse(decorationJson)[decoration.val];
-                    theme.status = true;
-                    sessionStorage.setItem(DECORATION_KEY + this.uid, JSON.stringify(theme));
-                    this.setDecoration(theme);
                 }
             });
         },

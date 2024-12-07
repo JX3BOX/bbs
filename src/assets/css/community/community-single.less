@@ -32,6 +32,10 @@
 
     .m-community-footer {
         background: white;
+        .u-more-buttom {
+            width: 100%;
+            margin-bottom: 8px;
+        }
     }
 
     .m-pageheader-pagination {
@@ -73,6 +77,15 @@
     }
 }
 
-.p-community-single .c-breadcrumb__title{
+.p-community-single .c-breadcrumb__title {
     .none;
+}
+
+@media screen and (max-width: @phone) {
+    .p-community-single .c-breadcrumb .u-op {
+        .db !important;
+        .u-publish {
+            .none !important;
+        }
+    }
 }

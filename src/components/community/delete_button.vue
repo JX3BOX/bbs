@@ -6,50 +6,67 @@
 </template>
 
 <script>
-import { delMyComment, delCommentToMyReply, delReplyToMyTopic, deleteMyReply, manageDelComment, manageDelReply } from "@/service/community";
+import {
+    delMyComment,
+    delCommentToMyReply,
+    delReplyToMyTopic,
+    deleteMyReply,
+    manageDelComment,
+    manageDelReply,
+} from "@/service/community";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "DeleteButton",
     inject: ["getTopicData", "getReplyList", "getReplyData", "getCommentList", "onSearch"],
     props: ["isMaster", "post", "type"],
     computed: {
-        topicData: function () {
+        topicData: function() {
             return this.getTopicData();
         },
-        replyData: function () {
+        replyData: function() {
             return this.getReplyData();
         },
         // 作者
-        isAuthor: function () {
+        isAuthor: function() {
             return this.post.user_id == User.getInfo().uid;
         },
         // 是我的帖子的回帖 （我是楼主）
-        isReplyToMyTopic: function () {
+        isReplyToMyTopic: function() {
             return this.type === "reply" && this.topicData.user_id == User.getInfo().uid;
         },
         // 回复我的回帖 （我是层主）
-        isCommentToMyReply: function () {
-            return this.type === "comment" && this.replyData.user_id == User.getInfo().uid
+        isCommentToMyReply: function() {
+            return this.type === "comment" && this.replyData.user_id == User.getInfo().uid;
         },
         isSuperAdmin() {
-            return User.isSuperAdmin();
+            return User.isSuperAdmin() || User.hasPermission("manage_del_post");
         },
         isFollower() {
             return this.post?.user_id == User.getInfo()?.uid;
         },
         canDelete() {
-            // 不是 1 楼 且 是超级管理 || 层主
-            return !this.isMaster && (this.isSuperAdmin || this.isFollower)
-        }
+            // 不是 1 楼 且 是超级管理 || 层主 || 楼主
+            return !this.isMaster && (this.isSuperAdmin || this.isFollower || this.isTopicAuthor);
+        },
+        // 是否为楼主
+        isTopicAuthor() {
+            return this.topicData.user_id == User.getInfo().uid;
+        },
     },
     methods: {
         onDeleteClick() {
             // 删除自己的评论与回帖
-            if (this.isAuthor || this.isSuperAdmin) {
+            if (this.isAuthor || this.isSuperAdmin || this.isTopicAuthor) {
                 if (this.type === "comment") {
-                    this.isSuperAdmin ? this.manageDeleteComment() : this.delMyComment();
+                    if (this.isAuthor) {
+                        this.delMyComment();
+                    }
+
+                    if (this.isSuperAdmin || this.isTopicAuthor) {
+                        this.manageDeleteComment();
+                    }
                 } else if (this.type === "reply") {
-                    this.isSuperAdmin ? this.manageDeleteReply() : this.deleteMyReply();
+                    this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteReply() : this.deleteMyReply();
                 } else {
                     this.$message.success("未知的组件类型：" + this.type);
                 }
@@ -66,7 +83,7 @@ export default {
                 }
             }
         },
-        deleteMyReply: function () {
+        deleteMyReply: function() {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -79,7 +96,7 @@ export default {
                 });
             });
         },
-        delMyComment: function () {
+        delMyComment: function() {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -91,7 +108,7 @@ export default {
                 });
             });
         },
-        delReplyToMyTopic: function () {
+        delReplyToMyTopic: function() {
             this.$confirm("确认是否删除该回帖？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -104,7 +121,7 @@ export default {
                 });
             });
         },
-        delCommentToMyReply: function () {
+        delCommentToMyReply: function() {
             this.$confirm("确认是否删除该评论？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",

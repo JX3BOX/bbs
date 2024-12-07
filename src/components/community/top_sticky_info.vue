@@ -4,7 +4,7 @@
             <h2 :style="hightStyle" class="u-title">{{ title }}</h2>
             <div class="u-infos">
                 <span v-if="isTop" class="u-status u-sub-block top">
-                    <img svg-inline src="@/assets/img/community/is_top_inline.svg" alt="" />
+                    <img svg-inline src="@/assets/img/community/is_top.svg" alt="" />
                 </span>
 
                 <span v-if="isStar" class="u-status u-sub-block star">

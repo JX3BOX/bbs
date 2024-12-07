@@ -71,10 +71,46 @@
     .u-reply-floor {
         .pr;
         .bold;
+        .flex;
+        align-items: center;
         color: @color-link;
         line-height: 32px;
-        font-size: 16px;
+        font-size: 13px;
         margin-bottom: 12px;
+    }
+    .u-comment-time{
+        color:#999;
+        font-weight: normal;
+        margin-left:5px;
+    }
+    .u-reply-op{
+        margin-left:5px;
+    }
+    .u-boxcoin {
+        .pa;
+        right: 0;
+        top: 0;
+        .fz(12px);
+        .flex;
+        align-items: center;
+        gap: 5px;
+        .pointer;
+        padding:5px 10px 5px 15px;
+        border: 1px solid #eee;
+        border-right:none;
+        border-top-left-radius: 32px;
+        border-bottom-left-radius: 32px;
+        background-color:@bg-light;
+    }
+
+    .u-boxcoin-img {
+        .size(14px);
+    }
+
+    .u-boxcoin-num {
+        color: #f0b400;
+        .bold;
+        padding:0 2px;
     }
     // 回帖内容
     .u-reply-content {
@@ -92,6 +128,48 @@
                 padding: 5px;
                 border: 1px solid #eee;
                 margin: 5px 0;
+            }
+        }
+    }
+
+    .m-image-box {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 10px;
+        margin-top: 24px;
+        width: 100%;
+        flex-wrap: wrap;
+        .u-item {
+            min-width: 48px;
+            height: 48px;
+            min-height: 48px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            img {
+                vertical-align: top;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .el-image {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+@media screen and (max-width:@phone){
+    .m-reply-content .u-boxcoin{.none;}
+}
+@media screen and (max-width:@pc){
+    .m-reply-content {
+        .u-reply-content {
+            img {
+                max-width: 40vw;
             }
         }
     }
@@ -117,7 +195,8 @@
             font-size: 12px;
             font-weight: 700;
             color: #0366d6;
-            margin-bottom: 8px;
+            // margin-bottom: 8px;
+            .pointer;
         }
         .m-reply-time {
             margin-bottom: 0;
@@ -126,6 +205,7 @@
 }
 // 右侧-主要内容
 .m-reply-right {
+    .pr;
     flex: 1;
     display: flex;
     flex-direction: column;

@@ -10,6 +10,9 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
+        <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <Info />
             <publish-gate slot="op-append" />
         </Breadcrumb>
@@ -34,11 +37,14 @@ import Nav from "@/components/nav/Nav.vue";
 import Side from "@/components/bbs/list_side.vue";
 import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "ListLayout",
     props: [],
     data: function () {
-        return {};
+        return {
+            logo: __cdn + "logo/logo-light/community.svg",
+        };
     },
     computed: {
         slug: function () {
