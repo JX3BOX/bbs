@@ -156,7 +156,6 @@ export default {
     methods: {
         setDecoration(decoration) {
             this.decoration = __imgPath + `decoration/images/${decoration.val}/comment.png`;
-            console.log(this.decoration);
         },
         getDecoration() {
             let decoration_local = sessionStorage.getItem(DECORATION_KEY + this.uid);

@@ -1,6 +1,6 @@
 <template>
     <div class="m-reply-wrapper" :id="`floor-${post.floor}`">
-        <div class="m-reply-left">
+        <div class="m-reply-left m-theme" :style="{ backgroundImage: `url(${bg})` }">
             <CommentUser :uid="userInfo.id" :isMaster="isMaster" />
             <div class="u-top-right u-mobile-show">
                 <div class="u-floor">{{ isMaster ? "楼主" : "#" + post.floor }}</div>
@@ -198,6 +198,10 @@ import Thx from "@jx3box/jx3box-common-ui/src/single/Thx.vue";
 import dayjs from "dayjs";
 import bus from "@/utils/bus";
 import { getHistorySummary } from "@/service/pay";
+
+import { getDecoration } from "@/service/cms";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+const DECORATION_SIDEBAR = "decoration_sidebar";
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList", "onReplyTopic"],
@@ -236,6 +240,9 @@ export default {
                 fromManager: 0,
                 fromUser: 0,
             },
+
+            bg: "",
+            user_id: "",
         };
     },
     computed: {
@@ -333,6 +340,13 @@ export default {
             },
             immediate: true,
         },
+        userId: {
+            handler: function (val) {
+                this.user_id = val;
+                this.getDecoration();
+            },
+            immediate: true,
+        }
     },
     methods: {
         onCollapseChange() {
@@ -490,6 +504,33 @@ export default {
             navigator.clipboard.writeText(link).then(() => {
                 this.$message.success("楼层已复制到剪贴板");
             });
+        },
+        showDecoration: function (val, type) {
+            return __imgPath + `decoration/images/${val}/${type}.png`;
+        },
+        getDecoration() {
+            if (!this.user_id) {
+                return;
+            }
+            let decoration_sidebar = sessionStorage.getItem(DECORATION_SIDEBAR + this.user_id) || "";
+            if (decoration_sidebar == "no") return;
+            //已有缓存，读取解析
+            try {
+                let sidebar = JSON.parse(decoration_sidebar);
+                this.bg = this.showDecoration(sidebar.val, "sidebar");
+            } catch (err) {
+                getDecoration({ using: 1, user_id: this.user_id, type: "sidebar" }).then((data) => {
+                    let res = data.data.data || [];
+                    if (res.length == 0) {
+                        //空 则为无主题，不再加载接口，界面设No
+                        sessionStorage.setItem(DECORATION_SIDEBAR + this.user_id, "no");
+                        return;
+                    }
+                    let sidebar = res[0];
+                    this.bg = this.showDecoration(sidebar.val, "sidebar");
+                    sessionStorage.setItem(DECORATION_SIDEBAR + this.user_id, JSON.stringify(sidebar));
+                });
+            }
         },
     },
 };
