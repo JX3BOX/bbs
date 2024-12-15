@@ -32,11 +32,11 @@
                     }"
                 >
                     <span>{{ item.name }}</span>
-                    <img
-                        v-svg-inline
-                        class="u-icon"
-                        :src="require(`@/assets/img/community/category/${item.icon}.svg`)"
-                    />
+                    <!-- <img -->
+                        <!-- v-svg-inline -->
+                        <!-- class="u-icon" -->
+                        <!-- :src="require(`@/assets/img/community/category/${item.icon}.svg`)" -->
+                    <!-- /> -->
 
                     <CategoryLottieMark class="u-mark" v-if="item.mark && item.mark_enable" :mark="item.mark"></CategoryLottieMark>
 
