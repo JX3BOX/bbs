@@ -1,6 +1,5 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import axios from "axios";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 
 function getMenu(key) {
     return $cms().get(`/api/cms/config/menu/${key}`);
@@ -26,6 +25,11 @@ function getDecoration(params) {
     });
 }
 
+function getDecorationJson() {
+    let url = __cdn + "design/decoration/index.json";
+    return axios.get(url);
+}
+
 const getUserList = (params) => $cms().get(`/api/cms/user/list`, { params });
 
-export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList, getDecoration };
+export { getMenu, getAuthorInfo, getTopicBucket, getConfigBanner, getUserList, getDecoration, getDecorationJson };

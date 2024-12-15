@@ -1,38 +1,14 @@
 <template>
     <div class="m-list-nav">
-        <!-- <RightSideMsg>
-            <em>综合交流反馈群</em> :
-            <strong @click="onQQClick" class="u-link" title="点击复制">
-                <a href="https://jq.qq.com/?_wv=1027&k=CAiizina" v-if="client == 'origin'">590349918</a>
-                <a>{{ qq }}</a>
-            </strong>
-        </RightSideMsg> -->
-
-        <!-- <h5 class="u-title"><i class="el-icon-menu"></i> 分类导航</h5> -->
-
-        <!-- <div class="m-ladder-carousel">
-            <el-carousel class="m-carousel" autoplay indicator-position="none">
-                <el-carousel-item v-for="(item, index) in slideList" :key="index">
-                    <a class="u-link" :href="item.link">
-                        <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
-                    </a>
-                </el-carousel-item>
-            </el-carousel>
-        </div> -->
         <Banner class="m-ladder-carousel"></Banner>
 
         <div class="m-nav-app">
             <h5 class="u-title">茶馆矩阵</h5>
             <a href="/community" :class="{ 'is-active': routeActive('community') }">
-                <i class="el-icon-cold-drink"></i>
+                <img svg-inline class="u-app-icon" :src="getAppIcon('community')" alt="">
                 <span>论坛</span>
                 <em>Community</em>
             </a>
-            <!-- <a href="/bbs" :class="{ 'is-active': routeActive('bbs') }">
-                <i class="el-icon-coffee-cup"></i>
-                <span>茶馆</span>
-                <em>Story</em>
-            </a> -->
             <a href="/joke" :class="{ 'is-active': routeActive('joke') }">
                 <i class="el-icon-cherry"></i>
                 <span>骚话</span>
@@ -63,6 +39,7 @@ import { feedback } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getAppType, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import { getConfigBanner } from "@/service/cms";
 import Banner from "@/components/bbs/banner.vue";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "list_nav",
     props: [],
@@ -136,7 +113,9 @@ export default {
         },
     },
     methods: {
-        getAppIcon,
+        getAppIcon(key) {
+            return __cdn + "logo/logo-light/" + key + ".svg";
+        },
         isActive: function (slug) {
             return slug == this.$route.name;
         },

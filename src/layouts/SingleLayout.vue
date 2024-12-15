@@ -11,6 +11,9 @@
             :showExtend="true"
             :subtypeMap="subtypeMap"
         >
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <publish-gate slot="op-append" />
             <template #op-prepend>
                 <!-- <AdminDirectMessage
@@ -46,12 +49,14 @@ import publishGate from "@/components/publish_gate.vue";
 import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import User from "@jx3box/jx3box-common/js/user";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "SingleLayout",
     props: [],
     data: function () {
         return {
             id: getAppID(),
+            logo: __cdn + "logo/logo-light/community.svg",
 
             subtypeMap: {
                 1: "攻略心得",

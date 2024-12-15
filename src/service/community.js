@@ -1,6 +1,6 @@
 import { $next, $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box";
 
 const API_PREFIX = `/api/next2`;
 const gs_url = process.env.NODE_ENV === "development" ? "" : "https://gs.jx3box.com";
@@ -112,7 +112,7 @@ function manageDelReply(id) {
 }
 
 function getSkinJson() {
-    let url = __imgPath + `decoration/community_skin.json?${Date.now()}}}`;
+    let url = __cdn + `design/decoration/community_skin.json`;
     return axios.get(url);
 }
 

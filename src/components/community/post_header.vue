@@ -74,10 +74,10 @@
                 {{ item.label }}
             </span>
             <!-- 小册 -->
-            <a v-if="collection" class="u-book u-sub-block" :href="collection.url" target="_blank">
+            <!-- <a v-if="collection" class="u-book u-sub-block" :href="collection.url" target="_blank">
                 <img svg-inline src="@/assets/img/community/bookmark.svg" alt="小册" />
                 {{ collection.name }}
-            </a>
+            </a> -->
 
             <!-- 发布日期 -->
             <span class="u-sub-block" :title="'发布日期:' + post_time">

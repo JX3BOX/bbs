@@ -17,6 +17,13 @@
                         ></el-pagination>
                     </template>
                 </PostHeader>
+                <!-- 文集小册 -->
+                <Collection
+                    class="m-single-collection"
+                    :id="collection_id"
+                    :defaultVisible="collection_collapse"
+                    @collectionUpdate="updateCollection"
+                />
                 <el-divider content-position="left">JX3BOX</el-divider>
             </div>
 
@@ -111,6 +118,7 @@ import Homework from "@jx3box/jx3box-common-ui/src/interact/Homework.vue";
 import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-records.vue";
 import bus from "@/utils/bus";
 import { atAuthors } from "@/service/pay";
+import Collection from "@jx3box/jx3box-common-ui/src/single/Collection.vue";
 
 const appKey = "community";
 
@@ -123,6 +131,7 @@ export default {
         Homework,
         boxCoinRecords,
         GoToTopOrBottom,
+        Collection,
     },
     provide() {
         return {
@@ -159,6 +168,8 @@ export default {
             // 打赏相关 end
 
             showComment: false,
+
+            collection_data: "",
         };
     },
     computed: {
@@ -186,6 +197,12 @@ export default {
         // 是否显示加载更多
         hasNextPage: function () {
             return this.pageTotal >= 1 && this.per * this.page < this.total;
+        },
+        collection_id() {
+            return this.post.collection_id;
+        },
+        collection_collapse: function () {
+            return this.post?.collection_collapse;
         },
     },
     created() {
@@ -440,6 +457,9 @@ export default {
         handleReplyTopic() {
             // 展示快捷回复弹窗
             this.showComment = true;
+        },
+        updateCollection: function (val) {
+            this.collection_data = val;
         },
     },
 };
