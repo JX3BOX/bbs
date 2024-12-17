@@ -31,11 +31,14 @@
                         v-if="isLogin && !isMaster"
                         class="u-mobile-hidden"
                         type="text"
-                        icon="el-icon-present"
                         @click="onThx"
                         size="mini"
-                        >答谢</el-button
                     >
+                        <span class="u-thx">
+                            <img src="@/assets/img/community/thx.webp" alt="答谢" />
+                            答谢
+                        </span>
+                    </el-button>
                     <span class="u-boxcoin-total" v-if="boxCoinTotal" @click.stop="onBoxcoinClick">
                         <!-- <img class="u-boxcoin-img" src="~@/assets/img/community/like4.png" alt="" /> -->
                         收到<span class="u-boxcoin-num">{{ boxCoinTotal }}</span
@@ -490,7 +493,7 @@ export default {
             navigator.clipboard.writeText(link).then(() => {
                 this.$message.success("楼层已复制到剪贴板");
             });
-        }
+        },
     },
 };
 </script>
