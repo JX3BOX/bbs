@@ -195,6 +195,7 @@
 .m-reply-left {
     padding: 0 24px;
     width: 220px;
+    .pr;
     .u-top-right {
         text-align: right;
         justify-content: space-between;
@@ -216,6 +217,23 @@
         background-position: top right;
         margin: 0 -24px 0 -24px;
         padding: 24px 24px 0 24px;
+    }
+
+    @media screen and (max-width: @phone) {
+        & {
+            height: 82px;
+        }
+        .m-theme {
+            .pa;
+            width: 100vw;
+            top: 0;
+        }
+        .u-top-right {
+            .pa;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+        }
     }
 }
 // 右侧-主要内容
