@@ -81,11 +81,12 @@ export default {
                 ...this.post,
                 post_title: this.post.title,
                 ID: this.post.id,
-                post_type: this.postType
+                post_type: 'community',
+                _subtype: this.subtype
             };
         },
-        postType() {
-            return postTypeMaps[this.post.category] || "community"
+        subtype() {
+            return postTypeMaps[this.post.category]
         }
     },
     mounted() {},
