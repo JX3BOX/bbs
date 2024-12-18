@@ -45,6 +45,19 @@ import { getAppIcon, getAppID } from "@jx3box/jx3box-common/js/utils";
 import AdminDrop from "@jx3box/jx3box-common-ui/src/bread/AdminDrop.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import Side from "@/components/bbs/single_side.vue";
+const postTypeMaps = {
+    "求助": "newbie",
+    "萌新": "newbie",
+    "讨论": "discussion",
+    "警示": "discussion",
+    "墨香": "poem",
+    "日记": "poem",
+    "三次元": "poem",
+    "美图": "pvx",
+    "同人": "pvx",
+    "心得": "wiki",
+    "剧情": "wiki"
+}
 export default {
     name: "CommunitySingleLayout",
     props: ["post"],
@@ -68,9 +81,12 @@ export default {
                 ...this.post,
                 post_title: this.post.title,
                 ID: this.post.id,
-                post_type: "community",
+                post_type: this.postType
             };
         },
+        postType() {
+            return postTypeMaps[this.post.category] || "community"
+        }
     },
     mounted() {},
     methods: { getAppIcon },
