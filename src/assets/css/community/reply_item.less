@@ -169,14 +169,24 @@
         }
     }
 }
-@media screen and (max-width:@phone){
-    .m-reply-content .u-boxcoin{.none;}
-}
+
 @media screen and (max-width:@pc){
+
     .m-reply-content {
         .u-reply-content {
             img {
                 max-width: 40vw;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:@phone){
+    .m-reply-content .u-boxcoin{.none;}
+    .m-reply-content {
+        .u-reply-content {
+            img {
+                max-width: 100%;
             }
         }
     }
