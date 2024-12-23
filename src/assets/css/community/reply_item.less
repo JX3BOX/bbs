@@ -78,20 +78,20 @@
         font-size: 13px;
         margin-bottom: 12px;
     }
-    .u-thx{
+    .u-thx {
         .flex;
         align-items: center;
-        img{
+        img {
             .size(18px);
         }
     }
-    .u-comment-time{
-        color:#999;
+    .u-comment-time {
+        color: #999;
         font-weight: normal;
-        margin-left:5px;
+        margin-left: 5px;
     }
-    .u-reply-op{
-        margin-left:5px;
+    .u-reply-op {
+        margin-left: 5px;
     }
     .u-boxcoin {
         .pa;
@@ -102,12 +102,12 @@
         align-items: center;
         gap: 5px;
         .pointer;
-        padding:5px 10px 5px 15px;
+        padding: 5px 10px 5px 15px;
         border: 1px solid #eee;
-        border-right:none;
+        border-right: none;
         border-top-left-radius: 32px;
         border-bottom-left-radius: 32px;
-        background-color:@bg-light;
+        background-color: @bg-light;
     }
 
     .u-boxcoin-img {
@@ -117,7 +117,7 @@
     .u-boxcoin-num {
         color: #f0b400;
         .bold;
-        padding:0 2px;
+        padding: 0 2px;
     }
     // 回帖内容
     .u-reply-content {
@@ -170,8 +170,7 @@
     }
 }
 
-@media screen and (max-width:@pc){
-
+@media screen and (max-width: @pc) {
     .m-reply-content {
         .u-reply-content {
             img {
@@ -181,12 +180,15 @@
     }
 }
 
-@media screen and (max-width:@phone){
-    .m-reply-content .u-boxcoin{.none;}
+@media screen and (max-width: @phone) {
+    .m-reply-content .u-boxcoin {
+        .none;
+    }
     .m-reply-content {
         .u-reply-content {
             img {
                 max-width: 100%;
+                height: auto;
             }
         }
     }
@@ -234,9 +236,12 @@
             height: 82px;
         }
         .m-theme {
-            .pa;
             width: 100vw;
-            top: 0;
+            box-sizing: border-box;
+            margin: 0;
+            position: absolute;
+            left: -12px;
+            top: -16px;
         }
         .u-top-right {
             .pa;
