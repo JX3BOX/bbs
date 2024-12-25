@@ -101,6 +101,10 @@
         </el-dialog>
 
         <go-to-top-or-bottom />
+
+        <div class="w-jx3-element-pop" :style="jx3_element.style">
+            <jx3-author :uid="author.id" v-show="jx3_element.type === 'author'" />
+        </div>
     </CommunitySingleLayout>
 </template>
 
@@ -119,6 +123,9 @@ import boxCoinRecords from "@jx3box/jx3box-comment-ui/src/components/boxcoin-rec
 import bus from "@/utils/bus";
 import { atAuthors } from "@/service/pay";
 import Collection from "@jx3box/jx3box-common-ui/src/single/Collection.vue";
+import renderJx3Element from "@jx3box/jx3box-editor/assets/js/jx3_element";
+import Author from "@jx3box/jx3box-editor/src/components/Author.vue";
+
 
 const appKey = "community";
 
@@ -132,6 +139,7 @@ export default {
         boxCoinRecords,
         GoToTopOrBottom,
         Collection,
+        "jx3-author": Author,
     },
     provide() {
         return {
@@ -170,6 +178,20 @@ export default {
             showComment: false,
 
             collection_data: "",
+
+            // COMMON
+            jx3_element: {
+                style: {
+                    top: 0,
+                    left: 0,
+                    display: "block",
+                },
+                type: "",
+            },
+
+            author: {
+                id: "",
+            }
         };
     },
     computed: {
@@ -211,7 +233,11 @@ export default {
     mounted() {
         if (!this.id) return this.$message.error("文章id不存在");
         this.getDetails();
-        this.getReplyList();
+        this.getReplyList().then(() => {
+            this.$nextTick(() => {
+                renderJx3Element(this);
+            });
+        })
 
         // 打赏
         bus.on("onThx", (data) => {
@@ -467,4 +493,9 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/community/community-single.less";
+
+.w-jx3-element-pop{
+    position: fixed;
+    .z(2000);
+}
 </style>
