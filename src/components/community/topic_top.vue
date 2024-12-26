@@ -319,6 +319,10 @@ export default {
         }
         .m-topic-hot__right {
             color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-sizing:border-box;
+            background-color: rgba(0, 0, 0, 0.6);
             .u-title {
                 .color(#fff,#fff);
             }
