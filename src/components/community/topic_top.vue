@@ -4,6 +4,9 @@
             class="m-topic-hot m-topic-box"
             :style="{
                 '--title-color': skin.titleColor,
+                '--user-color': skin.userColor,
+                '--desc-color': skin.descColor,
+                '--user-hover-color': skin.userHoverColor,
                 '--title-hover-color': skin.titleHoverColor,
                 '--border-hover-color': skin.borderHoverColor,
             }"
@@ -128,7 +131,10 @@ export default {
                     return {
                         background: __imgPath + `decoration/palu/${val}.png`,
                         titleColor: skinJson[val].titleColor,
+                        userColor: skinJson[val].userColor,
+                        descColor: skinJson[val].descColor,
                         titleHoverColor: skinJson[val].titleHoverColor,
+                        userHoverColor: skinJson[val].userHoverColor,
                         borderHoverColor: skinJson[val].borderHoverColor,
                     };
                 }
@@ -136,7 +142,10 @@ export default {
             // 默认值 未设置返回默认值 实装要判断
             return {
                 titleColor: "#0366d6",
+                userColor: "#3d454d",
+                descColor: "rgba(0, 0, 0, 0.5)",
                 titleHoverColor: "rgba(255, 64, 128, 1)",
+                userHoverColor: "#0366d6",
                 borderHoverColor: "#0366d6",
             };
         },
@@ -287,6 +296,12 @@ export default {
             }
             .m-topic-userInfo__name {
                 font-size: 15px;
+                color: var(--user-color);
+            }
+            :hover {
+                .m-topic-userInfo__name {
+                    color: var(--user-hover-color);
+                }
             }
         }
 
@@ -297,6 +312,7 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             flex: 1;
+            color: var(--desc-color);
         }
     }
 }
