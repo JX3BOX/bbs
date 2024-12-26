@@ -2,11 +2,9 @@
     <div>
         <div
             class="m-topic-hot m-topic-box"
+            :class="skin.style"
             :style="{
                 '--title-color': skin.titleColor,
-                '--user-color': skin.userColor,
-                '--desc-color': skin.descColor,
-                '--user-hover-color': skin.userHoverColor,
                 '--title-hover-color': skin.titleHoverColor,
                 '--border-hover-color': skin.borderHoverColor,
             }"
@@ -131,21 +129,16 @@ export default {
                     return {
                         background: __imgPath + `decoration/palu/${val}.png`,
                         titleColor: skinJson[val].titleColor,
-                        userColor: skinJson[val].userColor,
-                        descColor: skinJson[val].descColor,
                         titleHoverColor: skinJson[val].titleHoverColor,
-                        userHoverColor: skinJson[val].userHoverColor,
                         borderHoverColor: skinJson[val].borderHoverColor,
+                        style: skinJson[val].style,
                     };
                 }
             }
             // 默认值 未设置返回默认值 实装要判断
             return {
                 titleColor: "#0366d6",
-                userColor: "#3d454d",
-                descColor: "rgba(0, 0, 0, 0.5)",
                 titleHoverColor: "rgba(255, 64, 128, 1)",
-                userHoverColor: "#0366d6",
                 borderHoverColor: "#0366d6",
             };
         },
@@ -313,6 +306,27 @@ export default {
             text-overflow: ellipsis;
             flex: 1;
             color: var(--desc-color);
+        }
+    }
+    &.dark {
+        .m-topic-collection {
+            a {
+                border: 1px solid #fff;
+            }
+            .u-value {
+                color: #fff;
+            }
+        }
+        .m-topic-hot__right {
+            color: #fff;
+            .u-title {
+                .color(#fff,#fff);
+            }
+        }
+        .m-topic-userInfo {
+            .m-topic-userInfo__name {
+                .color(#fff,#fff);
+            }
         }
     }
 }

@@ -408,8 +408,7 @@ export default {
             return list;
         },
         /** 回帖 */
-        onReplyTopic({ attachmentList, content, atUsers }) {
-            console.log(attachmentList);
+        onReplyTopic({ attachmentList, content, atUsers }) { 
             if (!this.id) return this.$message.error("文章id不存在");
             // 拼接图片列表到 content 中
             if (attachmentList && attachmentList.length) {

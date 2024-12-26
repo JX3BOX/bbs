@@ -112,7 +112,7 @@ function manageDelReply(id) {
 }
 
 function getSkinJson() {
-    let url = __cdn + `design/decoration/community_skin.json`;
+    let url = __cdn + `design/decoration/community_skin.json?${Date.now()}`;
     return axios.get(url);
 }
 

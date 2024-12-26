@@ -38,7 +38,7 @@
         </div>
         <div
             class="u-box m-topic-box__content"
-            :class="{ withSkin: skin.background }"
+            :class="[{ withSkin: skin.background }, skin.style]"
             :style="{
                 backgroundImage: `url(${skin.background})`,
             }"
@@ -123,6 +123,7 @@ export default {
                         titleColor: skinJson[val].titleColor,
                         titleHoverColor: skinJson[val].titleHoverColor,
                         borderHoverColor: skinJson[val].borderHoverColor,
+                        style: skinJson[val].style || "",
                     };
                 }
             }
@@ -131,6 +132,7 @@ export default {
                 titleColor: "#0366d6",
                 titleHoverColor: "rgba(255, 64, 128, 1)",
                 borderHoverColor: "#0366d6",
+                style: "",
             };
         },
         hightStyle: function () {
