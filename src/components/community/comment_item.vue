@@ -74,7 +74,7 @@ import AddBlockButton from "@/components/community/add_block_button.vue";
 import ComplaintButton from "./complaint_button.vue";
 import DeleteButton from "./delete_button.vue";
 import { getDecoration } from "@/service/cms";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 const DECORATION_KEY = "decoration_comment_";
 
 export default {
@@ -155,7 +155,7 @@ export default {
     },
     methods: {
         setDecoration(decoration) {
-            this.decoration = __imgPath + `decoration/images/${decoration.val}/comment.png`;
+            this.decoration = __cdn + `design/decoration/images/${decoration.val}/comment.png`;
         },
         getDecoration() {
             let decoration_local = sessionStorage.getItem(DECORATION_KEY + this.uid);

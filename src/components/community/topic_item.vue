@@ -97,7 +97,7 @@
 
 <script>
 import { showAvatar, authorLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
-import { __ossMirror, __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box";
+import { __ossMirror, __cdn } from "@jx3box/jx3box-common/data/jx3box";
 import { random } from "lodash";
 import { getTimeAgo } from "@/utils/dateFormat";
 import { getSkinJson } from "@/service/community";
@@ -119,7 +119,7 @@ export default {
                 const val = this.data.decoration.val;
                 if (skinJson[val]) {
                     return {
-                        background: __imgPath + `decoration/palu/${val}.png`,
+                        background: __cdn + `design/decoration/palu/${val}.png`,
                         titleColor: skinJson[val].titleColor,
                         titleHoverColor: skinJson[val].titleHoverColor,
                         borderHoverColor: skinJson[val].borderHoverColor,
@@ -201,7 +201,6 @@ export default {
             } else {
                 // 从1-39中随机选一个
                 const randomNum = random(1, 39);
-                // return __imgPath + `image/banner/${appKey}${subtype}` + ".png";
                 return __cdn + `design/random_cover/${randomNum}.jpg`;
             }
         },

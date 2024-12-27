@@ -20,7 +20,7 @@ import AuthorMedals from "@jx3box/jx3box-common-ui/src/author/AuthorMedals.vue";
 import AuthorRss from "@jx3box/jx3box-common-ui/src/author/AuthorRss.vue";
 
 import { getDecoration } from "@/service/cms";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 const DECORATION_SIDEBAR = "decoration_sidebar";
 export default {
     props: ["uid", "isMaster"],
@@ -56,7 +56,7 @@ export default {
             window.open("/dashboard/letter?receiver=" + this.uid, "_blank");
         },
         showDecoration: function (val, type) {
-            return __imgPath + `decoration/images/${val}/${type}.png`;
+            return __cdn + `design/decoration/images/${val}/${type}.png`;
         },
         getDecoration() {
             if (!this.user_id) {
