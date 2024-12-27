@@ -49,7 +49,7 @@ function getTimeAgo(dateString) {
         return { text: date.format("MM-DD"), icon: "el-icon-date" };
     } else {
         // 如果时间差超过1年
-        return { text: date.format("YYYY-MM-DD HH:mm:ss"), icon: "el-icon-date" };
+        return { text: date.format("YYYY-MM-DD"), icon: "el-icon-date" };
     }
 }
 
