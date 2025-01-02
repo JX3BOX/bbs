@@ -10,6 +10,8 @@
             <AuthorMedals class="u-block u-trophy" :uid="uid" />
             <slot></slot>
         </template>
+
+        <AuthorCommunity v-if="isMaster" :uid="uid"></AuthorCommunity>
     </div>
 </template>
 
@@ -18,6 +20,7 @@ import AuthorInfo from "@jx3box/jx3box-common-ui/src/author/AuthorInfo.vue";
 import AuthorFollow from "@jx3box/jx3box-common-ui/src/author/AuthorFollow.vue";
 import AuthorMedals from "@jx3box/jx3box-common-ui/src/author/AuthorMedals.vue";
 import AuthorRss from "@jx3box/jx3box-common-ui/src/author/AuthorRss.vue";
+import AuthorCommunity from "./author_community.vue";
 
 import { getDecoration } from "@/service/cms";
 import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
@@ -88,6 +91,7 @@ export default {
         AuthorFollow,
         AuthorMedals,
         AuthorRss,
+        AuthorCommunity,
     },
 };
 </script>
