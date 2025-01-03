@@ -1,5 +1,5 @@
 <template>
-    <div class="c-author-posts" v-if="ready">
+    <div class="c-community-posts" v-if="ready">
         <div class="u-label">
             <!-- <i class="el-icon-notebook-2"></i> -->
             <img svg-inline src="@/assets/img/leftsidebar/post.svg" />
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style lang="less">
-.c-author-posts {
+.c-community-posts {
     margin-top: 20px;
     min-height: 190px;
     ul {
@@ -111,6 +111,12 @@ export default {
                 color: @pink;
             }
         }
+    }
+}
+
+@media screen and (max-width: @phone) {
+    .c-community-posts {
+        .none;
     }
 }
 </style>
