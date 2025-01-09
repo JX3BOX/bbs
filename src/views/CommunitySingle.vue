@@ -408,7 +408,7 @@ export default {
             return list;
         },
         /** 回帖 */
-        onReplyTopic({ attachmentList, content, atUsers }) { 
+        onReplyTopic({ attachmentList, content, atUsers }) {
             if (!this.id) return this.$message.error("文章id不存在");
             // 拼接图片列表到 content 中
             if (attachmentList && attachmentList.length) {
@@ -496,5 +496,11 @@ export default {
 .w-jx3-element-pop{
     position: fixed;
     .z(2000);
+}
+
+@media screen and (max-width:@phone){
+    .m-single-thx{
+        zoom: 0.8;
+    }
 }
 </style>
