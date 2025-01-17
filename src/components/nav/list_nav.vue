@@ -10,22 +10,22 @@
                 <em>Community</em>
             </a>
             <a href="/joke" :class="{ 'is-active': routeActive('joke') }">
-                <i class="el-icon-cherry"></i>
+                <img svg-inline class="u-app-icon" :src="getAppIcon('joke')" alt="">
                 <span>骚话</span>
                 <em>Joke</em>
             </a>
             <a href="/emotion" :class="{ 'is-active': routeActive('emotion') }">
-                <i class="el-icon-sugar"></i>
+                <img svg-inline class="u-app-icon" :src="getAppIcon('emotion')" alt="">
                 <span>趣图</span>
                 <em>Emotion</em>
             </a>
             <a href="/collection" :class="{ 'is-active': routeActive('collection') }">
-                <i class="el-icon-paperclip"></i>
+                <img svg-inline class="u-app-icon" :src="getAppIcon('collection')" alt="">
                 <span>小册</span>
                 <em>Collection</em>
             </a>
             <a href="/namespace" :class="{ 'is-active': routeActive('namespace') }">
-                <i class="el-icon-postcard"></i>
+                <img svg-inline class="u-app-icon" :src="getAppIcon('namespace')" alt="">
                 <span>铭牌</span>
                 <em>Namespace</em>
             </a>
@@ -114,7 +114,7 @@ export default {
     },
     methods: {
         getAppIcon(key) {
-            return __cdn + "logo/logo-light/" + key + ".svg";
+            return __cdn + "logo-light/" + key + ".svg";
         },
         isActive: function (slug) {
             return slug == this.$route.name;
