@@ -49,13 +49,29 @@
                     <template v-if="visible">
                         <Article v-if="isMaster" :content="post.content || ''" />
                     </template>
-                    <div class="m-single-null" v-else>
-                        <el-alert type="warning" show-icon>
+                    <div class="m-single-null" v-else-if="isMaster">
+                        <el-alert type="warning" show-icon v-if="post.visible > 1 && post.visible != 3">
                             <template #title>
                                 <span>{{nullTip}}</span>
                                 <a class="u-pwd-text" v-if="isLogin" @click="enterPwd">输入密码</a>
                             </template>
                         </el-alert>
+
+                        <template v-if="post.visible == 3">
+                            <div class="m-pwd-box">
+                                <div class="u-pwd-tip">作者设置了密码可见</div>
+                                <el-input
+                                    v-model="password"
+                                    placeholder="请输入密码"
+                                    show-password
+                                    clearable
+                                    class="u-pwd-input"
+                                >
+                                    <template #prepend>密码</template>
+                                </el-input>
+                                <el-button class="u-pwd-btn" type="primary" @click="enterPwd">确认</el-button>
+                            </div>
+                        </template>
                     </div>
 
                     <div v-if="!isMaster" v-html="renderContent" />
@@ -250,6 +266,8 @@ export default {
                 fromManager: 0,
                 fromUser: 0,
             },
+
+            password: "",
         };
     },
     computed: {
@@ -509,7 +527,7 @@ export default {
             });
         },
         enterPwd() {
-            this.$emit("enterPwd");
+            this.$emit("enterPwd", this.password);
         },
     },
 };
