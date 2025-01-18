@@ -15,8 +15,8 @@ const getTopicList = (params) => {
 };
 
 // 获取帖子详情
-function getTopicDetails(id) {
-    return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}`);
+function getTopicDetails(id, params) {
+    return $next().get(`${API_PREFIX}/community/discussion/topic/item/${id}`, { params });
 }
 
 // 管理员-获取帖子详情 查看审核的帖子

@@ -46,8 +46,19 @@
                     </span>
                 </span>
                 <div class="u-reply-content">
-                    <Article v-if="isMaster" :content="post.content || ''" />
-                    <div v-else v-html="renderContent" />
+                    <template v-if="visible">
+                        <Article v-if="isMaster" :content="post.content || ''" />
+                    </template>
+                    <div class="m-single-null" v-else>
+                        <el-alert type="warning" show-icon>
+                            <template #title>
+                                <span>{{nullTip}}</span>
+                                <a class="u-pwd-text" v-if="isLogin" @click="enterPwd">输入密码</a>
+                            </template>
+                        </el-alert>
+                    </div>
+
+                    <div v-if="!isMaster" v-html="renderContent" />
 
                     <div v-if="extraImages && extraImages.length && isMaster && isFromPhone" class="m-image-box">
                         <a class="u-item" v-for="(item, index) in extraImages" :key="index">
@@ -204,7 +215,7 @@ import { getHistorySummary } from "@/service/pay";
 export default {
     name: "ReplyItem",
     inject: ["getTopicData", "getReplyList", "onReplyTopic"],
-    props: ["isMaster", "post", "isAuthor"],
+    props: ["isMaster", "post", "isAuthor", "nullTip"],
     components: {
         DeleteButton,
         ForwardButton,
@@ -307,6 +318,9 @@ export default {
         },
         extraImages() {
             return this.post?.extra_images;
+        },
+        visible: function () {
+            return !!this.post?.visible_validate;
         },
     },
     watch: {
@@ -493,6 +507,9 @@ export default {
             navigator.clipboard.writeText(link).then(() => {
                 this.$message.success("楼层已复制到剪贴板");
             });
+        },
+        enterPwd() {
+            this.$emit("enterPwd");
         },
     },
 };

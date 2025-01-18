@@ -30,7 +30,14 @@
             <div class="m-list-box">
                 <!--  楼主 -->
                 <div class="m-master-box">
-                    <ReplyItem v-if="this.page === 1" :isMaster="true" :post="post" @onReplyTopic="handleReplyTopic" />
+                    <ReplyItem
+                        v-if="this.page === 1"
+                        :null-tip="null_tip"
+                        :isMaster="true"
+                        :post="post"
+                        @onReplyTopic="handleReplyTopic"
+                        @enterPwd="enterPwd"
+                    />
                 </div>
 
                 <!-- 帖子回复 -->
@@ -125,7 +132,8 @@ import { atAuthors } from "@/service/pay";
 import Collection from "@jx3box/jx3box-common-ui/src/single/Collection.vue";
 import renderJx3Element from "@jx3box/jx3box-editor/assets/js/jx3_element";
 import Author from "@jx3box/jx3box-editor/src/components/Author.vue";
-
+import { __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
+import { postReadHistory } from "@jx3box/jx3box-common/js/stat";
 
 const appKey = "community";
 
@@ -191,11 +199,13 @@ export default {
 
             author: {
                 id: "",
-            }
+            },
+
+            password: "",
         };
     },
     computed: {
-        styles: function () {
+        styles: function() {
             let item = this.categoryList.find((item) => item.value === this.post.category);
             if (item) {
                 return item;
@@ -207,7 +217,7 @@ export default {
                 };
             }
         },
-        id: function () {
+        id: function() {
             return this.$route.params.id;
         },
         isAuthor() {
@@ -217,14 +227,23 @@ export default {
             return window.innerWidth < 768;
         },
         // 是否显示加载更多
-        hasNextPage: function () {
+        hasNextPage: function() {
             return this.pageTotal >= 1 && this.per * this.page < this.total;
         },
         collection_id() {
             return this.post.collection_id;
         },
-        collection_collapse: function () {
+        collection_collapse: function() {
             return this.post?.collection_collapse;
+        },
+        null_tip: function() {
+            let str = "作者设置了【";
+            str += __visibleMap[this.post?.visible];
+            str += "】";
+            return str;
+        },
+        visible: function () {
+            return !!this.post?.visible_validate;
         },
     },
     created() {
@@ -237,7 +256,7 @@ export default {
             this.$nextTick(() => {
                 renderJx3Element(this);
             });
-        })
+        });
 
         // 打赏
         bus.on("onThx", (data) => {
@@ -258,7 +277,7 @@ export default {
         "$route.query": {
             deep: true,
             immediate: true,
-            handler: function (query) {
+            handler: function(query) {
                 if (Object.keys(query).length) {
                     for (let key in query) {
                         // for:element分页组件兼容性问题
@@ -276,7 +295,7 @@ export default {
         /**
          * 获取url楼诚参数
          */
-        getJumpFloor: function () {
+        getJumpFloor: function() {
             const hash = window.location.hash;
             const floor = hash.substring(1).split("?")[0];
             if (floor) {
@@ -299,7 +318,7 @@ export default {
             });
         },
         // 翻页按钮
-        nextPage: function () {
+        nextPage: function() {
             this.getReplyList(true);
         },
         onSearch() {
@@ -318,7 +337,7 @@ export default {
             this.getReplyList();
         },
 
-        buildQuery: function () {
+        buildQuery: function() {
             let _query = {
                 index: this.page,
                 pageSize: this.per,
@@ -330,15 +349,19 @@ export default {
             this.replaceRoute({ page: this.page, onlyAuthor: this.onlyAuthor });
             return _query;
         },
-        getTopicData: function () {
+        getTopicData: function() {
             return this.post;
         },
-        getDetails: function () {
+        getDetails: function() {
             let fun = getTopicDetails;
             if (this.mode == "admin") {
                 fun = getTopicDetailsFromAdmin;
             }
-            fun(this.id).then((res) => {
+            const params = {}
+            if (this.password) {
+                params.password = this.password;
+            }
+            fun(this.id, params).then((res) => {
                 this.post = res.data.data;
 
                 getStat(appKey, this.id).then((res) => {
@@ -347,15 +370,19 @@ export default {
                 });
                 postStat(appKey, this.id);
 
-                User.isLogin() && postHistory({
-                    source_type: "community",
-                    source_id: ~~this.id,
-                    link: location.href,
-                    title: this.post.title,
-                });
+                if (User.isLogin()) {
+                    postHistory({
+                        source_type: "community",
+                        source_id: ~~this.id,
+                        link: location.href,
+                        title: this.post.title,
+                    });
+
+                    this.visible && postReadHistory({ id: this.id, category: "communicate", subcategory: "default", visible_type: this.post.visible });
+                }
             });
         },
-        getReplyList: function (appendMode) {
+        getReplyList: function(appendMode) {
             if (this.mode == "admin") return;
             this.loading = true;
             if (appendMode) {
@@ -471,7 +498,7 @@ export default {
             this.getReplyList();
         },
         // 路由绑定
-        replaceRoute: function (extend) {
+        replaceRoute: function(extend) {
             return this.$router
                 .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
                 .then(() => {
@@ -483,9 +510,24 @@ export default {
             // 展示快捷回复弹窗
             this.showComment = true;
         },
-        updateCollection: function (val) {
+        updateCollection: function(val) {
             this.collection_data = val;
         },
+
+        enterPwd() {
+            this.$prompt("请输入密码", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                inputType: "password",
+                inputPattern: /\S/,
+                inputErrorMessage: "密码不能为空",
+            })
+                .then(({ value }) => {
+                    this.password = value;
+                    this.getDetails();
+                })
+                .catch(() => {});
+        }
     },
 };
 </script>
@@ -493,13 +535,13 @@ export default {
 <style lang="less">
 @import "~@/assets/css/community/community-single.less";
 
-.w-jx3-element-pop{
+.w-jx3-element-pop {
     position: fixed;
     .z(2000);
 }
 
-@media screen and (max-width:@phone){
-    .m-single-thx{
+@media screen and (max-width: @phone) {
+    .m-single-thx {
         zoom: 0.8;
     }
 }
