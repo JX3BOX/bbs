@@ -59,6 +59,7 @@
 
                         <template v-if="post.visible == 3">
                             <div class="m-pwd-box">
+                                <i class="u-pwd-icon el-icon-lock"></i>
                                 <div class="u-pwd-tip">作者设置了密码可见</div>
                                 <el-input
                                     v-model="password"
