@@ -378,7 +378,7 @@ export default {
                         title: this.post.title,
                     });
 
-                    this.visible && postReadHistory({ id: this.id, category: "communicate", subcategory: "default", visible_type: this.post.visible });
+                    this.post.visible > 1 && postReadHistory({ id: this.id, category: "communicate", subcategory: "default", visible_type: this.post.visible });
                 }
             });
         },
