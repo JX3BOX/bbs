@@ -376,6 +376,8 @@ export default {
                         source_id: ~~this.id,
                         link: location.href,
                         title: this.post.title,
+                        author_id: this.post.user_id,
+                        banner: this.post.banner_img,
                     });
 
                     (this.post.visible > 1 && this.post.visible_validate) && postReadHistory({ id: this.id, category: "communicate", subcategory: "default", visible_type: this.post.visible });

@@ -60,6 +60,8 @@ export default {
                         source_id: ~~this.id,
                         link: location.href,
                         title: this.post.post_title,
+                        author: this.post.post_author,
+                        banner: this.post.post_banner,
                     });
                 })
                 .finally(() => {
