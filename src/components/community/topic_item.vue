@@ -188,6 +188,7 @@ export default {
         getBanner: function (data) {
             if (data.banner_img) {
                 if (data.banner_img.indexOf("jx3box.com") >= 0) {
+                    if (data.banner_img.indexOf(".webp") > -1) return data.banner_img;
                     return getThumbnail(data.banner_img, [168 * 2, 88 * 2]);
                 } else {
                     return data.banner_img;

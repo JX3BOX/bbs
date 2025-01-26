@@ -96,6 +96,8 @@
                     :client="post.client"
                     category="community"
                     showRss
+                    :author-id="post.user_id"
+                    :banner="post.banner_img"
                 />
                 <!-- 操作按钮 -->
                 <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->
