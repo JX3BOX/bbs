@@ -58,15 +58,15 @@ export default {
             // 删除自己的评论与回帖
             if (this.isAuthor || this.isSuperAdmin || this.isTopicAuthor) {
                 if (this.type === "comment") {
-                    if (this.isAuthor) {
+                    if (this.isAuthor || this.isTopicAuthor) {
                         this.delMyComment();
                     }
 
-                    if (this.isSuperAdmin || this.isTopicAuthor) {
+                    if (this.isSuperAdmin) {
                         this.manageDeleteComment();
                     }
                 } else if (this.type === "reply") {
-                    this.isSuperAdmin || this.isTopicAuthor ? this.manageDeleteReply() : this.deleteMyReply();
+                    this.isSuperAdmin ? this.manageDeleteReply() : this.deleteMyReply();
                 } else {
                     this.$message.success("未知的组件类型：" + this.type);
                 }

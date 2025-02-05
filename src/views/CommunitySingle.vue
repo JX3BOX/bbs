@@ -242,7 +242,7 @@ export default {
             str += "】";
             return str;
         },
-        visible: function () {
+        visible: function() {
             return !!this.post?.visible_validate;
         },
     },
@@ -357,7 +357,7 @@ export default {
             if (this.mode == "admin") {
                 fun = getTopicDetailsFromAdmin;
             }
-            const params = {}
+            const params = {};
             if (this.password) {
                 params.password = this.password;
             }
@@ -376,9 +376,20 @@ export default {
                         source_id: ~~this.id,
                         link: location.href,
                         title: this.post.title,
+                        author_id: this.post.user_id,
+                        banner: this.post.banner_img,
                     });
 
-                    (this.post.visible > 1 && this.post.visible_validate) && postReadHistory({ id: this.id, category: "communicate", subcategory: "default", visible_type: this.post.visible });
+                    this.post.visible > 1 &&
+                        this.post.visible_validate &&
+                        postReadHistory({
+                            id: this.id,
+                            category: "communicate",
+                            subcategory: "default",
+                            visible_type: this.post.visible,
+                            author_id: this.post.user_id,
+                            banner: this.post.banner_img,
+                        });
                 }
             });
         },
