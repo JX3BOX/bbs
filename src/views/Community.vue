@@ -3,10 +3,13 @@
         <CommunityHeader :categoryList="categoryList" />
         <CommunitySearch @search="onSearch" ref="searchInput">
             <template #right>
-                <el-radio-group class="m-list-view" v-model="view" size="mini" @input="onViewChange">
-                    <el-radio-button :label="1"><i class="el-icon-s-grid"></i> 卡片</el-radio-button>
-                    <el-radio-button :label="2"><i class="el-icon-tickets"></i> 列表</el-radio-button>
-                </el-radio-group>
+                <div class="m-search-right">
+                    <el-checkbox v-model="is_star" :true-label="1" :false-label="0" border size="mini" @change="onIsStarChange">只看精选</el-checkbox>
+                    <el-radio-group class="m-list-view" v-model="view" size="mini" @input="onViewChange">
+                        <el-radio-button :label="1"><i class="el-icon-s-grid"></i> 卡片</el-radio-button>
+                        <el-radio-button :label="2"><i class="el-icon-tickets"></i> 列表</el-radio-button>
+                    </el-radio-group>
+                </div>
             </template>
         </CommunitySearch>
         <div class="m-community-content" v-loading="loading">
@@ -127,6 +130,8 @@ export default {
 
             // 视图 1:瀑布流 2:列表
             view: 2,
+            // 是否只看精选
+            is_star: "",
         };
     },
     computed: {
@@ -328,6 +333,9 @@ export default {
                 pageSize: this.per,
                 index: this.page,
             };
+            if (this.is_star) {
+                _query.is_star = this.is_star;
+            }
             this.replaceRoute({ category: this.category, page: this.page });
 
             return _query;
@@ -429,6 +437,10 @@ export default {
             this.view = view;
             localStorage.setItem("community_view", view);
         },
+        // 只看精选
+        onIsStarChange() {
+            this.loadData();
+        },
     },
 };
 </script>
@@ -440,7 +452,7 @@ export default {
 @import "~@/assets/css/bbs/list.less";
 
 @media screen and (max-width: @phone) {
-    .m-list-view {
+    .m-search-right {
         .none;
     }
 }
