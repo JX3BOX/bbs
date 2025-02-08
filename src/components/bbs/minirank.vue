@@ -29,17 +29,17 @@ import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getMenu } from "@jx3box/jx3box-common/js/api_misc";
 export default {
     name: "rank",
-    data: function() {
+    data: function () {
         return {
             loading: false,
             data: [],
-            active: "bbs_rank_2024",
+            active: "bbs_rank_2025",
 
-            tabs: ["2024", "2023", "2022"],
+            tabs: ["2025", "2024", "2023", "2022"],
         };
     },
     computed: {
-        client: function() {
+        client: function () {
             return this.$store.state.client;
         },
     },
@@ -48,11 +48,11 @@ export default {
         handleClick() {
             this.loadData();
         },
-        viewRank: function() {
+        viewRank: function () {
             const root = this.client === "std" ? __Root : __OriginRoot;
             window.open(`${root}dbm/pkg/rank`, "_blank");
         },
-        highlight: function(i) {
+        highlight: function (i) {
             if (i == 0) {
                 return "t1";
             } else if (i == 1) {
@@ -72,7 +72,7 @@ export default {
                 });
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.loadData();
     },
 };
