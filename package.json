@@ -2,8 +2,9 @@
     "name": "bbs",
     "private": true,
     "scripts": {
-        "dev": "cross-env DEV_SERVER=true vue-cli-service serve",
+        "dev": "cross-env DEV_SERVER=true vue-cli-service serve --mode development",
         "serve": "vue-cli-service serve",
+        "debug": "env DEV_SERVER=true vue-cli-service serve --mode staging",
         "build": "vue-cli-service build",
         "preview": "cross-env BUILD_MODE=preview vue-cli-service build",
         "lint": "vue-cli-service lint",
@@ -11,11 +12,11 @@
         "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common-ui@latest @jx3box/jx3box-common@latest @jx3box/jx3box-data@latest @jx3box/jx3box-emotion@latest @jx3box/jx3box-comment-ui@latest @jx3box/jx3box-editor@latest"
     },
     "dependencies": {
-        "@jx3box/jx3box-comment-ui": "^2.0.2",
-        "@jx3box/jx3box-common": "^8.5.7",
-        "@jx3box/jx3box-common-ui": "^9.1.2",
+        "@jx3box/jx3box-comment-ui": "^2.0.3",
+        "@jx3box/jx3box-common": "^8.6.4",
+        "@jx3box/jx3box-common-ui": "^9.2.1",
         "@jx3box/jx3box-data": "^3.7.7",
-        "@jx3box/jx3box-editor": "^2.2.23",
+        "@jx3box/jx3box-editor": "^2.2.24",
         "@jx3box/jx3box-emotion": "^1.2.8",
         "axios": "^0.21.1",
         "core-js": "^3.16.2",
