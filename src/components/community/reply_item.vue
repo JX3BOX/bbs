@@ -98,6 +98,7 @@
                     showRss
                     :author-id="post.user_id"
                     :banner="post.banner_img"
+                    :contentMetaId="post.link_content_meta_id"
                 />
                 <!-- 操作按钮 -->
                 <!-- <div class="m-reply-time u-mobile-hidden">{{ showTime }}</div> -->
