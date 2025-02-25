@@ -386,9 +386,10 @@ export default {
                             id: this.id,
                             category: "communicate",
                             subcategory: "default",
-                            visible_type: this.post.visible,
+                            visible_type: ~~this.post.visible,
                             author_id: this.post.user_id,
                             banner: this.post.banner_img,
+                            contentMetaId: this.post.link_content_meta_id,
                         });
                 }
             });
