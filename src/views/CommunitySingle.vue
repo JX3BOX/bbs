@@ -378,6 +378,7 @@ export default {
                         title: this.post.title,
                         author_id: this.post.user_id,
                         banner: this.post.banner_img,
+                        content_meta_id: this.post.link_content_meta_id,
                     });
 
                     this.post.visible > 1 &&
